@@ -804,6 +804,119 @@
         transition: width 0.5s ease;
       }
 
+      /* ---------------------------------------------------------- Speisen */
+      .beitrag {
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        gap: 12px;
+        padding: 15px 0;
+        border-top: 1px solid var(--linie);
+      }
+      .beitrag:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .beitrag .portrait {
+        width: 34px;
+        height: 34px;
+      }
+      .beitrag .portrait .initialen {
+        font-size: 0.9rem;
+      }
+      .beitrag .titel {
+        font-family: var(--display);
+        font-size: 1.25rem;
+        font-weight: 500;
+        line-height: 1.25;
+      }
+      .beitrag .von {
+        font-size: 13px;
+        color: var(--leise);
+        margin-top: 1px;
+      }
+      .beitrag .zutaten {
+        font-size: 13px;
+        line-height: 1.55;
+        color: var(--leise);
+        margin: 9px 0 0;
+      }
+      .beitrag .knoepfchen button {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gold);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        margin: 9px 14px 0 0;
+      }
+
+      /* Kategorien, in denen noch nichts steht. Das ist der Teil, der
+         die Planung bewegt: er zeigt, wo jemand gebraucht wird. */
+      .luecke {
+        padding: 13px 16px;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--leise);
+        border: 1px dashed var(--linie);
+        border-radius: 3px;
+      }
+      .luecke strong {
+        color: var(--tinte);
+        font-weight: 600;
+      }
+
+      .abendblock {
+        border-left: 2px solid var(--gold);
+        padding-left: 16px;
+      }
+
+      /* Haken als Chips - schneller anzutippen als eine Liste Kaestchen */
+      .hakenreihe {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 8px;
+      }
+      .hakenreihe label {
+        margin: 0;
+        padding: 6px 13px;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0;
+        border: 1px solid var(--linie);
+        border-radius: 999px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .hakenreihe input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .hakenreihe label:has(input:checked) {
+        border-color: var(--gold);
+        background: var(--gold-weich);
+        color: var(--gold);
+      }
+      .hakenreihe label:has(input:focus-visible) {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 12px 13px;
+        font: inherit;
+        font-size: 16px;
+        color: var(--tinte);
+        background: var(--papier);
+        border: 1px solid var(--linie);
+        border-radius: 3px;
+      }
+      input[type="text"]:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+
       /* ----------------------------------------------------------- Helfer */
       .aufgabe {
         padding: 15px 0;
@@ -1023,6 +1136,7 @@
         <button data-ansicht="Profil">
           Mein Platz<span class="punkt" id="navPunkt" hidden></span>
         </button>
+        <button data-ansicht="Speisen">Speisen</button>
         <button data-ansicht="Board">Gäste</button>
         <button data-ansicht="Helfer">Helfer</button>
       </nav>
@@ -1146,6 +1260,16 @@
         </div>
 
         <div class="karte auftritt">
+          <h2>Was bringst du mit?</h2>
+          <p class="leiser" style="margin-bottom: 16px">
+            Mittags gibt es ein Buffet aus dem, was alle mitbringen. Am Abend
+            wird für euch gekocht – da braucht ihr nichts.
+          </p>
+          <div id="meineBeitraege"></div>
+          <button class="knopf leise" data-beitrag-neu>Etwas hinzufügen</button>
+        </div>
+
+        <div class="karte auftritt">
           <h2>Für die Küche</h2>
           <p class="hinweis" style="margin-top: 0">
             Sehen nur Christina und Thanh – nicht die anderen Gäste. Aus dem
@@ -1202,6 +1326,30 @@
         </button>
       </section>
 
+      <!-- =============================================== Speisen ===== -->
+      <section id="ansichtSpeisen" hidden>
+        <div class="karte auftritt">
+          <h2>Das Mittagsbuffet</h2>
+          <p class="leiser" id="buffetStand"></p>
+          <div id="luecken"></div>
+          <div class="filter" id="speisenFilter"></div>
+          <button class="knopf" data-beitrag-neu>Ich bringe etwas mit</button>
+        </div>
+
+        <div id="speisenListe"></div>
+
+        <div class="karte auftritt">
+          <h2>Abends</h2>
+          <div class="abendblock">
+            <p class="leiser" id="abendText"></p>
+          </div>
+        </div>
+
+        <button class="knopf leise" data-ziel="Profil">
+          Zurück zu meinem Platz
+        </button>
+      </section>
+
       <!-- ================================================ Helfer ===== -->
       <section id="ansichtHelfer" hidden>
         <div class="karte auftritt">
@@ -1228,6 +1376,66 @@
     <dialog id="gastDialog">
       <div class="dialog-inhalt" id="gastDialogInhalt"></div>
       <button class="dialog-schliessen" id="gastDialogZu">Schließen</button>
+    </dialog>
+
+    <dialog id="beitragDialog">
+      <div class="dialog-inhalt links">
+        <h2 style="margin-bottom: 6px">Was bringst du mit?</h2>
+        <p class="leiser" style="margin-bottom: 4px" id="beitragFuer"></p>
+
+        <label for="bKategorie">Wofür?</label>
+        <select id="bKategorie"></select>
+
+        <div id="bArtFrei" hidden>
+          <label for="bArt">Was für eine Art?</label>
+          <input
+            type="text"
+            id="bArt"
+            maxlength="60"
+            placeholder="z. B. Getränke, Kuchen für nachmittags, Deko"
+          />
+        </div>
+
+        <label for="bTitel">Was genau?</label>
+        <input
+          type="text"
+          id="bTitel"
+          maxlength="80"
+          placeholder="z. B. Kartoffelsalat"
+        />
+
+        <label for="bMenge"
+          >Für wie viele? <span class="zusatz">— grob geschätzt</span></label
+        >
+        <input
+          type="text"
+          id="bMenge"
+          maxlength="40"
+          placeholder="z. B. für ca. 10"
+        />
+
+        <label for="bZutaten"
+          >Was ist drin?
+          <span class="zusatz">— damit alle mit Allergien es lesen können</span></label
+        >
+        <textarea
+          id="bZutaten"
+          maxlength="400"
+          placeholder="Kartoffeln, Mayonnaise, Eier, Senf, Gurken, Zwiebeln"
+        ></textarea>
+
+        <label>Enthält</label>
+        <div class="hakenreihe" id="bAllergene"></div>
+
+        <label>Passt für</label>
+        <div class="hakenreihe" id="bKennzeichen"></div>
+
+        <button class="knopf" id="beitragSpeichern">Eintragen</button>
+        <button class="knopf leise" id="beitragZuruecknehmen" hidden>
+          Ich bringe das doch nicht mit
+        </button>
+      </div>
+      <button class="dialog-schliessen" id="beitragZu">Abbrechen</button>
     </dialog>
 
     <dialog id="wechselDialog">
@@ -1262,7 +1470,7 @@
         tag: "2026-12-12", // maschinenlesbar – treibt Countdown und Kalender
 
         trauung: { von: "10:45", bis: "11:30" },
-        fest: { von: "13:00", bis: "22:00" },
+        fest: { von: "12:30", bis: "22:00" },
 
         schlafenText:
           "TODO: Hotelkontingent, Airbnb, wer bei wem unterkommt. Wenn in deinem Platz ein Schlafplatz steht, ist er für dich reserviert.",
@@ -1338,13 +1546,21 @@
           nebensache: true,
         },
         {
-          zeit: "13:00",
-          titel: "Die Feier beginnt",
-          text: "Ankommen, anstoßen, Zeit zum Reden. Kommt, wann es euch passt.",
+          zeit: "12:30",
+          titel: "Einlass",
+          text: "Ankommen, anstoßen, Zeit zum Reden.",
           ort: "fest",
         },
-        // TODO: Zeiten geschaetzt – sagt uns, wann was wirklich losgeht.
-        { zeit: "17:00", titel: "Essen", text: "TODO: Was es gibt." },
+        {
+          zeit: "13:30",
+          titel: "Mittagsbuffet",
+          text: "Alles, was ihr mitbringt. Was schon zusammengekommen ist, steht unter „Speisen“.",
+        },
+        {
+          zeit: "18:30",
+          titel: "Abendessen",
+          text: "TODO: wer kocht was. Hier braucht ihr nichts mitzubringen.",
+        },
         {
           zeit: "20:00",
           titel: "Tanzen",
@@ -1356,6 +1572,38 @@
           text: "Dann machen wir das Licht aus.",
         },
       ];
+
+      // Am Abend wird gekocht – hier bringt niemand etwas mit.
+      const ABENDESSEN =
+        "Um 18:30 Uhr gibt es Abendessen. TODO: wer kocht was (Suppe und …). Dafür müsst ihr nichts mitbringen – das ist schon organisiert.";
+
+      // Kategorien des Mitbring-Buffets. Eine Zeile mehr hier reicht,
+      // um eine Kategorie zu ergaenzen – die Datenbank bleibt, wie sie ist.
+      // art: null bedeutet "Gast schreibt selbst hin, was es ist".
+      const KATEGORIEN = [
+        { bereich: "Mittagsbuffet", art: "herzhaft" },
+        { bereich: "Mittagsbuffet", art: "Salat oder Beilage" },
+        { bereich: "Mittagsbuffet", art: "Brot, Dip, Kleinigkeiten" },
+        { bereich: "Mittagsbuffet", art: "süß oder Nachtisch" },
+        { bereich: "Anderes", art: null },
+      ];
+      const katLabel = (k) =>
+        k.art ? k.bereich + " – " + k.art : "Etwas anderes";
+
+      // Ankreuzbar statt Freitext: so laesst sich die Liste filtern.
+      // Das Zutatenfeld bleibt trotzdem – kein Haken deckt "Koriander" ab.
+      const ALLERGENE = [
+        "Gluten",
+        "Milch",
+        "Ei",
+        "Nüsse",
+        "Erdnüsse",
+        "Soja",
+        "Fisch",
+        "Sellerie",
+        "Senf",
+      ];
+      const KENNZEICHEN = ["vegetarisch", "vegan"];
 
       // =====================================================================
       //  Schluessel: Supabase -> Settings -> API Keys
@@ -1376,7 +1624,10 @@
       const $ = (id) => document.getElementById(id);
       let gaeste = [],
         profile = new Map(),
-        filterAuf = "alle";
+        speisen = [],
+        filterAuf = "alle",
+        speisenFilterAuf = "alle",
+        beitragOffen = null; // null = neuer Eintrag, sonst die id
       let ichName = localStorage.getItem("traufeier.gast");
 
       const esc = (s) =>
@@ -1405,7 +1656,13 @@
       }
 
       function zeige(welche) {
-        for (const a of ["Einladung", "Profil", "Board", "Helfer"])
+        for (const a of [
+          "Einladung",
+          "Profil",
+          "Speisen",
+          "Board",
+          "Helfer",
+        ])
           $("ansicht" + a).hidden = a !== welche;
         for (const b of $("nav").querySelectorAll("button"))
           b.setAttribute("aria-current", String(b.dataset.ansicht === welche));
@@ -1732,15 +1989,24 @@
 
       // ---------------------------------------------------------- Laden
       async function laden() {
-        const [g, p] = await Promise.all([
+        const [g, p, sp] = await Promise.all([
           db.from("gaeste").select("*").order("name"),
           db.from("profile").select("*"),
+          db
+            .from("speisen")
+            .select("*")
+            .eq("zurueckgezogen", false)
+            .order("id"),
         ]);
         if (g.error) throw g.error;
         if (p.error) throw p.error;
 
         gaeste = g.data;
         profile = new Map((p.data || []).map((r) => [r.name, r]));
+        // Die Speisen sind ein Nachtrag (speisen.sql). Fehlt die Tabelle
+        // noch, soll deshalb nicht die ganze Seite dunkel bleiben.
+        speisen = sp.error ? [] : sp.data || [];
+        if (sp.error) console.warn("Tabelle speisen fehlt:", sp.error.message);
 
         const liste =
           '<option value="">Bitte auswählen …</option>' +
@@ -1868,6 +2134,7 @@
         $("allergien").value = "";
         $("hinweise").value = "";
 
+        meineBeitraege();
         schritte(p, kStand);
         $("weiterText").textContent =
           "Du antwortest gerade als " + ich.name + ".";
@@ -1882,6 +2149,7 @@
           [!!p.steckbrief, "Einen Satz über dich geschrieben"],
           [!!p.foto, "Ein Foto hochgeladen"],
           [!!kStand, "Der Küche Bescheid gegeben"],
+          [meine().length > 0, "Etwas fürs Buffet eingetragen"],
         ];
         $("schritte").innerHTML = liste
           .map(
@@ -2046,6 +2314,272 @@
         zeige("Board");
       }
 
+      // ---------------------------------------------------------- Speisen
+      const meine = () => speisen.filter((b) => b.name === ichName);
+
+      // Wie eine Kategorie heisst, wenn der Gast sie selbst benannt hat.
+      const beitragArt = (b) => b.art || (b.bereich === "Anderes" ? "Anderes" : "");
+
+      function beitragKarte(b, mitKnoepfen) {
+        const g = gaeste.find((x) => x.name === b.name) || { name: b.name };
+        const marken = [
+          ...(b.kennzeichen || []).map(
+            (k) => '<span class="chip zusage">' + esc(k) + "</span>",
+          ),
+          ...(b.allergene || []).map(
+            (a) => '<span class="chip grau">' + esc(a) + "</span>",
+          ),
+        ].join("");
+
+        return (
+          '<div class="beitrag">' +
+          portrait(g, profile.get(b.name)) +
+          "<div>" +
+          '<div class="titel">' +
+          esc(b.titel) +
+          "</div>" +
+          '<div class="von">' +
+          esc(b.name) +
+          (b.menge ? " &middot; " + esc(b.menge) : "") +
+          (beitragArt(b) && mitKnoepfen
+            ? " &middot; " + esc(beitragArt(b))
+            : "") +
+          "</div>" +
+          (marken ? '<div class="chips">' + marken + "</div>" : "") +
+          (b.zutaten
+            ? '<p class="zutaten">' + esc(b.zutaten) + "</p>"
+            : '<p class="zutaten">Zutaten stehen noch nicht dabei.</p>') +
+          (mitKnoepfen
+            ? '<div class="knoepfchen"><button data-beitrag-bearbeiten="' +
+              b.id +
+              '">Ändern</button></div>'
+            : "") +
+          "</div></div>"
+        );
+      }
+
+      function zeigeSpeisen() {
+        const mittag = speisen.filter((b) => b.bereich === "Mittagsbuffet");
+        const anderes = speisen.filter((b) => b.bereich !== "Mittagsbuffet");
+        const leute = new Set(speisen.map((b) => b.name)).size;
+
+        $("buffetStand").textContent = speisen.length
+          ? speisen.length +
+            (speisen.length === 1 ? " Beitrag" : " Beiträge") +
+            " von " +
+            leute +
+            (leute === 1 ? " Person" : " Personen") +
+            " – " +
+            mittag.length +
+            " fürs Mittagsbuffet, " +
+            anderes.length +
+            " anderes."
+          : "Noch hat sich niemand eingetragen. Fang gern an.";
+
+        // Keine Zielzahlen – nur die Kategorien, in denen noch gar
+        // nichts steht. Das laesst sich nicht falsch einschaetzen.
+        const leer = KATEGORIEN.filter(
+          (k) =>
+            k.bereich === "Mittagsbuffet" &&
+            !mittag.some((b) => b.art === k.art),
+        );
+        $("luecken").innerHTML = leer.length
+          ? '<p class="luecke">Hier fehlt noch alles: <strong>' +
+            leer.map((k) => esc(k.art)).join("</strong>, <strong>") +
+            "</strong>."
+          : speisen.length
+            ? '<p class="luecke">In jeder Kategorie steht etwas. Mehr darf trotzdem gern dazu.</p>'
+            : "";
+
+        // Filter: Kategorien plus die Kennzeichen, die tatsaechlich
+        // vorkommen. Was niemand mitbringt, braucht keinen Knopf.
+        const vorhanden = [
+          ...new Set(speisen.flatMap((b) => b.kennzeichen || [])),
+        ].sort();
+        const knoepfe = [
+          ["alle", "Alles"],
+          ["Mittagsbuffet", "Mittagsbuffet"],
+          ["Anderes", "Anderes"],
+          ...vorhanden.map((k) => ["k:" + k, k]),
+        ];
+        $("speisenFilter").innerHTML = knoepfe
+          .map(
+            ([wert, text]) =>
+              '<button data-speisen-filter="' +
+              esc(wert) +
+              '" aria-pressed="' +
+              (speisenFilterAuf === wert) +
+              '">' +
+              esc(text) +
+              "</button>",
+          )
+          .join("");
+
+        const sichtbar = speisen.filter((b) => {
+          if (speisenFilterAuf === "alle") return true;
+          if (speisenFilterAuf.startsWith("k:"))
+            return (b.kennzeichen || []).includes(speisenFilterAuf.slice(2));
+          return speisenFilterAuf === "Mittagsbuffet"
+            ? b.bereich === "Mittagsbuffet"
+            : b.bereich !== "Mittagsbuffet";
+        });
+
+        // Nach Kategorie gruppieren, in der Reihenfolge von KATEGORIEN.
+        const gruppen = [];
+        for (const k of KATEGORIEN) {
+          const drin = sichtbar.filter(
+            (b) => b.bereich === k.bereich && (k.art ? b.art === k.art : true),
+          );
+          if (k.bereich === "Anderes") continue;
+          if (drin.length) gruppen.push([katLabel(k), drin]);
+        }
+        const rest = sichtbar.filter((b) => b.bereich !== "Mittagsbuffet");
+        if (rest.length) gruppen.push(["Außerdem", rest]);
+
+        $("speisenListe").innerHTML = gruppen.length
+          ? gruppen
+              .map(
+                ([titel, drin]) =>
+                  '<div class="karte auftritt"><h2>' +
+                  esc(titel) +
+                  "</h2>" +
+                  drin.map((b) => beitragKarte(b, false)).join("") +
+                  "</div>",
+              )
+              .join("")
+          : '<div class="karte auftritt"><p class="leiser">Hier steht noch nichts.</p></div>';
+
+        $("abendText").textContent = ABENDESSEN;
+        zeige("Speisen");
+      }
+
+      // Die eigenen Beitraege in "Mein Platz" – hier darf man aendern.
+      function meineBeitraege() {
+        const eigene = meine();
+        $("meineBeitraege").innerHTML = eigene.length
+          ? eigene.map((b) => beitragKarte(b, true)).join("")
+          : '<p class="leiser">Du hast noch nichts eingetragen.</p>';
+      }
+
+      // ------------------------------------------------- Beitrag erfassen
+      function hakenReihe(id, werte, gesetzt) {
+        $(id).innerHTML = werte
+          .map(
+            (w) =>
+              "<label><input type=\"checkbox\" value=\"" +
+              esc(w) +
+              '"' +
+              (gesetzt.includes(w) ? " checked" : "") +
+              ">" +
+              esc(w) +
+              "</label>",
+          )
+          .join("");
+      }
+
+      function oeffneBeitrag(id) {
+        const b = id ? speisen.find((x) => x.id === Number(id)) : null;
+        beitragOffen = b ? b.id : null;
+
+        $("bKategorie").innerHTML = KATEGORIEN.map(
+          (k, i) =>
+            '<option value="' +
+            i +
+            '"' +
+            (b && b.bereich === k.bereich && (k.art ? b.art === k.art : true)
+              ? " selected"
+              : "") +
+            ">" +
+            esc(katLabel(k)) +
+            "</option>",
+        ).join("");
+
+        $("bTitel").value = b ? b.titel : "";
+        $("bMenge").value = (b && b.menge) || "";
+        $("bZutaten").value = (b && b.zutaten) || "";
+        $("bArt").value = b && b.bereich === "Anderes" ? b.art || "" : "";
+        hakenReihe("bAllergene", ALLERGENE, (b && b.allergene) || []);
+        hakenReihe("bKennzeichen", KENNZEICHEN, (b && b.kennzeichen) || []);
+
+        $("beitragFuer").textContent = "Für " + ichName + ".";
+        $("beitragSpeichern").textContent = b ? "Änderung speichern" : "Eintragen";
+        $("beitragZuruecknehmen").hidden = !b;
+        artFeld();
+        $("beitragDialog").showModal();
+      }
+
+      // Das Freitextfeld erscheint nur bei "Etwas anderes".
+      function artFeld() {
+        const k = KATEGORIEN[Number($("bKategorie").value) || 0];
+        $("bArtFrei").hidden = !!(k && k.art);
+      }
+
+      const gehakt = (id) =>
+        [...$(id).querySelectorAll("input:checked")].map((i) => i.value);
+
+      async function beitragSpeichern() {
+        const knopf = $("beitragSpeichern");
+        const k = KATEGORIEN[Number($("bKategorie").value) || 0];
+        const titel = $("bTitel").value.trim();
+        if (!titel) return melde("Schreib bitte dazu, was du mitbringst.", true);
+
+        const satz = {
+          name: ichName,
+          bereich: k.bereich,
+          art: k.art || $("bArt").value.trim() || null,
+          titel: titel,
+          menge: $("bMenge").value.trim() || null,
+          zutaten: $("bZutaten").value.trim() || null,
+          allergene: gehakt("bAllergene"),
+          kennzeichen: gehakt("bKennzeichen"),
+          geaendert: new Date().toISOString(),
+        };
+
+        knopf.disabled = true;
+        try {
+          const { data, error } = beitragOffen
+            ? await db
+                .from("speisen")
+                .update(satz)
+                .eq("id", beitragOffen)
+                .select()
+            : await db.from("speisen").insert(satz).select();
+          if (error) throw error;
+
+          const neu = (data || [])[0];
+          if (neu) {
+            const i = speisen.findIndex((x) => x.id === neu.id);
+            i >= 0 ? (speisen[i] = neu) : speisen.push(neu);
+          }
+          $("beitragDialog").close();
+          meineBeitraege();
+          melde(beitragOffen ? "Geändert." : "Eingetragen. Danke!");
+        } catch (e) {
+          melde("Das hat nicht geklappt: " + (e.message ?? e), true);
+        } finally {
+          knopf.disabled = false;
+        }
+      }
+
+      // Zuruecknehmen loescht nicht, es setzt ein Flag. Christina und
+      // Thanh sehen die Zeile weiter im Table Editor.
+      async function beitragZuruecknehmen() {
+        if (!beitragOffen) return;
+        try {
+          const { error } = await db
+            .from("speisen")
+            .update({ zurueckgezogen: true, geaendert: new Date().toISOString() })
+            .eq("id", beitragOffen);
+          if (error) throw error;
+          speisen = speisen.filter((x) => x.id !== beitragOffen);
+          $("beitragDialog").close();
+          meineBeitraege();
+          melde("Ist aus der Liste raus.");
+        } catch (e) {
+          melde("Das hat nicht geklappt: " + (e.message ?? e), true);
+        }
+      }
+
       // ----------------------------------------------------------- Helfer
       // Die Rollen stehen als Freitext in der Gaesteliste. Hier drehen wir
       // sie um: nicht "wer hat welche Rolle", sondern "wer macht das hier".
@@ -2161,6 +2695,7 @@
       const ANSICHTEN = {
         Einladung: zeigeEinladung,
         Profil: zeigeProfil,
+        Speisen: zeigeSpeisen,
         Board: zeigeBoard,
         Helfer: zeigeHelfer,
       };
@@ -2175,6 +2710,17 @@
         if (ziel) return ANSICHTEN[ziel.dataset.ziel]();
 
         if (e.target.closest("[data-kalender]")) return kalenderLaden();
+
+        if (e.target.closest("[data-beitrag-neu]")) return oeffneBeitrag(null);
+
+        const bb = e.target.closest("[data-beitrag-bearbeiten]");
+        if (bb) return oeffneBeitrag(bb.dataset.beitragBearbeiten);
+
+        const sf = e.target.closest("[data-speisen-filter]");
+        if (sf) {
+          speisenFilterAuf = sf.dataset.speisenFilter;
+          return zeigeSpeisen();
+        }
 
         // Adresse in die Zwischenablage – spart das Abtippen ins Navi.
         const kopf = e.target.closest("[data-kopieren]");
@@ -2220,6 +2766,14 @@
       $("gastDialogZu").addEventListener("click", () => $("gastDialog").close());
       $("gastDialog").addEventListener("click", (e) => {
         if (e.target === $("gastDialog")) $("gastDialog").close();
+      });
+
+      $("bKategorie").addEventListener("change", artFeld);
+      $("beitragSpeichern").addEventListener("click", beitragSpeichern);
+      $("beitragZuruecknehmen").addEventListener("click", beitragZuruecknehmen);
+      $("beitragZu").addEventListener("click", () => $("beitragDialog").close());
+      $("beitragDialog").addEventListener("click", (e) => {
+        if (e.target === $("beitragDialog")) $("beitragDialog").close();
       });
 
       $("wechselKnopf").addEventListener("click", zeigeWechsel);

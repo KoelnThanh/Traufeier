@@ -41,7 +41,19 @@ Den Foto-Bucket `gaeste-fotos` legt das Skript gleich mit an – im Dashboard
 ist nichts zu klicken. („Public" heißt nur öffentlich *lesen*; ohne die
 mitgelieferte Policy scheitert jeder Upload.)
 
-### 2. Eure Angaben eintragen
+### 2. Mitbring-Buffet nachziehen
+
+`speisen.sql` in den SQL-Editor → **Run**. Legt die Tabelle `speisen` an
+und ändert nichts an den bestehenden Tabellen. Solange sie fehlt, läuft
+die Seite weiter – der Reiter „Speisen“ bleibt dann nur leer und im
+Browser-Log steht ein Hinweis.
+
+Dazu kommen drei Views: `buffet` (alles, was mitgebracht wird),
+`buffet_stand` (was pro Kategorie zusammenkommt) und `buffet_allergene`
+(welches Allergen in welchem Gericht steckt – die Gegenprobe zu dem,
+was euch die Gäste über `kueche` geschickt haben).
+
+### 3. Eure Angaben eintragen
 
 Ganz oben im Script-Block von `index.html` stehen drei Blöcke. Alles, was
 noch fehlt, ist dort als sichtbares `TODO:` markiert – damit nichts
@@ -72,7 +84,7 @@ Punkt gedämpft dar (so steht die Trauung dabei, ohne die Feier zu
 überstrahlen), `ort: "trauung"` oder `ort: "fest"` erzeugt den Sprunglink
 zur passenden Karte. Ein Punkt mehr heißt: eine Zeile mehr im Array.
 
-### 3. Zugangsdaten eintragen
+### 4. Zugangsdaten eintragen
 
 In `index.html` im Script-Block:
 
@@ -91,7 +103,7 @@ Der publishable Key darf öffentlich im Quelltext stehen – dafür ist er gemac
 Was er darf, regeln die Policies aus Schritt 1.
 Der `sb_secret_…`-Key gehört **niemals** in diese Datei.
 
-### 4. Gästeliste importieren
+### 5. Gästeliste importieren
 
 `import.sql` in den SQL-Editor → **Run**. Enthält alle 44 Gäste, erzeugt aus
 `Eheschließung - Gästeliste.csv`.
@@ -104,7 +116,7 @@ neu importieren – dann einzelne Zeilen im Table Editor pflegen.
 Neu erzeugen lässt sich die Datei aus der CSV jederzeit; das Skript dafür
 steht im Verlauf dieses Projekts.
 
-### 5. Lokal testen
+### 6. Lokal testen
 
 ```bash
 python -m http.server 8000
@@ -114,7 +126,7 @@ Dann `http://localhost:8000` öffnen – **nicht** per Doppelklick auf die Datei
 Bei `file://` blockiert Chrome die Modul-Importe, und der Fehler sieht aus wie
 ein Datenbankproblem.
 
-### 6. Veröffentlichen
+### 7. Veröffentlichen
 
 Ordner auf [app.netlify.com/drop](https://app.netlify.com/drop) ziehen,
 oder das Repo in Netlify verbinden (dann deployt jeder Push automatisch).
@@ -128,7 +140,7 @@ Danach in Netlify **Domain management → Add a domain** →
 
 Der spezifische CNAME sticht den Wildcard-Eintrag von INWX.
 
-### 7. Keep-Alive scharf schalten
+### 8. Keep-Alive scharf schalten
 
 Supabase pausiert Free-Projekte nach **7 Tagen ohne API-Anfrage** – dann lädt
 die Einladung keine Daten mehr. `.github/workflows/keepalive.yml` verhindert das.
@@ -148,12 +160,13 @@ Danach unter **Actions** einmal manuell auslösen und prüfen, dass `200` kommt.
 
 ## Aufbau der Seite
 
-Vier Ansichten unter einem festen Kopf:
+Fünf Ansichten unter einem festen Kopf:
 
 | Ansicht | Zeigt |
 |---|---|
 | Einladung | Ablauf, beide Orte mit Karte, Übernachtung – und für Unbekannte die Namensauswahl |
-| Mein Platz | eigene Stammdaten, Haushalt, Checkliste, Zusage, Steckbrief, Foto, Küche |
+| Mein Platz | eigene Stammdaten, Haushalt, Checkliste, Zusage, Steckbrief, Foto, Küche, eigene Buffet-Beiträge |
+| Speisen | das Mittagsbuffet: wer bringt was mit, mit Zutaten und Allergenen |
 | Gäste | alle Gäste, filterbar; ein Tipp auf eine Karte zeigt den Steckbrief |
 | Helfer | wer welche Aufgabe übernommen hat, plus die guten Geister |
 
@@ -189,6 +202,41 @@ Die Ansicht dreht die Gästeliste um: nicht „wer hat welche Rolle“, sondern
 „wer macht das hier“. Rollen mit Fragezeichen (`DJ?`, `Technik?`) stehen mit
 dem Vermerk **noch offen** da. „Braut“ und „Bräutigam“ sind ausgenommen –
 das sind keine Aufgaben, die jemand übernimmt.
+
+### Mitbring-Buffet
+
+Mittags gibt es ein Buffet aus dem, was die Gäste mitbringen; abends wird
+gekocht und niemand bringt etwas mit. Die Seite trennt das deutlich – der
+Abendblock im Reiter „Speisen“ hat bewusst kein Eingabefeld.
+
+Eingetragen wird in „Mein Platz“, angesehen unter „Speisen“. Ein Gast darf
+mehrere Beiträge haben (Salat *und* Getränke), deshalb eine eigene Tabelle
+statt eines Feldes an `profile`.
+
+Die Kategorien stehen in `KATEGORIEN` im Script. `art: null` heißt „der Gast
+schreibt selbst hin, was es ist“ – so sind Getränke, Kuchen oder Deko
+abgedeckt, ohne dass die Liste sie vorwegnehmen muss. Eine Kategorie mehr
+ist eine Zeile mehr im Array; die Datenbank bleibt, wie sie ist. Soll aus
+Getränken eine eigene Rubrik werden, reicht dort ein
+`{ bereich: "Mittagsbuffet", art: "Getränke" }`.
+
+Allergene sind Häkchen (`ALLERGENE`), nicht Freitext – nur so lässt sich
+die Liste filtern. Das Zutatenfeld bleibt zusätzlich, weil kein Häkchen
+„Koriander“ abdeckt.
+
+**Zutaten sind nicht dasselbe wie Allergien.** Was in einem Salat steckt,
+ist eine Rezeptangabe und steht offen da. Was ein Mensch nicht verträgt,
+liegt weiter in `kueche`, aus der nichts wieder herauskommt. Beide Seiten
+greifen ineinander: Wer eine Allergie gemeldet hat, liest die Speisenliste.
+
+**Zurücknehmen statt löschen.** Ein Gast, der absagt, setzt
+`zurueckgezogen` – die Zeile verschwindet aus der Liste, bleibt aber in der
+Tabelle. Ohne Login kann jeder alles anfassen; ein Fehlklick soll keine
+drei Wochen Planung kosten.
+
+Die Lückenanzeige nennt nur Kategorien, in denen **gar nichts** steht.
+Bewusst keine Zielzahlen: wie viel für 44 Leute reicht, schätzt jeder
+selbst besser ein als eine ausgedachte Sollgröße.
 
 ### Schriften und Karten
 
@@ -242,18 +290,8 @@ Bewusst weggelassen, bis ihr merkt, dass ihr es braucht:
   die sich kennen, ist das vertretbar. Falls doch nötig: PIN pro Gast.
 - **Kein Admin-Interface.** Stammdaten pflegt ihr im Table Editor,
   nachgereichte Fotos zieht ihr direkt in den Storage-Bucket.
-- **Kein Mitbring-Board.** Wer etwas beisteuern will, schreibt es bis auf
-  Weiteres ins Feld „Sonstige Hinweise“.
-
-## Als Nächstes geplant
-
-- **Reiter „Essen“ und „Trinken“** – wer bringt was mit. Das Essen mit
-  Zutatenliste, damit sich Allergien dagegen prüfen lassen; die Getränke
-  einfacher, eher als Zählliste.
-- Beides braucht je eine Tabelle und die Entscheidung, ob die Listen für
-  alle Gäste sichtbar sind oder nur für euch. Die Zutaten sind der Grund,
-  warum das nicht einfach in `kueche` mitläuft: dort kommt bewusst nichts
-  wieder heraus.
+- **Keine Mengenplanung.** Die Seite zählt, was zusammenkommt, sagt aber
+  nicht, ob es reicht. Das schätzt ihr besser ein als ein Algorithmus.
 
 ## Offen
 
