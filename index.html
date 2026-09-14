@@ -259,6 +259,7 @@
       body.angemeldet .hero .ornament,
       body.angemeldet .countdown,
       body.angemeldet .einordnung,
+      body.angemeldet .zweisaetze,
       body.angemeldet .hero .versalien {
         display: none;
       }
@@ -804,6 +805,45 @@
         transition: width 0.5s ease;
       }
 
+      /* ---------------------------------------------------------- Haltung */
+      ul.haltung {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      ul.haltung li {
+        padding: 14px 0;
+        border-top: 1px solid var(--linie);
+      }
+      ul.haltung li:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      ul.haltung h3 {
+        font-family: var(--display);
+        font-size: 1.25rem;
+        font-weight: 500;
+        margin: 0 0 3px;
+      }
+      ul.haltung p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--leise);
+        margin: 0;
+      }
+
+      /* Die zwei Saetze, die jeder lesen soll, bevor er weiterscrollt. */
+      .zweisaetze {
+        max-width: 34ch;
+        margin: 16px auto 0;
+        padding-top: 16px;
+        border-top: 1px solid var(--linie);
+        font-family: var(--display);
+        font-size: 1.15rem;
+        font-style: italic;
+        line-height: 1.5;
+      }
+
       /* ---------------------------------------------------------- Speisen */
       .beitrag {
         display: grid;
@@ -1123,8 +1163,11 @@
         <p class="countdown" id="countdown"></p>
         <p class="einordnung">
           Es ist unsere <strong>Traufeier</strong> – standesamtlich, im kleinen
-          Kreis, mit einem langen Abend danach. Die große Hochzeit feiern wir
+          Kreis, mit einem langen Tag danach. Die große Hochzeit feiern wir
           später.
+        </p>
+        <p class="zweisaetze">
+          Schenkt uns nichts, kommt einfach.<br />Und zieht euch schick an.
         </p>
       </div>
     </header>
@@ -1160,6 +1203,15 @@
           <p class="hinweis">
             Lädt eine Termindatei – Handy und Rechner tragen sie von allein ein.
           </p>
+        </div>
+
+        <div class="karte auftritt">
+          <h2>Wie wir feiern</h2>
+          <p class="leiser" style="margin-bottom: 18px">
+            Eine Traufeier ist keine Hochzeit. Damit ihr wisst, worauf ihr
+            euch einlasst:
+          </p>
+          <ul class="haltung" id="haltung"></ul>
         </div>
 
         <div class="karte auftritt">
@@ -1199,19 +1251,19 @@
 
       <!-- ============================================ Mein Platz ===== -->
       <section id="ansichtProfil" hidden>
-        <div class="karte auftritt">
-          <p class="versalien">Dein Platz</p>
-          <h2 id="meinName" style="margin: 6px 0 16px">–</h2>
-          <dl class="fakten" id="meineFakten"></dl>
-          <div class="chips" id="meineRollen"></div>
-        </div>
-
         <div class="karte auftritt" id="karteHaushalt" hidden>
           <h2>Dein Haushalt</h2>
           <p class="leiser" style="margin-bottom: 16px">
             Antworte für die anderen gleich mit – ein Klick wechselt hinüber.
           </p>
           <div class="haushalt" id="haushalt"></div>
+        </div>
+
+        <div class="karte auftritt">
+          <p class="versalien">Dein Platz</p>
+          <h2 id="meinName" style="margin: 6px 0 16px">–</h2>
+          <dl class="fakten" id="meineFakten"></dl>
+          <div class="chips" id="meineRollen"></div>
         </div>
 
         <div class="karte auftritt">
@@ -1557,14 +1609,19 @@
           text: "Alles, was ihr mitbringt. Was schon zusammengekommen ist, steht unter „Speisen“.",
         },
         {
+          zeit: "16:00",
+          titel: "Tanzworkshop für alle",
+          text: "Grundschritt in einer halben Stunde, ohne Vorkenntnisse. Wir stehen vorn, ihr macht mit – danach kann jeder mittanzen.",
+        },
+        {
           zeit: "18:30",
           titel: "Abendessen",
-          text: "TODO: wer kocht was. Hier braucht ihr nichts mitzubringen.",
+          text: "Suppe und ein paar warme Sachen. Hier braucht ihr nichts mitzubringen.",
         },
         {
           zeit: "20:00",
-          titel: "Tanzen",
-          text: "Wir feiern in einer Tanzschule – das bietet sich an.",
+          titel: "Unser Tanz, dann eurer",
+          text: "Einmal dürfen wir doch in die Mitte. Danach gehört die Fläche euch.",
         },
         {
           zeit: "22:00",
@@ -1573,9 +1630,43 @@
         },
       ];
 
+      // Worum es an dem Tag geht. Steht auf der Einladung, nicht in
+      // einem Unterreiter – es beantwortet die Fragen, die sich jeder
+      // stellt, bevor er zusagt.
+      const HALTUNG = [
+        [
+          "Schenkt uns nichts",
+          "Wirklich nichts. Dass ihr kommt, ist uns mehr wert als alles, was in Geschenkpapier passt.",
+        ],
+        [
+          "Zieht euch schick an",
+          "Wir haben Lust auf einen eleganten Tag. Mehr Vorgaben gibt es nicht.",
+        ],
+        [
+          "Es gibt kein Catering – es gibt uns",
+          "Mittags bringt jeder etwas mit, und den Teller trägt danach jeder selbst weg. So bleibt es bezahlbar, und wir sind trotzdem alle satt.",
+        ],
+        [
+          "Für die Kinder ist jemand da",
+          "Eine Erzieherin passt auf, damit ihr auch mal in Ruhe sitzen, essen und tanzen könnt.",
+        ],
+        [
+          "Wir stellen uns nicht in die Mitte",
+          "Kaum Programm mit uns. Uns ist lieber, ihr habt miteinander einen schönen Tag.",
+        ],
+        [
+          "Keine gestellten Fotos",
+          "Unsere Fotografin hält fest, was ohnehin passiert. Posieren müsst ihr nicht, wir auch nicht.",
+        ],
+        [
+          "Das große Fest kommt in fünf Jahren",
+          "Wenn die Kinder größer sind und wir mit euch wieder richtig lange feiern können. Deshalb ist auch um 22 Uhr Schluss.",
+        ],
+      ];
+
       // Am Abend wird gekocht – hier bringt niemand etwas mit.
       const ABENDESSEN =
-        "Um 18:30 Uhr gibt es Abendessen. TODO: wer kocht was (Suppe und …). Dafür müsst ihr nichts mitbringen – das ist schon organisiert.";
+        "Um 18:30 Uhr gibt es Abendessen – Suppe und ein paar warme Sachen. Dafür ist gesorgt, ihr müsst nichts mitbringen. Wer kocht, steht unter „Helfer“.";
 
       // Kategorien des Mitbring-Buffets. Eine Zeile mehr hier reicht,
       // um eine Kategorie zu ergaenzen – die Datenbank bleibt, wie sie ist.
@@ -1603,7 +1694,16 @@
         "Sellerie",
         "Senf",
       ];
-      const KENNZEICHEN = ["vegetarisch", "vegan"];
+      // "Passend fuer" – wird beim Eintragen unten angehakt und oben
+      // im Reiter zum Filter. Allergene stehen davor, die sind eine
+      // andere Frage: was drin ist, nicht fuer wen es passt.
+      const KENNZEICHEN = [
+        "vegetarisch",
+        "vegan",
+        "halal",
+        "glutenfrei",
+        "laktosefrei",
+      ];
 
       // =====================================================================
       //  Schluessel: Supabase -> Settings -> API Keys
@@ -1965,6 +2065,11 @@
                 " &#8594;</span>"
               : "") +
             "</div></li>",
+        ).join("");
+
+        $("haltung").innerHTML = HALTUNG.map(
+          ([titel, text]) =>
+            "<li><h3>" + esc(titel) + "</h3><p>" + esc(text) + "</p></li>",
         ).join("");
 
         $("orte").innerHTML = ortkarte("trauung") + ortkarte("fest");
