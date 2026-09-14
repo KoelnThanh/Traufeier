@@ -1989,24 +1989,16 @@
 
       // ---------------------------------------------------------- Laden
       async function laden() {
-        const [g, p, sp] = await Promise.all([
+        const [g, p] = await Promise.all([
           db.from("gaeste").select("*").order("name"),
           db.from("profile").select("*"),
-          db
-            .from("speisen")
-            .select("*")
-            .eq("zurueckgezogen", false)
-            .order("id"),
+          ladeSpeisen(),
         ]);
         if (g.error) throw g.error;
         if (p.error) throw p.error;
 
         gaeste = g.data;
         profile = new Map((p.data || []).map((r) => [r.name, r]));
-        // Die Speisen sind ein Nachtrag (speisen.sql). Fehlt die Tabelle
-        // noch, soll deshalb nicht die ganze Seite dunkel bleiben.
-        speisen = sp.error ? [] : sp.data || [];
-        if (sp.error) console.warn("Tabelle speisen fehlt:", sp.error.message);
 
         const liste =
           '<option value="">Bitte auswählen …</option>' +
@@ -2317,6 +2309,25 @@
       // ---------------------------------------------------------- Speisen
       const meine = () => speisen.filter((b) => b.name === ichName);
 
+      // Nach jedem Schreiben neu laden, statt der Antwort zu trauen:
+      // PostgREST liefert bei einem update ohne Prefer-Header HTTP 204
+      // ohne Inhalt. Nebenbei sieht man so, was andere inzwischen
+      // eingetragen haben - bei einer geteilten Liste ist das richtig.
+      async function ladeSpeisen() {
+        const { data, error } = await db
+          .from("speisen")
+          .select("*")
+          .eq("zurueckgezogen", false)
+          .order("id");
+        // Die Tabelle ist ein Nachtrag (speisen.sql). Fehlt sie noch,
+        // soll deshalb nicht die ganze Seite dunkel bleiben.
+        if (error) {
+          console.warn("Tabelle speisen nicht lesbar:", error.message);
+          return;
+        }
+        speisen = data || [];
+      }
+
       // Wie eine Kategorie heisst, wenn der Gast sie selbst benannt hat.
       const beitragArt = (b) => b.art || (b.bereich === "Anderes" ? "Anderes" : "");
 
@@ -2358,7 +2369,16 @@
         );
       }
 
-      function zeigeSpeisen() {
+      // Erst mit dem zeigen, was da ist, dann nachladen und neu malen.
+      // So steht die Ansicht sofort und ist gleich darauf aktuell.
+      async function zeigeSpeisen() {
+        rendereSpeisen();
+        zeige("Speisen");
+        await ladeSpeisen();
+        rendereSpeisen();
+      }
+
+      function rendereSpeisen() {
         const mittag = speisen.filter((b) => b.bereich === "Mittagsbuffet");
         const anderes = speisen.filter((b) => b.bereich !== "Mittagsbuffet");
         const leute = new Set(speisen.map((b) => b.name)).size;
@@ -2450,7 +2470,6 @@
           : '<div class="karte auftritt"><p class="leiser">Hier steht noch nichts.</p></div>';
 
         $("abendText").textContent = ABENDESSEN;
-        zeige("Speisen");
       }
 
       // Die eigenen Beitraege in "Mein Platz" – hier darf man aendern.
@@ -2537,23 +2556,17 @@
 
         knopf.disabled = true;
         try {
-          const { data, error } = beitragOffen
-            ? await db
-                .from("speisen")
-                .update(satz)
-                .eq("id", beitragOffen)
-                .select()
-            : await db.from("speisen").insert(satz).select();
+          const { error } = beitragOffen
+            ? await db.from("speisen").update(satz).eq("id", beitragOffen)
+            : await db.from("speisen").insert(satz);
           if (error) throw error;
 
-          const neu = (data || [])[0];
-          if (neu) {
-            const i = speisen.findIndex((x) => x.id === neu.id);
-            i >= 0 ? (speisen[i] = neu) : speisen.push(neu);
-          }
+          const warAenderung = !!beitragOffen;
+          await ladeSpeisen();
           $("beitragDialog").close();
           meineBeitraege();
-          melde(beitragOffen ? "Geändert." : "Eingetragen. Danke!");
+          if (!$("ansichtSpeisen").hidden) rendereSpeisen();
+          melde(warAenderung ? "Geändert." : "Eingetragen. Danke!");
         } catch (e) {
           melde("Das hat nicht geklappt: " + (e.message ?? e), true);
         } finally {
@@ -2571,9 +2584,10 @@
             .update({ zurueckgezogen: true, geaendert: new Date().toISOString() })
             .eq("id", beitragOffen);
           if (error) throw error;
-          speisen = speisen.filter((x) => x.id !== beitragOffen);
+          await ladeSpeisen();
           $("beitragDialog").close();
           meineBeitraege();
+          if (!$("ansichtSpeisen").hidden) rendereSpeisen();
           melde("Ist aus der Liste raus.");
         } catch (e) {
           melde("Das hat nicht geklappt: " + (e.message ?? e), true);
