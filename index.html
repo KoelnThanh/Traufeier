@@ -285,7 +285,11 @@
       }
       nav {
         display: flex;
-        justify-content: center;
+        /* Nicht justify-content: center – das schiebt ueberstehende
+           Reiter links aus dem scrollbaren Bereich, sie sind dann nicht
+           mehr erreichbar. Auto-Raender zentrieren, solange Platz ist,
+           und fallen auf null, sobald gescrollt werden muss. */
+        justify-content: flex-start;
         gap: 2px;
         padding: 9px 12px 0;
         overflow-x: auto;
@@ -293,6 +297,44 @@
       }
       nav::-webkit-scrollbar {
         display: none;
+      }
+      nav button:first-child {
+        margin-left: auto;
+      }
+      nav button:last-child {
+        margin-right: auto;
+      }
+      /* Fuenf Reiter, dazu laengere Woerter auf Spanisch und Vietnamesisch:
+         auf dem Handy etwas enger setzen. */
+      @media (max-width: 470px) {
+        /* Weich auslaufende Raender statt hartem Schnitt – zeigt, dass
+           seitlich noch mehr kommt. Die Maske wirkt nur auf die Reiter,
+           der Hintergrund liegt auf .navband darunter. */
+        nav {
+          padding-inline: 14px;
+          -webkit-mask-image: linear-gradient(
+            to right,
+            transparent 0,
+            #000 14px,
+            #000 calc(100% - 14px),
+            transparent 100%
+          );
+          mask-image: linear-gradient(
+            to right,
+            transparent 0,
+            #000 14px,
+            #000 calc(100% - 14px),
+            transparent 100%
+          );
+        }
+        nav button {
+          padding: 8px 9px 10px;
+          font-size: 13.5px;
+        }
+        nav button[aria-current="true"]::after {
+          left: 9px;
+          right: 9px;
+        }
       }
       nav button {
         position: relative;
@@ -1121,14 +1163,61 @@
           transition-duration: 0.01ms !important;
         }
       }
+      /* ---------------------------------------------------------- Sprache */
+      /* Steht ueber allem, auch vor der Anmeldung. Deshalb bekommt der
+         Kopf darunter weniger Luft nach oben – die Leiste nimmt sie ein. */
+      .sprachleiste {
+        display: flex;
+        justify-content: flex-end;
+        gap: 2px;
+        max-width: 660px;
+        margin: 0 auto;
+        padding: 10px 14px 0;
+      }
+      .sprachleiste button {
+        padding: 8px 9px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        color: var(--leise);
+        border-radius: 3px;
+      }
+      .sprachleiste button:hover {
+        color: var(--tinte);
+      }
+      .sprachleiste button[aria-pressed="true"] {
+        color: var(--gold);
+        text-decoration: underline;
+        text-underline-offset: 5px;
+      }
+      .sprachleiste button:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+      .hero {
+        padding-top: 18px;
+      }
+      body.angemeldet .hero {
+        padding-top: 2px;
+      }
     </style>
   </head>
 
   <body>
+    <!-- ================================================== Sprache ===== -->
+    <!-- Ganz oben und immer sichtbar: vor der Anmeldung gibt es noch
+         keine Navigation, gewechselt werden soll aber schon. -->
+    <div class="sprachleiste" role="group" data-t-aria="sprache.aria">
+      <button data-sprache="de" lang="de" title="Deutsch">DE</button>
+      <button data-sprache="en" lang="en" title="English">EN</button>
+      <button data-sprache="es" lang="es" title="Español">ES</button>
+      <button data-sprache="vi" lang="vi" title="Tiếng Việt">VI</button>
+    </div>
+
     <!-- ===================================================== Kopf ===== -->
     <header class="hero">
       <div class="hero-blatt">
-        <p class="versalien">Wir heiraten</p>
+        <p class="versalien" data-t="hero.ueberzeile">Wir heiraten</p>
         <h1 class="namen">
           <span>Christina</span>
           <span class="amp">&amp;</span>
@@ -1161,12 +1250,12 @@
           <span>Viersen</span>
         </p>
         <p class="countdown" id="countdown"></p>
-        <p class="einordnung">
+        <p class="einordnung" data-t-html="hero.einordnung">
           Es ist unsere <strong>Traufeier</strong> – standesamtlich, im kleinen
           Kreis, mit einem langen Tag danach. Die große Hochzeit feiern wir
           später.
         </p>
-        <p class="zweisaetze">
+        <p class="zweisaetze" data-t-html="hero.zweisaetze">
           Schenkt uns nichts, kommt einfach.<br />Und zieht euch schick an.
         </p>
       </div>
@@ -1175,17 +1264,23 @@
     <!-- =============================================== Navigation ===== -->
     <div class="navband" id="navband" hidden>
       <nav id="nav">
-        <button data-ansicht="Einladung">Einladung</button>
-        <button data-ansicht="Profil">
-          Mein Platz<span class="punkt" id="navPunkt" hidden></span>
+        <button data-ansicht="Einladung" data-t="nav.einladung">
+          Einladung
         </button>
-        <button data-ansicht="Speisen">Speisen</button>
-        <button data-ansicht="Board">Gäste</button>
-        <button data-ansicht="Helfer">Helfer</button>
+        <button data-ansicht="Profil">
+          <span data-t="nav.profil">Mein Platz</span
+          ><span class="punkt" id="navPunkt" hidden></span>
+        </button>
+        <button data-ansicht="Speisen" data-t="nav.speisen">Speisen</button>
+        <button data-ansicht="Board" data-t="nav.board">Gäste</button>
+        <button data-ansicht="Helfer" data-t="nav.helfer">Helfer</button>
       </nav>
       <div class="alsleiste">
-        <span>Du antwortest als <strong id="alsName">–</strong></span>
-        <button id="wechselKnopf">wechseln</button>
+        <span
+          ><span data-t="als.text">Du antwortest als</span>
+          <strong id="alsName">–</strong></span
+        >
+        <button id="wechselKnopf" data-t="als.wechseln">wechseln</button>
       </div>
     </div>
 
@@ -1195,55 +1290,65 @@
       <!-- ============================================= Einladung ===== -->
       <section id="ansichtEinladung" hidden>
         <div class="karte auftritt">
-          <h2>Der Tag</h2>
+          <h2 data-t="einl.tag">Der Tag</h2>
           <ol class="ablauf" id="ablauf"></ol>
-          <button class="knopf leise" data-kalender>
+          <button class="knopf leise" data-kalender data-t="kal.knopf">
             In meinen Kalender eintragen
           </button>
-          <p class="hinweis">
+          <p class="hinweis" data-t="kal.hinweis">
             Lädt eine Termindatei – Handy und Rechner tragen sie von allein ein.
           </p>
         </div>
 
         <div class="karte auftritt">
-          <h2>Wie wir feiern</h2>
-          <p class="leiser" style="margin-bottom: 18px">
-            Eine Traufeier ist keine Hochzeit. Damit ihr wisst, worauf ihr
-            euch einlasst:
+          <h2 data-t="haltung.titel">Wie wir feiern</h2>
+          <p
+            class="leiser"
+            style="margin-bottom: 18px"
+            data-t="haltung.intro"
+          >
+            Eine Traufeier ist keine Hochzeit. Damit ihr wisst, worauf ihr euch
+            einlasst:
           </p>
           <ul class="haltung" id="haltung"></ul>
         </div>
 
         <div class="karte auftritt">
-          <h2>Wo</h2>
+          <h2 data-t="orte.titel">Wo</h2>
           <div id="orte"></div>
         </div>
 
         <div class="karte auftritt">
-          <h2>Übernachten</h2>
+          <h2 data-t="schlafen.titel">Übernachten</h2>
           <p id="schlafenText"></p>
         </div>
 
         <!-- Erst das Fest, dann die Frage. -->
         <div class="karte auftritt" id="karteAuswahl">
-          <h2>Und wer bist du?</h2>
-          <p class="leiser">
+          <h2 data-t="auswahl.titel">Und wer bist du?</h2>
+          <p class="leiser" data-t="auswahl.text">
             Such dich in der Liste – danach siehst du deinen Platz und die
             anderen Gäste. Für Kinder und Mitbewohner kannst du danach in einem
             Klick mitantworten.
           </p>
-          <label for="wahl" style="margin-top: 18px">Dein Name</label>
+          <label for="wahl" style="margin-top: 18px" data-t="auswahl.label"
+            >Dein Name</label
+          >
           <select id="wahl">
             <option value="">Bitte auswählen …</option>
           </select>
-          <button class="knopf" id="losButton" disabled>Weiter</button>
+          <button class="knopf" id="losButton" disabled data-t="auswahl.weiter">
+            Weiter
+          </button>
         </div>
 
         <div class="karte auftritt" id="karteWeiter" hidden>
-          <h2>Schön, dass du da bist</h2>
+          <h2 data-t="weiter.titel">Schön, dass du da bist</h2>
           <p class="leiser" id="weiterText"></p>
-          <button class="knopf" data-ziel="Profil">Zu meinem Platz</button>
-          <button class="knopf leise" data-ziel="Board">
+          <button class="knopf" data-ziel="Profil" data-t="weiter.platz">
+            Zu meinem Platz
+          </button>
+          <button class="knopf leise" data-ziel="Board" data-t="weiter.board">
             Alle Gäste ansehen
           </button>
         </div>
@@ -1252,34 +1357,38 @@
       <!-- ============================================ Mein Platz ===== -->
       <section id="ansichtProfil" hidden>
         <div class="karte auftritt" id="karteHaushalt" hidden>
-          <h2>Dein Haushalt</h2>
-          <p class="leiser" style="margin-bottom: 16px">
+          <h2 data-t="haushalt.titel">Dein Haushalt</h2>
+          <p
+            class="leiser"
+            style="margin-bottom: 16px"
+            data-t="haushalt.text"
+          >
             Antworte für die anderen gleich mit – ein Klick wechselt hinüber.
           </p>
           <div class="haushalt" id="haushalt"></div>
         </div>
 
         <div class="karte auftritt">
-          <p class="versalien">Dein Platz</p>
+          <p class="versalien" data-t="platz.versalien">Dein Platz</p>
           <h2 id="meinName" style="margin: 6px 0 16px">–</h2>
           <dl class="fakten" id="meineFakten"></dl>
           <div class="chips" id="meineRollen"></div>
         </div>
 
         <div class="karte auftritt">
-          <h2>Noch zu tun</h2>
+          <h2 data-t="schritte.titel">Noch zu tun</h2>
           <ul class="schritte" id="schritte"></ul>
         </div>
 
         <div class="karte auftritt">
-          <h2>Kommst du?</h2>
-          <select id="zusage" aria-label="Zusage">
-            <option value="">Noch offen</option>
-            <option value="ja">Ja, ich komme</option>
-            <option value="nein">Leider nicht</option>
+          <h2 data-t="zusage.titel">Kommst du?</h2>
+          <select id="zusage" aria-label="Zusage" data-t-aria="zusage.aria">
+            <option value="" data-t="zusage.offen">Noch offen</option>
+            <option value="ja" data-t="zusage.ja">Ja, ich komme</option>
+            <option value="nein" data-t="zusage.nein">Leider nicht</option>
           </select>
 
-          <label for="steckbrief"
+          <label for="steckbrief" data-t-html="steckbrief.label"
             >Ein Satz über dich
             <span class="zusatz">— für die anderen Gäste</span></label
           >
@@ -1287,9 +1396,10 @@
             id="steckbrief"
             maxlength="240"
             placeholder="Wie kennst du uns? Was machst du so?"
+            data-t-ph="steckbrief.ph"
           ></textarea>
 
-          <label for="foto">Dein Foto</label>
+          <label for="foto" data-t="foto.label">Dein Foto</label>
           <div
             id="fotoVorschau"
             hidden
@@ -1301,52 +1411,70 @@
             "
           >
             <div class="portrait" style="width: 52px; height: 52px">
-              <img id="fotoBild" alt="Dein aktuelles Foto" />
+              <img id="fotoBild" alt="Dein aktuelles Foto" data-t-alt="foto.alt" />
             </div>
-            <span class="leiser">Dein Foto steht schon auf dem Board.</span>
+            <span class="leiser" data-t="foto.schon"
+              >Dein Foto steht schon auf dem Board.</span
+            >
           </div>
           <input type="file" id="foto" accept="image/*" />
-          <p class="hinweis">Wird vor dem Hochladen automatisch verkleinert.</p>
+          <p class="hinweis" data-t="foto.hinweis">
+            Wird vor dem Hochladen automatisch verkleinert.
+          </p>
 
-          <button class="knopf" id="speichernButton">Speichern</button>
+          <button class="knopf" id="speichernButton" data-t="speichern">
+            Speichern
+          </button>
         </div>
 
         <div class="karte auftritt">
-          <h2>Was bringst du mit?</h2>
-          <p class="leiser" style="margin-bottom: 16px">
+          <h2 data-t="mitbringen.titel">Was bringst du mit?</h2>
+          <p
+            class="leiser"
+            style="margin-bottom: 16px"
+            data-t="mitbringen.text"
+          >
             Mittags gibt es ein Buffet aus dem, was alle mitbringen. Am Abend
             wird für euch gekocht – da braucht ihr nichts.
           </p>
           <div id="meineBeitraege"></div>
-          <button class="knopf leise" data-beitrag-neu>Etwas hinzufügen</button>
+          <button class="knopf leise" data-beitrag-neu data-t="mitbringen.neu">
+            Etwas hinzufügen
+          </button>
         </div>
 
         <div class="karte auftritt">
-          <h2>Für die Küche</h2>
-          <p class="hinweis" style="margin-top: 0">
+          <h2 data-t="kueche.titel">Für die Küche</h2>
+          <p class="hinweis" style="margin-top: 0" data-t="kueche.hinweis">
             Sehen nur Christina und Thanh – nicht die anderen Gäste. Aus dem
             gleichen Grund können wir es dir später nicht wieder anzeigen.
           </p>
-          <label for="allergien">Allergien oder Unverträglichkeiten</label>
+          <label for="allergien" data-t="kueche.allergien"
+            >Allergien oder Unverträglichkeiten</label
+          >
           <textarea
             id="allergien"
             placeholder="z. B. Nüsse, laktosefrei, vegetarisch"
+            data-t-ph="kueche.allergienPh"
           ></textarea>
-          <label for="hinweise">Sonstige Hinweise</label>
+          <label for="hinweise" data-t="kueche.hinweise"
+            >Sonstige Hinweise</label
+          >
           <textarea
             id="hinweise"
             placeholder="Alles, was wir wissen sollten"
+            data-t-ph="kueche.hinweisePh"
           ></textarea>
           <p class="hinweis" id="kuecheStand" hidden></p>
-          <button class="knopf leise" id="kuecheButton">
+          <button class="knopf leise" id="kuecheButton" data-t="kueche.knopf">
             An die Küche schicken
           </button>
         </div>
 
-        <button class="knopf leise" data-kalender>
+        <button class="knopf leise" data-kalender data-t="kal.knopf">
           In meinen Kalender eintragen
         </button>
-        <button class="knopf leise" data-ziel="Board">
+        <button class="knopf leise" data-ziel="Board" data-t="weiter.board">
           Alle Gäste ansehen
         </button>
       </section>
@@ -1355,7 +1483,7 @@
       <section id="ansichtBoard" hidden>
         <div class="karte auftritt">
           <div class="zaehler">
-            <span>Zugesagt</span>
+            <span data-t="board.zugesagt">Zugesagt</span>
             <span>
               <span class="zahl" id="zusagenZahl">0</span>
               <span class="leiser" id="zusagenVon"></span>
@@ -1369,11 +1497,15 @@
 
         <div class="filter" id="filter"></div>
         <div class="board" id="board"></div>
-        <p class="hinweis" style="text-align: center; margin-top: 16px">
+        <p
+          class="hinweis"
+          style="text-align: center; margin-top: 16px"
+          data-t="board.tipp"
+        >
           Tipp: Auf einen Gast tippen zeigt seinen Steckbrief.
         </p>
 
-        <button class="knopf leise" data-ziel="Profil">
+        <button class="knopf leise" data-ziel="Profil" data-t="zurueck">
           Zurück zu meinem Platz
         </button>
       </section>
@@ -1381,23 +1513,25 @@
       <!-- =============================================== Speisen ===== -->
       <section id="ansichtSpeisen" hidden>
         <div class="karte auftritt">
-          <h2>Das Mittagsbuffet</h2>
+          <h2 data-t="speisen.titel">Das Mittagsbuffet</h2>
           <p class="leiser" id="buffetStand"></p>
           <div id="luecken"></div>
           <div class="filter" id="speisenFilter"></div>
-          <button class="knopf" data-beitrag-neu>Ich bringe etwas mit</button>
+          <button class="knopf" data-beitrag-neu data-t="speisen.neu">
+            Ich bringe etwas mit
+          </button>
         </div>
 
         <div id="speisenListe"></div>
 
         <div class="karte auftritt">
-          <h2>Abends</h2>
+          <h2 data-t="speisen.abends">Abends</h2>
           <div class="abendblock">
             <p class="leiser" id="abendText"></p>
           </div>
         </div>
 
-        <button class="knopf leise" data-ziel="Profil">
+        <button class="knopf leise" data-ziel="Profil" data-t="zurueck">
           Zurück zu meinem Platz
         </button>
       </section>
@@ -1405,21 +1539,25 @@
       <!-- ================================================ Helfer ===== -->
       <section id="ansichtHelfer" hidden>
         <div class="karte auftritt">
-          <h2>Wer macht was</h2>
-          <p class="leiser" style="margin-bottom: 20px">
-            Aus eurer Gästeliste. Gestrichelt heißt: noch nicht endgültig
+          <h2 data-t="helfer.titel">Wer macht was</h2>
+          <p
+            class="leiser"
+            style="margin-bottom: 20px"
+            data-t="helfer.intro"
+          >
+            Aus unserer Gästeliste. Gestrichelt heißt: noch nicht endgültig
             zugesagt.
           </p>
           <div id="aufgaben"></div>
         </div>
 
         <div class="karte auftritt" id="karteBedienste" hidden>
-          <h2>Gute Geister</h2>
+          <h2 data-t="helfer.geister">Gute Geister</h2>
           <p class="leiser" style="margin-bottom: 16px" id="bediensteText"></p>
           <div class="helferliste" id="bedienste"></div>
         </div>
 
-        <button class="knopf leise" data-ziel="Profil">
+        <button class="knopf leise" data-ziel="Profil" data-t="zurueck">
           Zurück zu meinem Platz
         </button>
       </section>
@@ -1427,36 +1565,42 @@
 
     <dialog id="gastDialog">
       <div class="dialog-inhalt" id="gastDialogInhalt"></div>
-      <button class="dialog-schliessen" id="gastDialogZu">Schließen</button>
+      <button class="dialog-schliessen" id="gastDialogZu" data-t="schliessen">
+        Schließen
+      </button>
     </dialog>
 
     <dialog id="beitragDialog">
       <div class="dialog-inhalt links">
-        <h2 style="margin-bottom: 6px">Was bringst du mit?</h2>
+        <h2 style="margin-bottom: 6px" data-t="mitbringen.titel">
+          Was bringst du mit?
+        </h2>
         <p class="leiser" style="margin-bottom: 4px" id="beitragFuer"></p>
 
-        <label for="bKategorie">Wofür?</label>
+        <label for="bKategorie" data-t="beitrag.wofuer">Wofür?</label>
         <select id="bKategorie"></select>
 
         <div id="bArtFrei" hidden>
-          <label for="bArt">Was für eine Art?</label>
+          <label for="bArt" data-t="beitrag.art">Was für eine Art?</label>
           <input
             type="text"
             id="bArt"
             maxlength="60"
             placeholder="z. B. Getränke, Kuchen für nachmittags, Deko"
+            data-t-ph="beitrag.artPh"
           />
         </div>
 
-        <label for="bTitel">Was genau?</label>
+        <label for="bTitel" data-t="beitrag.was">Was genau?</label>
         <input
           type="text"
           id="bTitel"
           maxlength="80"
           placeholder="z. B. Kartoffelsalat"
+          data-t-ph="beitrag.wasPh"
         />
 
-        <label for="bMenge"
+        <label for="bMenge" data-t-html="beitrag.menge"
           >Für wie viele? <span class="zusatz">— grob geschätzt</span></label
         >
         <input
@@ -1464,100 +1608,99 @@
           id="bMenge"
           maxlength="40"
           placeholder="z. B. für ca. 10"
+          data-t-ph="beitrag.mengePh"
         />
 
-        <label for="bZutaten"
+        <label for="bZutaten" data-t-html="beitrag.zutaten"
           >Was ist drin?
-          <span class="zusatz">— damit alle mit Allergien es lesen können</span></label
+          <span class="zusatz"
+            >— damit alle mit Allergien es lesen können</span
+          ></label
         >
         <textarea
           id="bZutaten"
           maxlength="400"
           placeholder="Kartoffeln, Mayonnaise, Eier, Senf, Gurken, Zwiebeln"
+          data-t-ph="beitrag.zutatenPh"
         ></textarea>
 
-        <label>Enthält</label>
+        <label data-t="beitrag.enthaelt">Enthält</label>
         <div class="hakenreihe" id="bAllergene"></div>
 
-        <label>Passt für</label>
+        <label data-t="beitrag.passt">Passt für</label>
         <div class="hakenreihe" id="bKennzeichen"></div>
 
         <button class="knopf" id="beitragSpeichern">Eintragen</button>
-        <button class="knopf leise" id="beitragZuruecknehmen" hidden>
+        <button
+          class="knopf leise"
+          id="beitragZuruecknehmen"
+          hidden
+          data-t="beitrag.zuruecknehmen"
+        >
           Ich bringe das doch nicht mit
         </button>
       </div>
-      <button class="dialog-schliessen" id="beitragZu">Abbrechen</button>
+      <button class="dialog-schliessen" id="beitragZu" data-t="abbrechen">
+        Abbrechen
+      </button>
     </dialog>
 
     <dialog id="wechselDialog">
       <div class="dialog-inhalt links">
-        <h2 style="margin-bottom: 6px">Wer antwortet?</h2>
-        <p class="leiser" style="margin-bottom: 18px">
+        <h2 style="margin-bottom: 6px" data-t="wechsel.titel">
+          Wer antwortet?
+        </h2>
+        <p class="leiser" style="margin-bottom: 18px" data-t="wechsel.text">
           Du kannst jederzeit wechseln – auch für deine Kinder.
         </p>
         <div class="haushalt" id="wechselHaushalt"></div>
-        <label for="wahl2">Oder jemand anderes</label>
+        <label for="wahl2" data-t="wechsel.andere">Oder jemand anderes</label>
         <select id="wahl2">
           <option value="">Bitte auswählen …</option>
         </select>
-        <button class="knopf" id="wechselOk" disabled>Wechseln</button>
+        <button class="knopf" id="wechselOk" disabled data-t="wechsel.knopf">
+          Wechseln
+        </button>
       </div>
-      <button class="dialog-schliessen" id="wechselZu">Abbrechen</button>
+      <button class="dialog-schliessen" id="wechselZu" data-t="abbrechen">
+        Abbrechen
+      </button>
     </dialog>
 
     <footer>nthanh.de</footer>
 
     <script type="module">
       import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+      import { TEXTE } from "./sprachen.js";
 
       // =====================================================================
       //  EURE ANGABEN – hier und nur hier pflegen.
       //
-      //  Was als TODO markiert ist, fehlt uns noch. Alles andere ist
-      //  recherchiert und gegen OpenStreetMap geprueft.
+      //  Hier steht nur, was in jeder Sprache gleich ist: Datum, Zeiten,
+      //  Adressen, Koordinaten. Alle Texte stehen in sprachen.js.
       // =====================================================================
       const FEIER = {
-        datum: "Samstag, 12. Dezember 2026",
-        tag: "2026-12-12", // maschinenlesbar – treibt Countdown und Kalender
+        // Maschinenlesbar. Treibt das Datum im Kopf (in jeder Sprache
+        // richtig formatiert), den Countdown und den Kalendereintrag.
+        tag: "2026-12-12",
 
         trauung: { von: "10:45", bis: "11:30" },
         fest: { von: "12:30", bis: "22:00" },
-
-        schlafenText:
-          "TODO: Hotelkontingent, Airbnb, wer bei wem unterkommt. Wenn in deinem Platz ein Schlafplatz steht, ist er für dich reserviert.",
       };
 
       // Die beiden Orte. Koordinaten gegen OpenStreetMap geprueft.
+      // 'marken' sind die Symbole vor den Hinweisen; die Texte dazu stehen
+      // in sprachen.js unter orteHinweise, in derselben Reihenfolge.
       const ORTE = {
         trauung: {
-          rolle: "Trauung",
           kurz: "Trauzimmer Dülken",
           strasse: "Theodor-Frings-Allee 22",
           plz: "41751 Viersen-Dülken",
           lat: 51.2489191,
           lon: 6.3312341,
-          hinweise: [
-            [
-              "&#9200;",
-              "<strong>Bitte zehn Minuten früher da sein.</strong> Um 11:30 Uhr wird der Raum wieder gebraucht.",
-            ],
-            [
-              "&#9855;",
-              "Verwaltungsgebäude II der Stadt Viersen. Ein Aufzug führt hinauf – auch mit Rollstuhl oder Kinderwagen kein Problem.",
-            ],
-            [
-              "&#128101;",
-              "25 Sitzplätze. Deshalb ist die Trauung der kleine Teil des Tages.",
-            ],
-            [
-              "&#9742;",
-              'Standesamt Viersen: <a href="tel:+492162101253">02162 101-253</a>',
-            ],
-          ],
+          marken: ["&#9200;", "&#9855;", "&#128101;", "&#9742;"],
         },
         fest: {
-          rolle: "Die Feier",
           kurz: "Tanzschule Bachata Viersen",
           strasse: "Erich-Sanders-Weg 1",
           plz: "41749 Viersen-Süchteln",
@@ -1566,110 +1709,27 @@
           web: "https://www.bachata-viersen.de",
           telefon: "+49 178 868 3013",
           instagram: "https://www.instagram.com/bachata.viersen/",
-          hinweise: [
-            [
-              "&#9888;",
-              "<strong>Süchteln, nicht Dülken.</strong> Von der Trauung sind es gut 5 km – mit dem Auto etwa 15 Minuten.",
-            ],
-            [
-              "&#128663;",
-              "Parkplätze sind direkt an der Tanzschule – ihr müsst nichts suchen.",
-            ],
-            [
-              "&#128652;",
-              "Mit dem Bus bis Süchteln Busbahnhof. Die Linien 067, 074 und 083 verbinden Dülken und Süchteln.",
-            ],
-            [
-              "&#127925;",
-              "Wir feiern bis 22:00 Uhr. Wer ein Taxi braucht, bestellt es besser vorher.",
-            ],
-          ],
+          marken: ["&#9888;", "&#128663;", "&#128652;", "&#127925;"],
         },
       };
 
-      // Ablauf des Tages. nebensache: true stellt einen Punkt gedaempft dar,
+      // Die Zeiten des Tages. Titel und Text je Punkt stehen in
+      // sprachen.js unter 'ablauf', in derselben Reihenfolge.
+      // nebensache: true stellt einen Punkt gedaempft dar,
       // ort: verweist auf einen Schluessel aus ORTE und erzeugt den Link.
       const ABLAUF = [
-        {
-          zeit: "10:45",
-          titel: "Trauung",
-          text: "Im kleinen Kreis, bis etwa 11:30 Uhr. Wer dabei ist, findet es in seinem Platz.",
-          ort: "trauung",
-          nebensache: true,
-        },
-        {
-          zeit: "12:30",
-          titel: "Einlass",
-          text: "Ankommen, anstoßen, Zeit zum Reden.",
-          ort: "fest",
-        },
-        {
-          zeit: "13:30",
-          titel: "Mittagsbuffet",
-          text: "Alles, was ihr mitbringt. Was schon zusammengekommen ist, steht unter „Speisen“.",
-        },
-        {
-          zeit: "16:00",
-          titel: "Tanzworkshop für alle",
-          text: "Grundschritt in einer halben Stunde, ohne Vorkenntnisse. Wir stehen vorn, ihr macht mit – danach kann jeder mittanzen.",
-        },
-        {
-          zeit: "18:30",
-          titel: "Abendessen",
-          text: "Suppe und ein paar warme Sachen. Hier braucht ihr nichts mitzubringen.",
-        },
-        {
-          zeit: "20:00",
-          titel: "Unser Tanz, dann eurer",
-          text: "Einmal dürfen wir doch in die Mitte. Danach gehört die Fläche euch.",
-        },
-        {
-          zeit: "22:00",
-          titel: "Ende",
-          text: "Dann machen wir das Licht aus.",
-        },
+        { zeit: "10:45", ort: "trauung", nebensache: true },
+        { zeit: "12:30", ort: "fest" },
+        { zeit: "13:30" },
+        { zeit: "16:00" },
+        { zeit: "18:30" },
+        { zeit: "20:00" },
+        { zeit: "22:00" },
       ];
 
-      // Worum es an dem Tag geht. Steht auf der Einladung, nicht in
-      // einem Unterreiter – es beantwortet die Fragen, die sich jeder
-      // stellt, bevor er zusagt.
-      const HALTUNG = [
-        [
-          "Schenkt uns nichts",
-          "Wirklich nichts. Dass ihr kommt, ist uns mehr wert als alles, was in Geschenkpapier passt.",
-        ],
-        [
-          "Zieht euch schick an",
-          "Wir haben Lust auf einen eleganten Tag. Mehr Vorgaben gibt es nicht.",
-        ],
-        [
-          "Es gibt kein Catering – es gibt uns",
-          "Mittags bringt jeder etwas mit, und den Teller trägt danach jeder selbst weg. So bleibt es bezahlbar, und wir sind trotzdem alle satt.",
-        ],
-        [
-          "Für die Kinder ist jemand da",
-          "Eine Erzieherin passt auf, damit ihr auch mal in Ruhe sitzen, essen und tanzen könnt.",
-        ],
-        [
-          "Wir stellen uns nicht in die Mitte",
-          "Kaum Programm mit uns. Uns ist lieber, ihr habt miteinander einen schönen Tag.",
-        ],
-        [
-          "Keine gestellten Fotos",
-          "Unsere Fotografin hält fest, was ohnehin passiert. Posieren müsst ihr nicht, wir auch nicht.",
-        ],
-        [
-          "Das große Fest kommt in fünf Jahren",
-          "Wenn die Kinder größer sind und wir mit euch wieder richtig lange feiern können. Deshalb ist auch um 22 Uhr Schluss.",
-        ],
-      ];
-
-      // Am Abend wird gekocht – hier bringt niemand etwas mit.
-      const ABENDESSEN =
-        "Um 18:30 Uhr gibt es Abendessen – Suppe und ein paar warme Sachen. Dafür ist gesorgt, ihr müsst nichts mitbringen. Wer kocht, steht unter „Helfer“.";
-
-      // Kategorien des Mitbring-Buffets. Eine Zeile mehr hier reicht,
-      // um eine Kategorie zu ergaenzen – die Datenbank bleibt, wie sie ist.
+      // Kategorien des Mitbring-Buffets. Die Werte sind das, was in der
+      // Datenbank steht – sie bleiben deutsch, egal in welcher Sprache
+      // jemand einträgt. Angezeigt wird die Übersetzung aus sprachen.js.
       // art: null bedeutet "Gast schreibt selbst hin, was es ist".
       const KATEGORIEN = [
         { bereich: "Mittagsbuffet", art: "herzhaft" },
@@ -1678,8 +1738,6 @@
         { bereich: "Mittagsbuffet", art: "süß oder Nachtisch" },
         { bereich: "Anderes", art: null },
       ];
-      const katLabel = (k) =>
-        k.art ? k.bereich + " – " + k.art : "Etwas anderes";
 
       // Ankreuzbar statt Freitext: so laesst sich die Liste filtern.
       // Das Zutatenfeld bleibt trotzdem – kein Haken deckt "Koriander" ab.
@@ -1727,9 +1785,116 @@
         speisen = [],
         filterAuf = "alle",
         speisenFilterAuf = "alle",
-        beitragOffen = null; // null = neuer Eintrag, sonst die id
+        beitragOffen = null, // null = neuer Eintrag, sonst die id
+        offenerGast = null,
+        aktuell = "Einladung",
+        ruhig = false; // true: neu beschriften, ohne zu scrollen
       let ichName = localStorage.getItem("traufeier.gast");
 
+      // ============================================================ Sprache
+      // Gespeicherte Wahl zuerst, dann die Browsersprache, sonst Deutsch.
+      function waehleSprache() {
+        const gemerkt = localStorage.getItem("traufeier.sprache");
+        if (gemerkt && TEXTE[gemerkt]) return gemerkt;
+        for (const l of navigator.languages || [navigator.language || ""]) {
+          const kurz = String(l).slice(0, 2).toLowerCase();
+          if (TEXTE[kurz]) return kurz;
+        }
+        return "de";
+      }
+      let lang = waehleSprache();
+
+      // Ein Wert aus der aktuellen Sprache, sonst aus der deutschen.
+      // Fehlt er, meldet die Konsole es einmal – so faellt beim
+      // Gegenlesen auf, was noch nicht uebersetzt ist.
+      const gemeldet = new Set();
+      function L(key) {
+        const v = TEXTE[lang][key];
+        if (v !== undefined) return v;
+        if (!gemeldet.has(lang + key)) {
+          gemeldet.add(lang + key);
+          console.warn("Übersetzung fehlt:", lang, key);
+        }
+        return TEXTE.de[key];
+      }
+
+      // Text mit Platzhaltern. { one, other } waehlt nach vars.n.
+      function t(key, vars = {}) {
+        let v = L(key);
+        if (v && typeof v === "object") v = vars.n === 1 ? v.one : v.other;
+        if (v === undefined) return key;
+        return String(v).replace(/\{(\w+)\}/g, (m, k) =>
+          k in vars ? vars[k] : m,
+        );
+      }
+
+      // Anzeige fuer einen Datenbankwert: "Ei" -> "egg".
+      const wort = (karte, wert) =>
+        (L(karte) || {})[wert] ?? (TEXTE.de[karte] || {})[wert] ?? wert;
+
+      const katLabel = (k) =>
+        k.art
+          ? t("kat.label", {
+              bereich: t("bereich." + k.bereich),
+              art: wort("art", k.art),
+            })
+          : t("kat.anderes");
+
+      // Alles, was fest im Markup steht und ein data-t-Attribut traegt.
+      function beschrifte() {
+        document.documentElement.lang = lang;
+        for (const el of document.querySelectorAll("[data-t]"))
+          el.textContent = t(el.dataset.t);
+        // Nur fuer eigene Texte aus sprachen.js, nie fuer Gaesteeingaben.
+        for (const el of document.querySelectorAll("[data-t-html]"))
+          el.innerHTML = t(el.dataset.tHtml);
+        for (const el of document.querySelectorAll("[data-t-ph]"))
+          el.placeholder = t(el.dataset.tPh);
+        for (const el of document.querySelectorAll("[data-t-aria]"))
+          el.setAttribute("aria-label", t(el.dataset.tAria));
+        for (const el of document.querySelectorAll("[data-t-alt]"))
+          el.alt = t(el.dataset.tAlt);
+        for (const b of document.querySelectorAll("[data-sprache]"))
+          b.setAttribute("aria-pressed", String(b.dataset.sprache === lang));
+        for (const s of [$("wahl"), $("wahl2")])
+          if (s.options[0]) s.options[0].textContent = t("auswahl.bitte");
+        if (ichName)
+          $("weiterText").textContent = t("weiter.text", { name: ichName });
+        kopf();
+      }
+
+      function setzeSprache(neu) {
+        if (!TEXTE[neu] || neu === lang) return;
+        lang = neu;
+        localStorage.setItem("traufeier.sprache", neu);
+        beschrifte();
+
+        // Die offene Ansicht neu malen, ohne zu scrollen – und ohne
+        // Formulare zurueckzusetzen: halb Getipptes bleibt stehen.
+        ruhig = true;
+        try {
+          if (aktuell === "Profil") rendereProfil();
+          else if (aktuell === "Speisen") rendereSpeisen();
+          else ANSICHTEN[aktuell]();
+        } finally {
+          ruhig = false;
+        }
+
+        if ($("gastDialog").open && offenerGast) zeigeGast(offenerGast);
+        if ($("wechselDialog").open)
+          $("wechselHaushalt").innerHTML = haushaltKnoepfe(
+            gaeste.find((g) => g.name === ichName),
+            ichName,
+          );
+        if ($("beitragDialog").open)
+          beitragBeschriften(
+            $("bKategorie").value,
+            gehakt("bAllergene"),
+            gehakt("bKennzeichen"),
+          );
+      }
+
+      // ========================================================= Werkzeuge
       const esc = (s) =>
         String(s ?? "").replace(
           /[&<>"']/g,
@@ -1754,18 +1919,24 @@
             m.hidden = true;
           }, 4000);
       }
+      const fehler = (e) => melde(t("m.fehler", { text: e.message ?? e }), true);
 
       function zeige(welche) {
-        for (const a of [
-          "Einladung",
-          "Profil",
-          "Speisen",
-          "Board",
-          "Helfer",
-        ])
+        aktuell = welche;
+        for (const a of ["Einladung", "Profil", "Speisen", "Board", "Helfer"])
           $("ansicht" + a).hidden = a !== welche;
         for (const b of $("nav").querySelectorAll("button"))
           b.setAttribute("aria-current", String(b.dataset.ansicht === welche));
+        // Passen nicht alle Reiter auf den Schirm, den aktiven mittig
+        // holen. Bewusst per scrollTo statt scrollIntoView – das wuerde
+        // auch die Seite verschieben.
+        const aktiv = $("nav").querySelector('[aria-current="true"]');
+        if (aktiv)
+          $("nav").scrollTo({
+            left: aktiv.offsetLeft - ($("nav").clientWidth - aktiv.offsetWidth) / 2,
+            behavior: ruhig ? "auto" : "smooth",
+          });
+        if (ruhig) return;
         // Animation neu ausloesen, sonst laeuft sie nur beim ersten Mal.
         for (const el of $("ansicht" + welche).querySelectorAll(".auftritt")) {
           el.style.animation = "none";
@@ -1786,7 +1957,8 @@
           .join("")
           .toUpperCase();
 
-      // Rollen mit Fragezeichen sind noch nicht bestaetigt – gestrichelt zeigen
+      // Rollen stammen woertlich aus der Gaesteliste und bleiben, wie sie
+      // sind. Mit Fragezeichen sind sie noch nicht bestaetigt – gestrichelt.
       function rollenChips(rollen, grau = false) {
         return (rollen || [])
           .map((r) => {
@@ -1826,13 +1998,16 @@
         );
         const ziel = o.lat + "," + o.lon;
         const adresse = o.kurz + ", " + o.strasse + ", " + o.plz;
+        const texte = (L("orteHinweise") || {})[schluessel] || [];
 
         const kontakt = [];
         if (o.web)
           kontakt.push(
             '<a href="' +
               esc(o.web) +
-              '" target="_blank" rel="noopener">Website</a>',
+              '" target="_blank" rel="noopener">' +
+              esc(t("ort.website")) +
+              "</a>",
           );
         if (o.telefon)
           kontakt.push(
@@ -1854,7 +2029,7 @@
           esc(schluessel) +
           '">' +
           '<p class="versalien">' +
-          esc(o.rolle) +
+          esc(t("ort." + schluessel)) +
           "</p>" +
           '<p class="adresse"><strong>' +
           esc(o.kurz) +
@@ -1863,8 +2038,8 @@
           "<br>" +
           esc(o.plz) +
           "</p>" +
-          '<div class="kartenrahmen"><iframe loading="lazy" title="Karte: ' +
-          esc(o.kurz) +
+          '<div class="kartenrahmen"><iframe loading="lazy" title="' +
+          esc(t("ort.kartenTitel", { name: o.kurz })) +
           '" src="https://www.openstreetmap.org/export/embed.html?bbox=' +
           bbox +
           "&amp;layer=mapnik&amp;marker=" +
@@ -1880,26 +2055,34 @@
           o.lat +
           "/" +
           o.lon +
-          '" target="_blank" rel="noopener">Größere Karte öffnen</a></p>' +
+          '" target="_blank" rel="noopener">' +
+          esc(t("ort.karte")) +
+          "</a></p>" +
           '<div class="routen">' +
           '<a class="knopf leise" href="https://www.google.com/maps/dir/?api=1&amp;destination=' +
           ziel +
-          '" target="_blank" rel="noopener">Route (Google)</a>' +
+          '" target="_blank" rel="noopener">' +
+          esc(t("ort.google")) +
+          "</a>" +
           '<a class="knopf leise" href="https://maps.apple.com/?daddr=' +
           ziel +
-          '" target="_blank" rel="noopener">Route (Apple)</a>' +
+          '" target="_blank" rel="noopener">' +
+          esc(t("ort.apple")) +
+          "</a>" +
           '<button class="knopf leise" data-kopieren="' +
           esc(adresse) +
-          '">Adresse kopieren</button>' +
+          '">' +
+          esc(t("ort.kopieren")) +
+          "</button>" +
           "</div>" +
           '<ul class="orthinweise">' +
-          o.hinweise
+          o.marken
             .map(
-              ([marke, text]) =>
+              (marke, i) =>
                 '<li><span class="marke" aria-hidden="true">' +
                 marke +
                 "</span><span>" +
-                text +
+                (texte[i] || "") + // eigener Text aus sprachen.js, darf HTML
                 "</span></li>",
             )
             .join("") +
@@ -1974,41 +2157,48 @@
           zeilen.push(
             ...termin(
               "trauung",
-              "Trauung Christina & Thanh",
+              t("ics.trauungTitel"),
               FEIER.trauung.von,
               FEIER.trauung.bis,
               "trauung",
-              "Standesamtliche Trauung im kleinen Kreis. Bitte zehn Minuten frueher da sein.",
+              t("ics.trauungText"),
             ),
           );
         zeilen.push(
           ...termin(
             "fest",
-            "Traufeier Christina & Thanh",
+            t("ics.festTitel"),
             FEIER.fest.von,
             FEIER.fest.bis,
             "fest",
-            "Die Feier in der Tanzschule. Alle Infos: hochzeit.nthanh.de",
+            t("ics.festText"),
           ),
         );
         zeilen.push("END:VCALENDAR");
 
-        // Zeilen ueber 75 Zeichen muessen umgebrochen werden, die
-        // Fortsetzung beginnt mit einem Leerzeichen. Getrennt wird nie
-        // hinter einem einzelnen Backslash - das zerrisse eine
-        // Escape-Sequenz mittendrin.
+        // Zeilen ueber 75 Oktette muessen umgebrochen werden, die
+        // Fortsetzung beginnt mit einem Leerzeichen. Gezaehlt werden Bytes,
+        // nicht Zeichen – ein vietnamesisches Zeichen ist bis zu drei Bytes
+        // lang. Getrennt wird nie mitten in einem Zeichen oder mitten in
+        // einer Escape-Sequenz wie \, – beides zaehlt als ein Stueck.
+        const utf8 = new TextEncoder();
         const falten = (z) => {
           const teile = [];
-          let rest = z;
-          while (rest.length > 74) {
-            let n = 74,
-              schraege = 0;
-            while (rest[n - 1 - schraege] === "\\") schraege++;
-            if (schraege % 2 === 1) n--;
-            teile.push(rest.slice(0, n));
-            rest = rest.slice(n);
+          let zeile = "",
+            bytes = 0,
+            grenze = 75;
+          for (const stueck of z.match(/\\.|[\s\S]/gu) || []) {
+            const b = utf8.encode(stueck).length;
+            if (bytes + b > grenze) {
+              teile.push(zeile);
+              zeile = "";
+              bytes = 0;
+              grenze = 74; // das fuehrende Leerzeichen zaehlt mit
+            }
+            zeile += stueck;
+            bytes += b;
           }
-          teile.push(rest);
+          teile.push(zeile);
           return teile.join("\r\n ");
         };
         return zeilen.map(falten).join("\r\n");
@@ -2016,7 +2206,7 @@
 
       function kalenderLaden() {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(FEIER.tag))
-          return melde("Das Datum steht noch nicht fest.", true);
+          return melde(t("kal.datumFehlt"), true);
 
         const ich = gaeste.find((g) => g.name === ichName);
         const mitTrauung =
@@ -2034,48 +2224,24 @@
         a.click();
         a.remove();
         setTimeout(() => URL.revokeObjectURL(url), 5000);
-        melde(
-          mitTrauung
-            ? "Trauung und Feier stehen in der Datei."
-            : "Die Feier steht in der Datei.",
-        );
+        melde(t(mitTrauung ? "kal.beide" : "kal.feier"));
       }
 
-      // -------------------------------------------------------- Einladung
-      function zeigeEinladung() {
-        $("heroDatum").textContent = FEIER.datum;
-        $("schlafenText").textContent = FEIER.schlafenText;
-
-        $("ablauf").innerHTML = ABLAUF.map(
-          (s) =>
-            '<li class="' +
-            (s.nebensache ? "nebensache" : "") +
-            '"><span class="zeit">' +
-            esc(s.zeit) +
-            "</span><div><h3>" +
-            esc(s.titel) +
-            '</h3><p class="was">' +
-            esc(s.text) +
-            "</p>" +
-            (s.ort
-              ? '<span class="ortlink" data-ort="' +
-                esc(s.ort) +
-                '">' +
-                esc(ORTE[s.ort].kurz) +
-                " &#8594;</span>"
-              : "") +
-            "</div></li>",
-        ).join("");
-
-        $("haltung").innerHTML = HALTUNG.map(
-          ([titel, text]) =>
-            "<li><h3>" + esc(titel) + "</h3><p>" + esc(text) + "</p></li>",
-        ).join("");
-
-        $("orte").innerHTML = ortkarte("trauung") + ortkarte("fest");
-
+      // -------------------------------------------------------------- Kopf
+      // Das Datum wird nicht als Text gepflegt, sondern aus FEIER.tag in der
+      // jeweiligen Sprache gebaut: "Samstag, 12. Dezember 2026" /
+      // "Saturday 12 December 2026" / "Thứ Bảy, 12 tháng 12, 2026".
+      function kopf() {
+        const d = new Date(FEIER.tag + "T12:00");
+        $("heroDatum").textContent = isNaN(d)
+          ? ""
+          : new Intl.DateTimeFormat(L("_locale"), {
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            }).format(d);
         countdown();
-        zeige("Einladung");
       }
 
       function countdown() {
@@ -2084,12 +2250,53 @@
         const tage = Math.ceil((ziel - new Date()) / 86400000);
         $("countdown").textContent =
           tage > 1
-            ? "Noch " + tage + " Tage"
+            ? t("countdown.tage", { n: tage })
             : tage === 1
-              ? "Morgen ist es so weit"
+              ? t("countdown.morgen")
               : tage === 0
-                ? "Heute ist der Tag"
+                ? t("countdown.heute")
                 : "";
+      }
+
+      // -------------------------------------------------------- Einladung
+      function zeigeEinladung() {
+        $("schlafenText").textContent = t("schlafen");
+
+        const ablaufTexte = L("ablauf") || [];
+        $("ablauf").innerHTML = ABLAUF.map((s, i) => {
+          const [titel, text] = ablaufTexte[i] || ["", ""];
+          return (
+            '<li class="' +
+            (s.nebensache ? "nebensache" : "") +
+            '"><span class="zeit">' +
+            esc(s.zeit) +
+            "</span><div><h3>" +
+            esc(titel) +
+            '</h3><p class="was">' +
+            esc(text) +
+            "</p>" +
+            (s.ort
+              ? '<span class="ortlink" data-ort="' +
+                esc(s.ort) +
+                '">' +
+                esc(ORTE[s.ort].kurz) +
+                " &#8594;</span>"
+              : "") +
+            "</div></li>"
+          );
+        }).join("");
+
+        $("haltung").innerHTML = (L("haltung") || [])
+          .map(
+            ([titel, text]) =>
+              "<li><h3>" + esc(titel) + "</h3><p>" + esc(text) + "</p></li>",
+          )
+          .join("");
+
+        $("orte").innerHTML = ortkarte("trauung") + ortkarte("fest");
+
+        countdown();
+        zeige("Einladung");
       }
 
       // ---------------------------------------------------------- Laden
@@ -2106,7 +2313,9 @@
         profile = new Map((p.data || []).map((r) => [r.name, r]));
 
         const liste =
-          '<option value="">Bitte auswählen …</option>' +
+          '<option value="">' +
+          esc(t("auswahl.bitte")) +
+          "</option>" +
           gaeste
             .map(
               (x) =>
@@ -2141,11 +2350,13 @@
       // Wie weit ist jemand? Beschriftet die Haushaltsknoepfe.
       function stand(name) {
         const p = profile.get(name) || {};
-        return p.zusage === true
-          ? "kommt"
-          : p.zusage === false
-            ? "kann nicht"
-            : "noch offen";
+        return t(
+          p.zusage === true
+            ? "status.kommt"
+            : p.zusage === false
+              ? "status.kannNicht"
+              : "status.offen",
+        );
       }
 
       function haushaltKnoepfe(ich, aktiv) {
@@ -2169,6 +2380,7 @@
           .join("");
       }
 
+      // Formulare aus der Datenbank fuellen, dann alles Textliche malen.
       function zeigeProfil() {
         const ich = gaeste.find((g) => g.name === ichName);
         if (!ich) {
@@ -2179,22 +2391,46 @@
         }
 
         const p = profile.get(ichName) || {};
+        $("zusage").value =
+          p.zusage === true ? "ja" : p.zusage === false ? "nein" : "";
+        $("steckbrief").value = p.steckbrief || "";
+
+        const url = fotoUrl(p.foto);
+        $("fotoVorschau").hidden = !url;
+        if (url) $("fotoBild").src = url;
+        $("foto").value = "";
+
+        // Beim Wechsel leeren, sonst landen Annas Allergien bei Bruno.
+        $("allergien").value = "";
+        $("hinweise").value = "";
+
+        rendereProfil();
+        zeige("Profil");
+      }
+
+      // Nur Text, keine Eingaben – laeuft auch beim Sprachwechsel, ohne
+      // halb Getipptes zu verwerfen.
+      function rendereProfil() {
+        const ich = gaeste.find((g) => g.name === ichName);
+        if (!ich) return;
+        const p = profile.get(ichName) || {};
+
         $("meinName").textContent = ich.name;
         $("alsName").textContent = ich.name;
 
         // Die Trauung steht nur bei denen, die sie betrifft – und dort als
         // eine Zeile unter anderen, nicht als Schlagzeile.
-        const zeilen = [["Haushalt", ich.familie || "–"]];
+        const zeilen = [[t("fakten.haushalt"), ich.familie || "–"]];
         const schlafText = !ich.schlafplatz
           ? null
           : !ich.schlafort || ich.schlafort === "??"
-            ? "Ja – Ort noch offen"
+            ? t("fakten.ortOffen")
             : ich.schlafort;
-        if (schlafText) zeilen.push(["Schlafplatz", schlafText]);
+        if (schlafText) zeilen.push([t("fakten.schlafplatz"), schlafText]);
         if (ich.standesamt === "Ja" || ich.standesamt === "(Ja)")
           zeilen.push([
-            "Trauung",
-            ich.standesamt === "Ja" ? "Du bist dabei" : "Vorgemerkt",
+            t("fakten.trauung"),
+            t(ich.standesamt === "Ja" ? "fakten.dabei" : "fakten.vorgemerkt"),
           ]);
 
         $("meineFakten").innerHTML = zeilen
@@ -2209,52 +2445,37 @@
         $("karteHaushalt").hidden = mitbewohner.length < 2;
         $("haushalt").innerHTML = haushaltKnoepfe(ich, ichName);
 
-        $("zusage").value =
-          p.zusage === true ? "ja" : p.zusage === false ? "nein" : "";
-        $("steckbrief").value = p.steckbrief || "";
-
-        const url = fotoUrl(p.foto);
-        $("fotoVorschau").hidden = !url;
-        if (url) $("fotoBild").src = url;
-        $("foto").value = "";
-
         // Die Kueche kann nicht zurueckgelesen werden (Absicht, siehe
         // schema.sql) – also merken wir uns lokal, dass etwas ankam.
         const kStand = localStorage.getItem("traufeier.kueche." + ichName);
         $("kuecheStand").hidden = !kStand;
         if (kStand)
-          $("kuecheStand").textContent =
-            "Zuletzt geschickt am " +
-            new Date(kStand).toLocaleDateString("de-DE") +
-            ". Nochmal schicken geht jederzeit.";
-        // Beim Wechsel leeren, sonst landen Annas Allergien bei Bruno.
-        $("allergien").value = "";
-        $("hinweise").value = "";
+          $("kuecheStand").textContent = t("kueche.stand", {
+            datum: new Date(kStand).toLocaleDateString(L("_locale")),
+          });
 
         meineBeitraege();
         schritte(p, kStand);
-        $("weiterText").textContent =
-          "Du antwortest gerade als " + ich.name + ".";
-        zeige("Profil");
+        $("weiterText").textContent = t("weiter.text", { name: ich.name });
       }
 
       // Kleine Fortschrittsliste – sie beantwortet die Frage
       // "und was soll ich hier jetzt tun?".
       function schritte(p, kStand) {
         const liste = [
-          [p.zusage === true || p.zusage === false, "Zu- oder Absage gegeben"],
-          [!!p.steckbrief, "Einen Satz über dich geschrieben"],
-          [!!p.foto, "Ein Foto hochgeladen"],
-          [!!kStand, "Der Küche Bescheid gegeben"],
-          [meine().length > 0, "Etwas fürs Buffet eingetragen"],
+          [p.zusage === true || p.zusage === false, "schritte.zusage"],
+          [!!p.steckbrief, "schritte.steckbrief"],
+          [!!p.foto, "schritte.foto"],
+          [!!kStand, "schritte.kueche"],
+          [meine().length > 0, "schritte.buffet"],
         ];
         $("schritte").innerHTML = liste
           .map(
-            ([fertig, text]) =>
+            ([fertig, key]) =>
               '<li class="' +
               (fertig ? "erledigt" : "") +
               '"><span class="haken">&#10003;</span>' +
-              esc(text) +
+              esc(t(key)) +
               "</li>",
           )
           .join("");
@@ -2279,7 +2500,7 @@
         const knopf = $("speichernButton");
         const fuer = ichName; // festhalten: waehrend des Uploads kann gewechselt werden
         knopf.disabled = true;
-        knopf.textContent = "Speichere …";
+        knopf.textContent = t("speichern.laeuft");
         try {
           const datensatz = {
             name: fuer,
@@ -2295,7 +2516,7 @@
 
           const datei = $("foto").files[0];
           if (datei) {
-            knopf.textContent = "Lade Foto …";
+            knopf.textContent = t("speichern.foto");
             const blob = await verkleinern(datei);
             const pfad = crypto.randomUUID() + ".jpg";
             const { error } = await db.storage
@@ -2310,12 +2531,12 @@
 
           profile.set(fuer, { ...(profile.get(fuer) || {}), ...datensatz });
           if (ichName === fuer) zeigeProfil();
-          melde("Gespeichert für " + fuer + ". Danke!");
+          melde(t("m.gespeichert", { name: fuer }));
         } catch (e) {
-          melde("Das hat nicht geklappt: " + (e.message ?? e), true);
+          fehler(e);
         } finally {
           knopf.disabled = false;
-          knopf.textContent = "Speichern";
+          knopf.textContent = t("speichern");
         }
       }
 
@@ -2324,7 +2545,7 @@
         const fuer = ichName;
         const a = $("allergien").value.trim(),
           h = $("hinweise").value.trim();
-        if (!a && !h) return melde("Da steht noch nichts drin.", true);
+        if (!a && !h) return melde(t("m.leer"), true);
 
         knopf.disabled = true;
         try {
@@ -2337,9 +2558,9 @@
             new Date().toISOString(),
           );
           if (ichName === fuer) zeigeProfil();
-          melde("Ist bei uns angekommen.");
+          melde(t("m.kueche"));
         } catch (e) {
-          melde("Das hat nicht geklappt: " + (e.message ?? e), true);
+          fehler(e);
         } finally {
           knopf.disabled = false;
         }
@@ -2355,13 +2576,15 @@
         ).length;
 
         $("zusagenZahl").textContent = zugesagt;
-        $("zusagenVon").textContent = "von " + gaeste.length;
+        $("zusagenVon").textContent = t("board.von", { n: gaeste.length });
         $("zusagenBalken").style.width =
           (gaeste.length ? (zugesagt / gaeste.length) * 100 : 0) + "%";
         $("zusagenText").textContent = offen
-          ? offen + " haben noch nicht geantwortet."
-          : "Alle haben geantwortet.";
+          ? t("board.offen", { n: offen })
+          : t("board.fertig");
 
+        // Die Gruppen (Christina, Thanh, …) sind Daten und bleiben, wie sie
+        // in der Gaesteliste stehen. Nur "Alle" wird uebersetzt.
         const gruppen = [
           ...new Set(gaeste.map((g) => g.zugehoerigkeit).filter(Boolean)),
         ].sort();
@@ -2373,7 +2596,7 @@
               '" aria-pressed="' +
               (filterAuf === w) +
               '">' +
-              esc(w === "alle" ? "Alle" : w) +
+              esc(w === "alle" ? t("board.alle") : w) +
               "</button>",
           )
           .join("");
@@ -2387,7 +2610,11 @@
           .map((g) => {
             const p = profile.get(g.name) || {};
             const zusage =
-              p.zusage === true ? '<span class="chip zusage">kommt</span>' : "";
+              p.zusage === true
+                ? '<span class="chip zusage">' +
+                  esc(t("status.kommt")) +
+                  "</span>"
+                : "";
             const haus = g.familie
               ? '<div class="haus">' + esc(g.familie) + "</div>"
               : "";
@@ -2433,17 +2660,26 @@
         speisen = data || [];
       }
 
-      // Wie eine Kategorie heisst, wenn der Gast sie selbst benannt hat.
-      const beitragArt = (b) => b.art || (b.bereich === "Anderes" ? "Anderes" : "");
+      // Wie die Art eines Beitrags angezeigt wird: feste Kategorien
+      // uebersetzt, selbst benannte ("Getraenke") so, wie der Gast sie
+      // geschrieben hat.
+      const beitragArt = (b) =>
+        b.bereich === "Mittagsbuffet"
+          ? wort("art", b.art)
+          : b.art || t("bereich.Anderes");
 
       function beitragKarte(b, mitKnoepfen) {
         const g = gaeste.find((x) => x.name === b.name) || { name: b.name };
         const marken = [
           ...(b.kennzeichen || []).map(
-            (k) => '<span class="chip zusage">' + esc(k) + "</span>",
+            (k) =>
+              '<span class="chip zusage">' +
+              esc(wort("kennzeichen", k)) +
+              "</span>",
           ),
           ...(b.allergene || []).map(
-            (a) => '<span class="chip grau">' + esc(a) + "</span>",
+            (a) =>
+              '<span class="chip grau">' + esc(wort("allergen", a)) + "</span>",
           ),
         ].join("");
 
@@ -2457,18 +2693,18 @@
           '<div class="von">' +
           esc(b.name) +
           (b.menge ? " &middot; " + esc(b.menge) : "") +
-          (beitragArt(b) && mitKnoepfen
-            ? " &middot; " + esc(beitragArt(b))
-            : "") +
+          (mitKnoepfen ? " &middot; " + esc(beitragArt(b)) : "") +
           "</div>" +
           (marken ? '<div class="chips">' + marken + "</div>" : "") +
-          (b.zutaten
-            ? '<p class="zutaten">' + esc(b.zutaten) + "</p>"
-            : '<p class="zutaten">Zutaten stehen noch nicht dabei.</p>') +
+          '<p class="zutaten">' +
+          esc(b.zutaten || t("speisen.ohneZutaten")) +
+          "</p>" +
           (mitKnoepfen
             ? '<div class="knoepfchen"><button data-beitrag-bearbeiten="' +
               b.id +
-              '">Ändern</button></div>'
+              '">' +
+              esc(t("speisen.aendern")) +
+              "</button></div>"
             : "") +
           "</div></div>"
         );
@@ -2489,17 +2725,13 @@
         const leute = new Set(speisen.map((b) => b.name)).size;
 
         $("buffetStand").textContent = speisen.length
-          ? speisen.length +
-            (speisen.length === 1 ? " Beitrag" : " Beiträge") +
-            " von " +
-            leute +
-            (leute === 1 ? " Person" : " Personen") +
-            " – " +
-            mittag.length +
-            " fürs Mittagsbuffet, " +
-            anderes.length +
-            " anderes."
-          : "Noch hat sich niemand eingetragen. Fang gern an.";
+          ? t("speisen.stand", {
+              beitraege: t("speisen.beitraege", { n: speisen.length }),
+              personen: t("speisen.personen", { n: leute }),
+              mittag: mittag.length,
+              anderes: anderes.length,
+            })
+          : t("speisen.leer");
 
         // Keine Zielzahlen – nur die Kategorien, in denen noch gar
         // nichts steht. Das laesst sich nicht falsch einschaetzen.
@@ -2509,23 +2741,28 @@
             !mittag.some((b) => b.art === k.art),
         );
         $("luecken").innerHTML = leer.length
-          ? '<p class="luecke">Hier fehlt noch alles: <strong>' +
-            leer.map((k) => esc(k.art)).join("</strong>, <strong>") +
-            "</strong>."
+          ? '<p class="luecke">' +
+            t("speisen.luecke", {
+              liste: leer
+                .map((k) => "<strong>" + esc(wort("art", k.art)) + "</strong>")
+                .join(", "),
+            }) +
+            "</p>"
           : speisen.length
-            ? '<p class="luecke">In jeder Kategorie steht etwas. Mehr darf trotzdem gern dazu.</p>'
+            ? '<p class="luecke">' + esc(t("speisen.voll")) + "</p>"
             : "";
 
-        // Filter: Kategorien plus die Kennzeichen, die tatsaechlich
-        // vorkommen. Was niemand mitbringt, braucht keinen Knopf.
-        const vorhanden = [
-          ...new Set(speisen.flatMap((b) => b.kennzeichen || [])),
-        ].sort();
+        // Filter: Bereiche plus die Kennzeichen, die tatsaechlich
+        // vorkommen – in der Reihenfolge von KENNZEICHEN. Was niemand
+        // mitbringt, braucht keinen Knopf.
+        const vorhanden = KENNZEICHEN.filter((k) =>
+          speisen.some((b) => (b.kennzeichen || []).includes(k)),
+        );
         const knoepfe = [
-          ["alle", "Alles"],
-          ["Mittagsbuffet", "Mittagsbuffet"],
-          ["Anderes", "Anderes"],
-          ...vorhanden.map((k) => ["k:" + k, k]),
+          ["alle", t("speisen.filterAlle")],
+          ["Mittagsbuffet", t("bereich.Mittagsbuffet")],
+          ["Anderes", t("bereich.Anderes")],
+          ...vorhanden.map((k) => ["k:" + k, wort("kennzeichen", k)]),
         ];
         $("speisenFilter").innerHTML = knoepfe
           .map(
@@ -2552,14 +2789,14 @@
         // Nach Kategorie gruppieren, in der Reihenfolge von KATEGORIEN.
         const gruppen = [];
         for (const k of KATEGORIEN) {
+          if (k.bereich !== "Mittagsbuffet") continue;
           const drin = sichtbar.filter(
-            (b) => b.bereich === k.bereich && (k.art ? b.art === k.art : true),
+            (b) => b.bereich === k.bereich && b.art === k.art,
           );
-          if (k.bereich === "Anderes") continue;
           if (drin.length) gruppen.push([katLabel(k), drin]);
         }
         const rest = sichtbar.filter((b) => b.bereich !== "Mittagsbuffet");
-        if (rest.length) gruppen.push(["Außerdem", rest]);
+        if (rest.length) gruppen.push([t("speisen.ausserdem"), rest]);
 
         $("speisenListe").innerHTML = gruppen.length
           ? gruppen
@@ -2572,9 +2809,11 @@
                   "</div>",
               )
               .join("")
-          : '<div class="karte auftritt"><p class="leiser">Hier steht noch nichts.</p></div>';
+          : '<div class="karte auftritt"><p class="leiser">' +
+            esc(t("speisen.nichts")) +
+            "</p></div>";
 
-        $("abendText").textContent = ABENDESSEN;
+        $("abendText").textContent = t("abendessen");
       }
 
       // Die eigenen Beitraege in "Mein Platz" – hier darf man aendern.
@@ -2582,51 +2821,64 @@
         const eigene = meine();
         $("meineBeitraege").innerHTML = eigene.length
           ? eigene.map((b) => beitragKarte(b, true)).join("")
-          : '<p class="leiser">Du hast noch nichts eingetragen.</p>';
+          : '<p class="leiser">' + esc(t("speisen.meineLeer")) + "</p>";
       }
 
       // ------------------------------------------------- Beitrag erfassen
-      function hakenReihe(id, werte, gesetzt) {
+      // Wert = Datenbankwert (deutsch), Beschriftung = aktuelle Sprache.
+      function hakenReihe(id, werte, gesetzt, karte) {
         $(id).innerHTML = werte
           .map(
             (w) =>
-              "<label><input type=\"checkbox\" value=\"" +
+              '<label><input type="checkbox" value="' +
               esc(w) +
               '"' +
               (gesetzt.includes(w) ? " checked" : "") +
               ">" +
-              esc(w) +
+              esc(wort(karte, w)) +
               "</label>",
           )
           .join("");
+      }
+
+      // Beschriftet den Dialog, ohne die Auswahl zu verlieren – genutzt
+      // beim Oeffnen und beim Sprachwechsel mit offenem Dialog.
+      function beitragBeschriften(kategorie, allergene, kennzeichen) {
+        $("bKategorie").innerHTML = KATEGORIEN.map(
+          (k, i) => '<option value="' + i + '">' + esc(katLabel(k)) + "</option>",
+        ).join("");
+        $("bKategorie").value = String(kategorie);
+        hakenReihe("bAllergene", ALLERGENE, allergene, "allergen");
+        hakenReihe("bKennzeichen", KENNZEICHEN, kennzeichen, "kennzeichen");
+        $("beitragFuer").textContent = t("beitrag.fuer", { name: ichName });
+        $("beitragSpeichern").textContent = t(
+          beitragOffen ? "beitrag.aenderung" : "beitrag.eintragen",
+        );
       }
 
       function oeffneBeitrag(id) {
         const b = id ? speisen.find((x) => x.id === Number(id)) : null;
         beitragOffen = b ? b.id : null;
 
-        $("bKategorie").innerHTML = KATEGORIEN.map(
-          (k, i) =>
-            '<option value="' +
-            i +
-            '"' +
-            (b && b.bereich === k.bereich && (k.art ? b.art === k.art : true)
-              ? " selected"
-              : "") +
-            ">" +
-            esc(katLabel(k)) +
-            "</option>",
-        ).join("");
+        const kategorie = b
+          ? Math.max(
+              0,
+              KATEGORIEN.findIndex(
+                (k) =>
+                  k.bereich === b.bereich && (k.art ? b.art === k.art : true),
+              ),
+            )
+          : 0;
+        beitragBeschriften(
+          kategorie,
+          (b && b.allergene) || [],
+          (b && b.kennzeichen) || [],
+        );
 
         $("bTitel").value = b ? b.titel : "";
         $("bMenge").value = (b && b.menge) || "";
         $("bZutaten").value = (b && b.zutaten) || "";
         $("bArt").value = b && b.bereich === "Anderes" ? b.art || "" : "";
-        hakenReihe("bAllergene", ALLERGENE, (b && b.allergene) || []);
-        hakenReihe("bKennzeichen", KENNZEICHEN, (b && b.kennzeichen) || []);
-
-        $("beitragFuer").textContent = "Für " + ichName + ".";
-        $("beitragSpeichern").textContent = b ? "Änderung speichern" : "Eintragen";
         $("beitragZuruecknehmen").hidden = !b;
         artFeld();
         $("beitragDialog").showModal();
@@ -2645,7 +2897,7 @@
         const knopf = $("beitragSpeichern");
         const k = KATEGORIEN[Number($("bKategorie").value) || 0];
         const titel = $("bTitel").value.trim();
-        if (!titel) return melde("Schreib bitte dazu, was du mitbringst.", true);
+        if (!titel) return melde(t("m.titelFehlt"), true);
 
         const satz = {
           name: ichName,
@@ -2671,9 +2923,9 @@
           $("beitragDialog").close();
           meineBeitraege();
           if (!$("ansichtSpeisen").hidden) rendereSpeisen();
-          melde(warAenderung ? "Geändert." : "Eingetragen. Danke!");
+          melde(t(warAenderung ? "m.geaendert" : "m.eingetragen"));
         } catch (e) {
-          melde("Das hat nicht geklappt: " + (e.message ?? e), true);
+          fehler(e);
         } finally {
           knopf.disabled = false;
         }
@@ -2693,15 +2945,16 @@
           $("beitragDialog").close();
           meineBeitraege();
           if (!$("ansichtSpeisen").hidden) rendereSpeisen();
-          melde("Ist aus der Liste raus.");
+          melde(t("m.raus"));
         } catch (e) {
-          melde("Das hat nicht geklappt: " + (e.message ?? e), true);
+          fehler(e);
         }
       }
 
       // ----------------------------------------------------------- Helfer
       // Die Rollen stehen als Freitext in der Gaesteliste. Hier drehen wir
       // sie um: nicht "wer hat welche Rolle", sondern "wer macht das hier".
+      // Die Aufgabennamen sind Daten und bleiben, wie sie dort stehen.
       function zeigeHelfer() {
         // Braut und Braeutigam sind keine Aufgaben, die jemand uebernimmt.
         const KEINE_AUFGABE = ["Braut", "Bräutigam"];
@@ -2727,7 +2980,7 @@
                   '<div class="aufgabe"><h3>' +
                   esc(titel.replace(/\s*\?$/, "")) +
                   (titel.trim().endsWith("?")
-                    ? '<span class="offen">noch offen</span>'
+                    ? '<span class="offen">' + esc(t("helfer.offen")) + "</span>"
                     : "") +
                   '</h3><div class="helferliste">' +
                   leute
@@ -2742,17 +2995,16 @@
                   "</div></div>",
               )
               .join("")
-          : '<p class="leiser">Noch sind keine Aufgaben verteilt.</p>';
+          : '<p class="leiser">' + esc(t("helfer.keine")) + "</p>";
 
         // Bedienstete stehen in der Gaesteliste als eigene Art.
         const bed = gaeste.filter(
           (g) => g.art === "Bedienste" || g.zugehoerigkeit === "Bedienste",
         );
         $("karteBedienste").hidden = bed.length === 0;
-        $("bediensteText").textContent =
-          bed.length === 1
-            ? "Eine Person hilft uns an dem Tag im Hintergrund."
-            : bed.length + " Menschen helfen uns an dem Tag im Hintergrund.";
+        $("bediensteText").textContent = t("helfer.geisterText", {
+          n: bed.length,
+        });
         $("bedienste").innerHTML = bed
           .map(
             (g) =>
@@ -2771,13 +3023,16 @@
       function zeigeGast(name) {
         const g = gaeste.find((x) => x.name === name);
         if (!g) return;
+        offenerGast = name;
         const p = profile.get(name) || {};
         const status =
           p.zusage === true
-            ? '<span class="chip zusage">kommt</span>'
+            ? '<span class="chip zusage">' + esc(t("status.kommt")) + "</span>"
             : p.zusage === false
-              ? '<span class="chip grau">kann nicht</span>'
-              : '<span class="chip grau">noch offen</span>';
+              ? '<span class="chip grau">' +
+                esc(t("status.kannNicht")) +
+                "</span>"
+              : '<span class="chip grau">' + esc(t("status.offen")) + "</span>";
 
         $("gastDialogInhalt").innerHTML =
           portrait(g, p) +
@@ -2794,12 +3049,14 @@
           rollenChips(g.rollen, true) +
           "</div>" +
           (p.steckbrief
-            ? '<p class="steckbrief">&#8222;' +
-              esc(p.steckbrief) +
-              "&#8220;</p>"
-            : '<p class="hinweis" style="margin-top:16px">Hat noch nichts über sich geschrieben.</p>');
+            ? '<p class="steckbrief">' +
+              esc(t("zitat.auf") + p.steckbrief + t("zitat.zu")) +
+              "</p>"
+            : '<p class="hinweis" style="margin-top:16px">' +
+              esc(t("board.keinSteckbrief")) +
+              "</p>");
 
-        $("gastDialog").showModal();
+        if (!$("gastDialog").open) $("gastDialog").showModal();
       }
 
       function zeigeWechsel() {
@@ -2818,6 +3075,13 @@
         Board: zeigeBoard,
         Helfer: zeigeHelfer,
       };
+
+      document
+        .querySelector(".sprachleiste")
+        .addEventListener("click", (e) => {
+          const b = e.target.closest("[data-sprache]");
+          if (b) setzeSprache(b.dataset.sprache);
+        });
 
       $("nav").addEventListener("click", (e) => {
         const b = e.target.closest("button");
@@ -2846,9 +3110,9 @@
         if (kopf) {
           try {
             await navigator.clipboard.writeText(kopf.dataset.kopieren);
-            melde("Adresse kopiert.");
+            melde(t("m.kopiert"));
           } catch {
-            melde("Kopieren ging nicht – bitte von Hand markieren.", true);
+            melde(t("m.kopierenFehl"), true);
           }
           return;
         }
@@ -2886,6 +3150,9 @@
       $("gastDialog").addEventListener("click", (e) => {
         if (e.target === $("gastDialog")) $("gastDialog").close();
       });
+      $("gastDialog").addEventListener("close", () => {
+        offenerGast = null;
+      });
 
       $("bKategorie").addEventListener("change", artFeld);
       $("beitragSpeichern").addEventListener("click", beitragSpeichern);
@@ -2917,6 +3184,7 @@
       $("kuecheButton").addEventListener("click", anKueche);
 
       // Die Einladung steht auch ohne Datenbank – sie ist der Kern der Seite.
+      beschrifte();
       zeigeEinladung();
       try {
         await laden();
@@ -2929,7 +3197,7 @@
           angemeldet(false);
         }
       } catch (e) {
-        melde("Keine Verbindung zur Datenbank: " + (e.message ?? e), true);
+        melde(t("m.keineDb", { text: e.message ?? e }), true);
       }
     </script>
   </body>

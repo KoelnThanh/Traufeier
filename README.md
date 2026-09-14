@@ -55,34 +55,45 @@ was euch die Gäste über `kueche` geschickt haben).
 
 ### 3. Eure Angaben eintragen
 
-Ganz oben im Script-Block von `index.html` stehen drei Blöcke. Alles, was
-noch fehlt, ist dort als sichtbares `TODO:` markiert – damit nichts
-unbemerkt stehen bleibt.
+Zwei Dateien, sauber getrennt:
 
-**`FEIER`** – Datum und Zeiten:
+- **`index.html`** enthält nur, was in jeder Sprache gleich ist: Datum,
+  Zeiten, Adressen, Koordinaten.
+- **`sprachen.js`** enthält alle Texte der Seite in Deutsch, Englisch,
+  Spanisch und Vietnamesisch.
+
+Wer einen Text ändern will, ändert ihn in `sprachen.js` – in allen vier
+Sprachen. Wer eine Uhrzeit ändert, ändert sie in `index.html`.
+
+**`FEIER`** in `index.html` – Datum und Zeiten:
 
 ```js
 const FEIER = {
-  datum: "Samstag, 12. Dezember 2026",  // ausgeschrieben, für den Kopf
-  tag: "2026-12-12",                    // JJJJ-MM-TT, Countdown UND Kalender
+  tag: "2026-12-12",                      // JJJJ-MM-TT
   trauung: { von: "10:45", bis: "11:30" },
-  fest:    { von: "13:00", bis: "22:00" },
+  fest:    { von: "12:30", bis: "22:00" },
 };
 ```
 
-`tag` ist die einzige Stelle, an der das Datum maschinenlesbar steht.
-Fehlt es oder liegt es in der Vergangenheit, verschwindet der Countdown
-stillschweigend – die Seite bleibt heil, der Kalenderknopf sagt Bescheid.
+`tag` ist die einzige Stelle, an der das Datum steht. Daraus entstehen das
+ausgeschriebene Datum im Kopf – in jeder Sprache richtig formatiert
+(„Samstag, 12. Dezember 2026", „Thứ Bảy, 12 tháng 12, 2026") –, der
+Countdown und der Kalendereintrag. Liegt das Datum in der Vergangenheit,
+verschwindet der Countdown stillschweigend.
 
-**`ORTE`** – Trauzimmer und Tanzschule, jeweils mit Adresse, Koordinaten
-und einer Liste von Hinweisen. Die Koordinaten sind gegen OpenStreetMap
-geprüft; sie treiben die Karte, beide Routen-Knöpfe und das `GEO:`-Feld im
-Kalendereintrag. Wer die Adresse ändert, muss `lat`/`lon` mitziehen.
+**`ORTE`** – Trauzimmer und Tanzschule mit Adresse, Koordinaten und den
+Symbolen vor den Hinweisen (`marken`). Die Koordinaten sind gegen
+OpenStreetMap geprüft; sie treiben die Karte, beide Routen-Knöpfe und das
+`GEO:`-Feld im Kalendereintrag. Wer die Adresse ändert, muss `lat`/`lon`
+mitziehen. Die Hinweistexte stehen in `sprachen.js` unter `orteHinweise`,
+in derselben Reihenfolge wie `marken`.
 
-**`ABLAUF`** – der Tagesplan als Array. `nebensache: true` stellt einen
-Punkt gedämpft dar (so steht die Trauung dabei, ohne die Feier zu
-überstrahlen), `ort: "trauung"` oder `ort: "fest"` erzeugt den Sprunglink
-zur passenden Karte. Ein Punkt mehr heißt: eine Zeile mehr im Array.
+**`ABLAUF`** – die Zeiten des Tages. `nebensache: true` stellt einen Punkt
+gedämpft dar (so steht die Trauung dabei, ohne die Feier zu überstrahlen),
+`ort: "trauung"` oder `ort: "fest"` erzeugt den Sprunglink zur passenden
+Karte. Titel und Text stehen in `sprachen.js` unter `ablauf` – **gleiche
+Reihenfolge, gleiche Anzahl**. Ein Punkt mehr heißt: eine Zeile in
+`index.html` und eine Zeile je Sprache in `sprachen.js`.
 
 ### 4. Zugangsdaten eintragen
 
@@ -160,7 +171,7 @@ Danach unter **Actions** einmal manuell auslösen und prüfen, dass `200` kommt.
 
 ## Aufbau der Seite
 
-Fünf Ansichten unter einem festen Kopf:
+Fünf Ansichten unter einem festen Kopf, in vier Sprachen:
 
 | Ansicht | Zeigt |
 |---|---|
@@ -237,6 +248,33 @@ drei Wochen Planung kosten.
 Die Lückenanzeige nennt nur Kategorien, in denen **gar nichts** steht.
 Bewusst keine Zielzahlen: wie viel für 44 Leute reicht, schätzt jeder
 selbst besser ein als eine ausgedachte Sollgröße.
+
+### Sprachen
+
+Oben rechts steht immer DE · EN · ES · VI – auch vor der Anmeldung, weil
+es da noch keine Navigation gibt. Beim ersten Besuch wählt die Seite die
+Sprache des Browsers, danach die zuletzt gewählte.
+
+Ein paar Regeln, die man beim Pflegen kennen muss:
+
+- **Datenbankwerte bleiben deutsch.** Wer auf Spanisch „huevo" anhakt,
+  speichert `Ei`. Sonst würde ein Filter in einer Sprache die Einträge aus
+  einer anderen nicht finden. In `sprachen.js` steht deshalb bei `art`,
+  `allergen` und `kennzeichen` links der Datenbankwert – nur rechts
+  übersetzen.
+- **Was Gäste schreiben, bleibt, wie sie es schreiben.** Steckbriefe,
+  Gerichte, Zutaten, aber auch die Rollen und Haushalte aus eurer
+  Gästeliste werden nicht übersetzt.
+- **Fehlt eine Übersetzung**, erscheint der deutsche Text, und die
+  Browser-Konsole meldet `Übersetzung fehlt: vi schluessel`.
+- **Sprachwechsel verliert nichts.** Halb Getipptes in einem Formular oder
+  im offenen Eintragen-Dialog bleibt stehen; nur die Beschriftung wechselt.
+- Auch der Kalendereintrag kommt in der gewählten Sprache.
+
+Die Übersetzungen sind ein erster Entwurf. Beim Gegenlesen besonders
+prüfen: Vietnamesisch spricht Gäste mit „bạn" an – für ältere Verwandte
+womöglich zu locker. Spanisch ist neutral-lateinamerikanisch („ustedes",
+„auto").
 
 ### Schriften und Karten
 
