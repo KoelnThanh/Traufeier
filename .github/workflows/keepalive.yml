@@ -1,0 +1,18 @@
+name: Supabase wachhalten
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'   # jeden Montag 06:00 UTC
+  workflow_dispatch:       # plus Knopf zum manuellen Ausloesen
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Datenbank anpingen
+        run: |
+          code=$(curl -sS -o /dev/null -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/gaeste?select=name&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_KEY }}")
+          echo "Supabase antwortete mit $code"
+          test "$code" = "200"

@@ -1,0 +1,7 @@
+# Echte Personendaten – gehören nicht auf GitHub
+*.csv
+import.sql
+
+Thumbs.db
+.DS_Store
+.netlify/

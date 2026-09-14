@@ -1,0 +1,2263 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#faf7f2" />
+    <title>Christina &amp; Thanh</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* =================================================================
+         Farben & Schriften
+
+         Zwei Akzente, mehr nicht: Gold traegt das Festliche, Salbei
+         markiert Zusagen. Alles andere ist Papier, Tinte und Linie.
+         ================================================================= */
+      :root {
+        --papier: #faf7f2;
+        --papier-tief: #f2ebe0;
+        --tinte: #2a2521;
+        --leise: #837a6f;
+        --linie: #e7ded1;
+        --karte: #fffdfa;
+        --gold: #a8874a;
+        --gold-hell: #c2a165;
+        --gold-weich: #f5edde;
+        --salbei: #5c7d62;
+        --salbei-weich: #e8f0e8;
+        --warn: #9a3412;
+        --warn-weich: #fdeae4;
+        --schatten:
+          0 1px 2px rgba(42, 37, 33, 0.03),
+          0 10px 30px -18px rgba(42, 37, 33, 0.28);
+        --display: "Cormorant Garamond", Georgia, "Iowan Old Style", serif;
+        --text: system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --papier: #15120f;
+          --papier-tief: #1b1714;
+          --tinte: #efe8df;
+          --leise: #a09588;
+          --linie: #302823;
+          --karte: #1d1815;
+          --gold: #d5b276;
+          --gold-hell: #e2c58f;
+          --gold-weich: #2a2016;
+          --salbei: #8fb094;
+          --salbei-weich: #1d2620;
+          --warn: #f3a98c;
+          --warn-weich: #2f1b14;
+          --schatten:
+            0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px -18px rgba(0, 0, 0, 0.7);
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      /* Muss hinter jede display-Regel: nav, .punkt und die Fotovorschau
+         setzen selbst ein display und wuerden das hidden-Attribut sonst
+         ueberstimmen. */
+      [hidden] {
+        display: none !important;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(
+            120% 60% at 50% 0%,
+            var(--papier-tief) 0%,
+            var(--papier) 62%
+          ),
+          var(--papier);
+        color: var(--tinte);
+        font: 16px/1.65 var(--text);
+        overflow-wrap: break-word;
+      }
+      main {
+        max-width: 660px;
+        margin: 0 auto;
+        padding: 0 20px 72px;
+      }
+
+      /* ---------------------------------------------------- Grundelemente */
+      h2 {
+        font-family: var(--display);
+        font-weight: 500;
+        font-size: 1.7rem;
+        letter-spacing: 0.01em;
+        margin: 0 0 14px;
+      }
+      h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin: 0 0 2px;
+      }
+      p {
+        margin: 0 0 12px;
+      }
+      p:last-child {
+        margin-bottom: 0;
+      }
+      a {
+        color: var(--gold);
+      }
+      .leiser {
+        color: var(--leise);
+        font-size: 14px;
+      }
+      .versalien {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin: 0;
+      }
+
+      .karte {
+        background: var(--karte);
+        border: 1px solid var(--linie);
+        border-radius: 3px;
+        padding: 24px;
+        margin-bottom: 18px;
+        box-shadow: var(--schatten);
+      }
+
+      /* Cormorant liefert Mediaevalziffern – in einer Uhrzeit oder einem
+         Zaehler liest sich die 1 dann als I. Also Versalziffern erzwingen. */
+      .eckdaten,
+      .countdown,
+      ol.ablauf .zeit,
+      .zaehler .zahl,
+      .ortkarte .adresse {
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+
+      /* ------------------------------------------------------- Ornamente */
+      .ornament {
+        display: block;
+        margin: 18px auto;
+        color: var(--gold);
+        opacity: 0.75;
+      }
+
+      /* ------------------------------------------------ Kopf / Einladung */
+      .hero {
+        padding: 52px 20px 34px;
+        text-align: center;
+      }
+      .hero-blatt {
+        position: relative;
+        max-width: 620px;
+        margin: 0 auto;
+        padding: 46px 26px 40px;
+        background: var(--karte);
+        border: 1px solid var(--linie);
+        border-radius: 3px;
+        box-shadow: var(--schatten);
+      }
+      /* Die zweite, feine Linie innen macht aus einer Box eine Karte. */
+      .hero-blatt::after {
+        content: "";
+        position: absolute;
+        inset: 7px;
+        border: 1px solid var(--gold);
+        opacity: 0.32;
+        pointer-events: none;
+      }
+      .namen {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: baseline;
+        gap: 0 0.18em;
+        font-family: var(--display);
+        font-weight: 300;
+        font-size: clamp(2.3rem, 9vw, 3.7rem);
+        line-height: 1.06;
+        letter-spacing: 0.01em;
+        margin: 14px 0 0;
+      }
+      .namen .amp {
+        font-style: italic;
+        font-weight: 400;
+        color: var(--gold);
+      }
+      /* Schmal gestapelt – Name, Und, Name. So steht es auf Karten. */
+      @media (max-width: 470px) {
+        .namen {
+          flex-direction: column;
+          align-items: center;
+          gap: 0;
+        }
+        .namen .amp {
+          font-size: 0.62em;
+          line-height: 1.4;
+        }
+        body.angemeldet .namen {
+          flex-direction: row;
+          align-items: baseline;
+          gap: 0 0.18em;
+        }
+        body.angemeldet .namen .amp {
+          font-size: 1em;
+          line-height: inherit;
+        }
+      }
+      .eckdaten {
+        font-family: var(--display);
+        font-size: clamp(1.05rem, 3.6vw, 1.35rem);
+        line-height: 1.5;
+        margin: 0;
+      }
+      .eckdaten .trenn {
+        color: var(--gold);
+        padding: 0 0.45em;
+      }
+      .countdown {
+        margin: 18px 0 0;
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--leise);
+      }
+      /* Traufeier, nicht Hochzeit – das gehoert auf die erste Seite. */
+      .einordnung {
+        max-width: 36ch;
+        margin: 20px auto 0;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--leise);
+      }
+
+      /* Sobald klar ist, wer da ist, tritt der Kopf zurueck und macht
+         Platz fuer den eigentlichen Inhalt. */
+      body.angemeldet .hero {
+        padding: 26px 20px 8px;
+      }
+      body.angemeldet .hero-blatt {
+        background: none;
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+      }
+      body.angemeldet .hero-blatt::after,
+      body.angemeldet .hero .ornament,
+      body.angemeldet .countdown,
+      body.angemeldet .einordnung,
+      body.angemeldet .hero .versalien {
+        display: none;
+      }
+      body.angemeldet .namen {
+        font-size: clamp(1.5rem, 6vw, 1.9rem);
+        margin: 0;
+      }
+      body.angemeldet .eckdaten {
+        font-size: 0.95rem;
+        color: var(--leise);
+        margin-top: 2px;
+      }
+
+      /* ------------------------------------------------------ Navigation */
+      .navband {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        margin-bottom: 18px;
+        background: color-mix(in srgb, var(--papier) 90%, transparent);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--linie);
+      }
+      nav {
+        display: flex;
+        justify-content: center;
+        gap: 2px;
+        padding: 9px 12px 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      nav::-webkit-scrollbar {
+        display: none;
+      }
+      nav button {
+        position: relative;
+        flex: none;
+        padding: 8px 13px 10px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--leise);
+        border-radius: 3px;
+        white-space: nowrap;
+      }
+      nav button[aria-current="true"] {
+        color: var(--tinte);
+      }
+      nav button[aria-current="true"]::after {
+        content: "";
+        position: absolute;
+        left: 13px;
+        right: 13px;
+        bottom: 2px;
+        height: 1px;
+        background: var(--gold);
+      }
+      nav .punkt {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin-left: 5px;
+        border-radius: 50%;
+        background: var(--gold);
+        vertical-align: 2px;
+      }
+
+      /* Wer gerade antwortet – und wie man das in einem Klick aendert.
+         Eltern beantworten hierueber auch die Zusage ihrer Kinder. */
+      .alsleiste {
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        padding: 7px 14px 9px;
+        font-size: 13px;
+        color: var(--leise);
+      }
+      .alsleiste strong {
+        color: var(--tinte);
+        font-weight: 600;
+      }
+      .alsleiste button {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gold);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      /* --------------------------------------------------------- Knoepfe */
+      button {
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: 0;
+        cursor: pointer;
+      }
+      .knopf {
+        display: block;
+        width: 100%;
+        padding: 13px 20px;
+        margin-top: 20px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-align: center;
+        color: #fff;
+        background: var(--gold);
+        border: 1px solid var(--gold);
+        border-radius: 3px;
+        transition:
+          background 0.15s,
+          transform 0.08s;
+      }
+      .knopf:hover:not(:disabled) {
+        background: var(--gold-hell);
+      }
+      .knopf:active:not(:disabled) {
+        transform: translateY(1px);
+      }
+      .knopf.leise {
+        color: var(--tinte);
+        background: transparent;
+        border-color: var(--linie);
+        font-weight: 500;
+        margin-top: 10px;
+        text-decoration: none;
+      }
+      .knopf.leise:hover:not(:disabled) {
+        background: var(--gold-weich);
+        border-color: var(--gold);
+      }
+      .knopf:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      @media (prefers-color-scheme: dark) {
+        .knopf {
+          color: #17130f;
+        }
+      }
+
+      /* --------------------------------------------------------- Formular */
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        margin: 20px 0 6px;
+      }
+      label .zusatz {
+        font-weight: 400;
+        letter-spacing: 0;
+        color: var(--leise);
+      }
+      select,
+      textarea,
+      input[type="file"] {
+        width: 100%;
+        padding: 12px 13px;
+        font: inherit;
+        font-size: 16px;
+        color: var(--tinte);
+        background: var(--papier);
+        border: 1px solid var(--linie);
+        border-radius: 3px;
+      }
+      select:focus-visible,
+      textarea:focus-visible,
+      .knopf:focus-visible,
+      nav button:focus-visible,
+      .gast:focus-visible,
+      .filter button:focus-visible,
+      .alsleiste button:focus-visible,
+      .hausknopf:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+      textarea {
+        min-height: 86px;
+        resize: vertical;
+      }
+      input[type="file"] {
+        padding: 10px 12px;
+        font-size: 14px;
+      }
+      .hinweis {
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--leise);
+        margin-top: 7px;
+      }
+
+      /* ----------------------------------------------------------- Ablauf */
+      ol.ablauf {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      ol.ablauf li {
+        display: grid;
+        grid-template-columns: 62px 1fr;
+        gap: 14px;
+        padding: 15px 0;
+        border-top: 1px solid var(--linie);
+      }
+      ol.ablauf li:first-child {
+        border-top: 0;
+        padding-top: 2px;
+      }
+      ol.ablauf .zeit {
+        font-family: var(--display);
+        font-size: 1.25rem;
+        color: var(--gold);
+        line-height: 1.3;
+      }
+      ol.ablauf .was {
+        font-size: 14px;
+        color: var(--leise);
+        margin: 0;
+      }
+      /* Die Trauung ist der kleine Termin vorneweg: sie steht da, draengt
+         sich aber nicht vor die Feier. */
+      ol.ablauf li.nebensache {
+        opacity: 0.58;
+      }
+      ol.ablauf li.nebensache .zeit {
+        color: var(--leise);
+        font-size: 1.05rem;
+      }
+      ol.ablauf li.nebensache h3 {
+        font-weight: 500;
+      }
+      ol.ablauf .ortlink {
+        display: inline-block;
+        margin-top: 5px;
+        font-size: 13px;
+        color: var(--gold);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        cursor: pointer;
+      }
+
+      .fakten {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 9px 16px;
+        margin: 0;
+        font-size: 14px;
+      }
+      .fakten dt {
+        color: var(--leise);
+      }
+      .fakten dd {
+        margin: 0;
+        text-align: right;
+        font-weight: 500;
+      }
+
+      /* -------------------------------------------------------------- Orte */
+      .ortkarte + .ortkarte {
+        margin-top: 30px;
+        padding-top: 26px;
+        border-top: 1px solid var(--linie);
+      }
+      .ortkarte .adresse {
+        font-family: var(--display);
+        font-size: 1.2rem;
+        line-height: 1.45;
+        margin: 6px 0 0;
+      }
+      .kartenrahmen {
+        margin: 16px 0 6px;
+        border: 1px solid var(--linie);
+        border-radius: 3px;
+        overflow: hidden;
+        background: var(--papier-tief);
+      }
+      .kartenrahmen iframe {
+        display: block;
+        width: 100%;
+        height: 220px;
+        border: 0;
+      }
+      .kartenquelle {
+        font-size: 11px;
+        color: var(--leise);
+        text-align: right;
+        margin: 0 0 12px;
+      }
+      .kartenquelle a {
+        color: inherit;
+      }
+      .routen {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .routen .knopf {
+        flex: 1 1 130px;
+        width: auto;
+        margin: 0;
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+      ul.orthinweise {
+        list-style: none;
+        margin: 18px 0 0;
+        padding: 0;
+        font-size: 14px;
+      }
+      ul.orthinweise li {
+        display: grid;
+        grid-template-columns: 20px 1fr;
+        gap: 10px;
+        padding: 6px 0;
+        color: var(--leise);
+        line-height: 1.55;
+      }
+      ul.orthinweise .marke {
+        color: var(--gold);
+        text-align: center;
+      }
+      ul.orthinweise strong {
+        color: var(--tinte);
+        font-weight: 600;
+      }
+
+      /* -------------------------------------------------------- Checkliste */
+      ul.schritte {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      ul.schritte li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 7px 0;
+        font-size: 14px;
+      }
+      ul.schritte .haken {
+        flex: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1px solid var(--linie);
+        font-size: 11px;
+        line-height: 16px;
+        text-align: center;
+        color: transparent;
+      }
+      ul.schritte li.erledigt {
+        color: var(--leise);
+      }
+      ul.schritte li.erledigt .haken {
+        background: var(--salbei-weich);
+        border-color: var(--salbei);
+        color: var(--salbei);
+      }
+
+      /* ------------------------------------------------ Haushalt-Schnellwahl */
+      .haushalt {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .hausknopf {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 7px 15px 7px 7px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.3;
+        text-align: left;
+        border: 1px solid var(--linie);
+        border-radius: 999px;
+        background: var(--karte);
+      }
+      .hausknopf:hover {
+        border-color: var(--gold);
+        background: var(--gold-weich);
+      }
+      .hausknopf[aria-current="true"] {
+        border-color: var(--gold);
+        background: var(--gold-weich);
+      }
+      .hausknopf .portrait {
+        width: 32px;
+        height: 32px;
+      }
+      .hausknopf .portrait .initialen {
+        font-size: 0.85rem;
+      }
+      .hausknopf .stand {
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--leise);
+      }
+
+      /* ----------------------------------------------------------- Chips */
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .chip {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        padding: 4px 11px;
+        border-radius: 999px;
+        background: var(--gold-weich);
+        color: var(--gold);
+      }
+      .chip.grau {
+        background: transparent;
+        color: var(--leise);
+        border: 1px solid var(--linie);
+      }
+      .chip.unsicher {
+        background: transparent;
+        color: var(--leise);
+        border: 1px dashed var(--leise);
+      }
+      .chip.zusage {
+        background: var(--salbei-weich);
+        color: var(--salbei);
+      }
+
+      /* ----------------------------------------------------------- Board */
+      .filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin: 0 0 18px;
+      }
+      .filter button {
+        padding: 7px 15px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--leise);
+        border: 1px solid var(--linie);
+        border-radius: 999px;
+        background: var(--karte);
+      }
+      .filter button[aria-pressed="true"] {
+        color: var(--gold);
+        border-color: var(--gold);
+        background: var(--gold-weich);
+      }
+
+      .board {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(146px, 1fr));
+        gap: 12px;
+      }
+      .gast {
+        display: block;
+        width: 100%;
+        padding: 16px 12px 14px;
+        text-align: center;
+        background: var(--karte);
+        border: 1px solid var(--linie);
+        border-radius: 3px;
+        box-shadow: var(--schatten);
+        transition:
+          transform 0.12s,
+          border-color 0.12s;
+      }
+      .gast:hover {
+        transform: translateY(-2px);
+        border-color: var(--gold);
+      }
+      .gast .portrait {
+        width: 68px;
+        height: 68px;
+        margin: 0 auto 11px;
+      }
+      .portrait {
+        flex: none;
+        border-radius: 50%;
+        overflow: hidden;
+        background: var(--gold-weich);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .portrait img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .portrait .initialen {
+        font-family: var(--display);
+        font-weight: 500;
+        font-size: 1.3rem;
+        color: var(--gold);
+      }
+      .gast .name {
+        font-family: var(--display);
+        font-size: 1.15rem;
+        font-weight: 500;
+        line-height: 1.25;
+      }
+      .gast .haus {
+        font-size: 12px;
+        color: var(--leise);
+        margin-top: 2px;
+      }
+      .gast .chips {
+        justify-content: center;
+        margin-top: 9px;
+      }
+
+      /* Der Zaehler zaehlt die Feier, nicht das Standesamt. */
+      .zaehler {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+      }
+      .zaehler .zahl {
+        font-family: var(--display);
+        font-size: 2rem;
+        font-weight: 500;
+        line-height: 1;
+      }
+      .balken {
+        height: 4px;
+        border-radius: 2px;
+        background: var(--linie);
+        margin-top: 12px;
+        overflow: hidden;
+      }
+      .balken > div {
+        height: 100%;
+        background: var(--salbei);
+        transition: width 0.5s ease;
+      }
+
+      /* ----------------------------------------------------------- Helfer */
+      .aufgabe {
+        padding: 15px 0;
+        border-top: 1px solid var(--linie);
+      }
+      .aufgabe:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .aufgabe h3 {
+        font-family: var(--display);
+        font-size: 1.3rem;
+        font-weight: 500;
+        margin: 0 0 8px;
+      }
+      .aufgabe h3 .offen {
+        font-family: var(--text);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--leise);
+        border: 1px dashed var(--leise);
+        border-radius: 999px;
+        padding: 3px 9px;
+        margin-left: 9px;
+        vertical-align: 3px;
+      }
+      .helferliste {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .helfer {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 14px 5px 5px;
+        font-size: 14px;
+        border: 1px solid var(--linie);
+        border-radius: 999px;
+        background: var(--karte);
+      }
+      .helfer .portrait {
+        width: 28px;
+        height: 28px;
+      }
+      .helfer .portrait .initialen {
+        font-size: 0.8rem;
+      }
+
+      /* ---------------------------------------------------------- Dialog */
+      dialog {
+        width: min(440px, calc(100vw - 32px));
+        padding: 0;
+        border: 1px solid var(--linie);
+        border-radius: 3px;
+        background: var(--karte);
+        color: var(--tinte);
+        box-shadow: 0 24px 60px -20px rgba(42, 37, 33, 0.45);
+      }
+      dialog::backdrop {
+        background: rgba(30, 26, 22, 0.55);
+      }
+      .dialog-inhalt {
+        padding: 30px 26px 24px;
+        text-align: center;
+      }
+      .dialog-inhalt.links {
+        text-align: left;
+      }
+      .dialog-inhalt .portrait {
+        width: 96px;
+        height: 96px;
+        margin: 0 auto 14px;
+      }
+      .dialog-inhalt .name {
+        font-family: var(--display);
+        font-size: 1.8rem;
+        font-weight: 500;
+        line-height: 1.2;
+      }
+      .dialog-inhalt .steckbrief {
+        font-family: var(--display);
+        font-size: 1.15rem;
+        font-style: italic;
+        line-height: 1.5;
+        margin: 16px 0 0;
+      }
+      .dialog-inhalt .chips {
+        justify-content: center;
+      }
+      .dialog-schliessen {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--leise);
+        border-top: 1px solid var(--linie);
+      }
+
+      /* -------------------------------------------------------- Meldungen */
+      #meldung {
+        padding: 13px 16px;
+        border-radius: 3px;
+        margin-bottom: 18px;
+        font-size: 14px;
+        border: 1px solid transparent;
+      }
+      #meldung.ok {
+        background: var(--salbei-weich);
+        border-color: var(--salbei);
+        color: var(--salbei);
+      }
+      #meldung.fehl {
+        background: var(--warn-weich);
+        border-color: var(--warn);
+        color: var(--warn);
+      }
+
+      footer {
+        text-align: center;
+        color: var(--leise);
+        font-size: 12px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        padding: 8px 20px 44px;
+      }
+
+      /* ------------------------------------------------------- Bewegung */
+      .auftritt {
+        animation: auf 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+      }
+      .auftritt:nth-child(2) {
+        animation-delay: 0.07s;
+      }
+      .auftritt:nth-child(3) {
+        animation-delay: 0.14s;
+      }
+      .auftritt:nth-child(4) {
+        animation-delay: 0.21s;
+      }
+      .auftritt:nth-child(5) {
+        animation-delay: 0.28s;
+      }
+      @keyframes auf {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ===================================================== Kopf ===== -->
+    <header class="hero">
+      <div class="hero-blatt">
+        <p class="versalien">Wir heiraten</p>
+        <h1 class="namen">
+          <span>Christina</span>
+          <span class="amp">&amp;</span>
+          <span>Thanh</span>
+        </h1>
+
+        <svg
+          class="ornament"
+          width="164"
+          height="20"
+          viewBox="0 0 164 20"
+          fill="none"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M0 10h56M108 10h56" stroke-width="1" />
+          <path
+            d="M82 1c5 4 5 14 0 18-5-4-5-14 0-18z"
+            stroke-width="1"
+            stroke-linejoin="round"
+          />
+          <path d="M82 4v12" stroke-width="0.75" opacity="0.6" />
+          <circle cx="66" cy="10" r="1.7" fill="currentColor" stroke="none" />
+          <circle cx="98" cy="10" r="1.7" fill="currentColor" stroke="none" />
+        </svg>
+
+        <p class="eckdaten">
+          <span id="heroDatum"></span>
+          <span class="trenn" aria-hidden="true">&#183;</span>
+          <span>Viersen</span>
+        </p>
+        <p class="countdown" id="countdown"></p>
+        <p class="einordnung">
+          Es ist unsere <strong>Traufeier</strong> – standesamtlich, im kleinen
+          Kreis, mit einem langen Abend danach. Die große Hochzeit feiern wir
+          später.
+        </p>
+      </div>
+    </header>
+
+    <!-- =============================================== Navigation ===== -->
+    <div class="navband" id="navband" hidden>
+      <nav id="nav">
+        <button data-ansicht="Einladung">Einladung</button>
+        <button data-ansicht="Profil">
+          Mein Platz<span class="punkt" id="navPunkt" hidden></span>
+        </button>
+        <button data-ansicht="Board">Gäste</button>
+        <button data-ansicht="Helfer">Helfer</button>
+      </nav>
+      <div class="alsleiste">
+        <span>Du antwortest als <strong id="alsName">–</strong></span>
+        <button id="wechselKnopf">wechseln</button>
+      </div>
+    </div>
+
+    <main>
+      <div id="meldung" hidden></div>
+
+      <!-- ============================================= Einladung ===== -->
+      <section id="ansichtEinladung" hidden>
+        <div class="karte auftritt">
+          <h2>Der Tag</h2>
+          <ol class="ablauf" id="ablauf"></ol>
+          <button class="knopf leise" data-kalender>
+            In meinen Kalender eintragen
+          </button>
+          <p class="hinweis">
+            Lädt eine Termindatei – Handy und Rechner tragen sie von allein ein.
+          </p>
+        </div>
+
+        <div class="karte auftritt">
+          <h2>Wo</h2>
+          <div id="orte"></div>
+        </div>
+
+        <div class="karte auftritt">
+          <h2>Übernachten</h2>
+          <p id="schlafenText"></p>
+        </div>
+
+        <!-- Erst das Fest, dann die Frage. -->
+        <div class="karte auftritt" id="karteAuswahl">
+          <h2>Und wer bist du?</h2>
+          <p class="leiser">
+            Such dich in der Liste – danach siehst du deinen Platz und die
+            anderen Gäste. Für Kinder und Mitbewohner kannst du danach in einem
+            Klick mitantworten.
+          </p>
+          <label for="wahl" style="margin-top: 18px">Dein Name</label>
+          <select id="wahl">
+            <option value="">Bitte auswählen …</option>
+          </select>
+          <button class="knopf" id="losButton" disabled>Weiter</button>
+        </div>
+
+        <div class="karte auftritt" id="karteWeiter" hidden>
+          <h2>Schön, dass du da bist</h2>
+          <p class="leiser" id="weiterText"></p>
+          <button class="knopf" data-ziel="Profil">Zu meinem Platz</button>
+          <button class="knopf leise" data-ziel="Board">
+            Alle Gäste ansehen
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================ Mein Platz ===== -->
+      <section id="ansichtProfil" hidden>
+        <div class="karte auftritt">
+          <p class="versalien">Dein Platz</p>
+          <h2 id="meinName" style="margin: 6px 0 16px">–</h2>
+          <dl class="fakten" id="meineFakten"></dl>
+          <div class="chips" id="meineRollen"></div>
+        </div>
+
+        <div class="karte auftritt" id="karteHaushalt" hidden>
+          <h2>Dein Haushalt</h2>
+          <p class="leiser" style="margin-bottom: 16px">
+            Antworte für die anderen gleich mit – ein Klick wechselt hinüber.
+          </p>
+          <div class="haushalt" id="haushalt"></div>
+        </div>
+
+        <div class="karte auftritt">
+          <h2>Noch zu tun</h2>
+          <ul class="schritte" id="schritte"></ul>
+        </div>
+
+        <div class="karte auftritt">
+          <h2>Kommst du?</h2>
+          <select id="zusage" aria-label="Zusage">
+            <option value="">Noch offen</option>
+            <option value="ja">Ja, ich komme</option>
+            <option value="nein">Leider nicht</option>
+          </select>
+
+          <label for="steckbrief"
+            >Ein Satz über dich
+            <span class="zusatz">— für die anderen Gäste</span></label
+          >
+          <textarea
+            id="steckbrief"
+            maxlength="240"
+            placeholder="Wie kennst du uns? Was machst du so?"
+          ></textarea>
+
+          <label for="foto">Dein Foto</label>
+          <div
+            id="fotoVorschau"
+            hidden
+            style="
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 10px;
+            "
+          >
+            <div class="portrait" style="width: 52px; height: 52px">
+              <img id="fotoBild" alt="Dein aktuelles Foto" />
+            </div>
+            <span class="leiser">Dein Foto steht schon auf dem Board.</span>
+          </div>
+          <input type="file" id="foto" accept="image/*" />
+          <p class="hinweis">Wird vor dem Hochladen automatisch verkleinert.</p>
+
+          <button class="knopf" id="speichernButton">Speichern</button>
+        </div>
+
+        <div class="karte auftritt">
+          <h2>Für die Küche</h2>
+          <p class="hinweis" style="margin-top: 0">
+            Sehen nur Christina und Thanh – nicht die anderen Gäste. Aus dem
+            gleichen Grund können wir es dir später nicht wieder anzeigen.
+          </p>
+          <label for="allergien">Allergien oder Unverträglichkeiten</label>
+          <textarea
+            id="allergien"
+            placeholder="z. B. Nüsse, laktosefrei, vegetarisch"
+          ></textarea>
+          <label for="hinweise">Sonstige Hinweise</label>
+          <textarea
+            id="hinweise"
+            placeholder="Alles, was wir wissen sollten"
+          ></textarea>
+          <p class="hinweis" id="kuecheStand" hidden></p>
+          <button class="knopf leise" id="kuecheButton">
+            An die Küche schicken
+          </button>
+        </div>
+
+        <button class="knopf leise" data-kalender>
+          In meinen Kalender eintragen
+        </button>
+        <button class="knopf leise" data-ziel="Board">
+          Alle Gäste ansehen
+        </button>
+      </section>
+
+      <!-- ================================================= Gäste ===== -->
+      <section id="ansichtBoard" hidden>
+        <div class="karte auftritt">
+          <div class="zaehler">
+            <span>Zugesagt</span>
+            <span>
+              <span class="zahl" id="zusagenZahl">0</span>
+              <span class="leiser" id="zusagenVon"></span>
+            </span>
+          </div>
+          <div class="balken">
+            <div id="zusagenBalken" style="width: 0"></div>
+          </div>
+          <p class="hinweis" id="zusagenText"></p>
+        </div>
+
+        <div class="filter" id="filter"></div>
+        <div class="board" id="board"></div>
+        <p class="hinweis" style="text-align: center; margin-top: 16px">
+          Tipp: Auf einen Gast tippen zeigt seinen Steckbrief.
+        </p>
+
+        <button class="knopf leise" data-ziel="Profil">
+          Zurück zu meinem Platz
+        </button>
+      </section>
+
+      <!-- ================================================ Helfer ===== -->
+      <section id="ansichtHelfer" hidden>
+        <div class="karte auftritt">
+          <h2>Wer macht was</h2>
+          <p class="leiser" style="margin-bottom: 20px">
+            Aus eurer Gästeliste. Gestrichelt heißt: noch nicht endgültig
+            zugesagt.
+          </p>
+          <div id="aufgaben"></div>
+        </div>
+
+        <div class="karte auftritt" id="karteBedienste" hidden>
+          <h2>Gute Geister</h2>
+          <p class="leiser" style="margin-bottom: 16px" id="bediensteText"></p>
+          <div class="helferliste" id="bedienste"></div>
+        </div>
+
+        <button class="knopf leise" data-ziel="Profil">
+          Zurück zu meinem Platz
+        </button>
+      </section>
+    </main>
+
+    <dialog id="gastDialog">
+      <div class="dialog-inhalt" id="gastDialogInhalt"></div>
+      <button class="dialog-schliessen" id="gastDialogZu">Schließen</button>
+    </dialog>
+
+    <dialog id="wechselDialog">
+      <div class="dialog-inhalt links">
+        <h2 style="margin-bottom: 6px">Wer antwortet?</h2>
+        <p class="leiser" style="margin-bottom: 18px">
+          Du kannst jederzeit wechseln – auch für deine Kinder.
+        </p>
+        <div class="haushalt" id="wechselHaushalt"></div>
+        <label for="wahl2">Oder jemand anderes</label>
+        <select id="wahl2">
+          <option value="">Bitte auswählen …</option>
+        </select>
+        <button class="knopf" id="wechselOk" disabled>Wechseln</button>
+      </div>
+      <button class="dialog-schliessen" id="wechselZu">Abbrechen</button>
+    </dialog>
+
+    <footer>nthanh.de</footer>
+
+    <script type="module">
+      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+      // =====================================================================
+      //  EURE ANGABEN – hier und nur hier pflegen.
+      //
+      //  Was als TODO markiert ist, fehlt uns noch. Alles andere ist
+      //  recherchiert und gegen OpenStreetMap geprueft.
+      // =====================================================================
+      const FEIER = {
+        datum: "Samstag, 12. Dezember 2026",
+        tag: "2026-12-12", // maschinenlesbar – treibt Countdown und Kalender
+
+        trauung: { von: "10:45", bis: "11:30" },
+        fest: { von: "13:00", bis: "22:00" },
+
+        schlafenText:
+          "TODO: Hotelkontingent, Airbnb, wer bei wem unterkommt. Wenn in deinem Platz ein Schlafplatz steht, ist er für dich reserviert.",
+      };
+
+      // Die beiden Orte. Koordinaten gegen OpenStreetMap geprueft.
+      const ORTE = {
+        trauung: {
+          rolle: "Trauung",
+          kurz: "Trauzimmer Dülken",
+          strasse: "Theodor-Frings-Allee 22",
+          plz: "41751 Viersen-Dülken",
+          lat: 51.2489191,
+          lon: 6.3312341,
+          hinweise: [
+            [
+              "&#9200;",
+              "<strong>Bitte zehn Minuten früher da sein.</strong> Um 11:30 Uhr wird der Raum wieder gebraucht.",
+            ],
+            [
+              "&#9855;",
+              "Verwaltungsgebäude II der Stadt Viersen. Ein Aufzug führt hinauf – auch mit Rollstuhl oder Kinderwagen kein Problem.",
+            ],
+            [
+              "&#128101;",
+              "25 Sitzplätze. Deshalb ist die Trauung der kleine Teil des Tages.",
+            ],
+            [
+              "&#9742;",
+              'Standesamt Viersen: <a href="tel:+492162101253">02162 101-253</a>',
+            ],
+          ],
+        },
+        fest: {
+          rolle: "Die Feier",
+          kurz: "Tanzschule Bachata Viersen",
+          strasse: "Erich-Sanders-Weg 1",
+          plz: "41749 Viersen-Süchteln",
+          lat: 51.2942011,
+          lon: 6.3657625,
+          web: "https://www.bachata-viersen.de",
+          telefon: "+49 178 868 3013",
+          instagram: "https://www.instagram.com/bachata.viersen/",
+          hinweise: [
+            [
+              "&#9888;",
+              "<strong>Süchteln, nicht Dülken.</strong> Von der Trauung sind es gut 5 km – mit dem Auto etwa 15 Minuten.",
+            ],
+            [
+              "&#128663;",
+              "Parkplätze sind direkt an der Tanzschule – ihr müsst nichts suchen.",
+            ],
+            [
+              "&#128652;",
+              "Mit dem Bus bis Süchteln Busbahnhof. Die Linien 067, 074 und 083 verbinden Dülken und Süchteln.",
+            ],
+            [
+              "&#127925;",
+              "Wir feiern bis 22:00 Uhr. Wer ein Taxi braucht, bestellt es besser vorher.",
+            ],
+          ],
+        },
+      };
+
+      // Ablauf des Tages. nebensache: true stellt einen Punkt gedaempft dar,
+      // ort: verweist auf einen Schluessel aus ORTE und erzeugt den Link.
+      const ABLAUF = [
+        {
+          zeit: "10:45",
+          titel: "Trauung",
+          text: "Im kleinen Kreis, bis etwa 11:30 Uhr. Wer dabei ist, findet es in seinem Platz.",
+          ort: "trauung",
+          nebensache: true,
+        },
+        {
+          zeit: "13:00",
+          titel: "Die Feier beginnt",
+          text: "Ankommen, anstoßen, Zeit zum Reden. Kommt, wann es euch passt.",
+          ort: "fest",
+        },
+        // TODO: Zeiten geschaetzt – sagt uns, wann was wirklich losgeht.
+        { zeit: "17:00", titel: "Essen", text: "TODO: Was es gibt." },
+        {
+          zeit: "20:00",
+          titel: "Tanzen",
+          text: "Wir feiern in einer Tanzschule – das bietet sich an.",
+        },
+        {
+          zeit: "22:00",
+          titel: "Ende",
+          text: "Dann machen wir das Licht aus.",
+        },
+      ];
+
+      // =====================================================================
+      //  Schluessel: Supabase -> Settings -> API Keys
+      //  Nimm den PUBLISHABLE key (beginnt mit 'sb_publishable_'), nicht den
+      //  alten anon-Key aus dem Legacy-Tab – der wird Ende 2026 abgeschaltet.
+      //
+      //  Dieser Schluessel darf oeffentlich im Quelltext stehen, dafuer ist er
+      //  gemacht. Was er darf, regeln die Policies aus schema.sql.
+      //  Der SECRET key (sb_secret_...) gehoert hier NIEMALS hinein.
+      // =====================================================================
+      const SUPABASE_URL = "https://jlwpzsdpezjxsgefbiws.supabase.co";
+      const SUPABASE_KEY = "sb_publishable_HBsRUKuS-hKMz1X2rNYzQw_eD2Q1eBv";
+      const BUCKET = "gaeste-fotos";
+      // =====================================================================
+
+      const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      const $ = (id) => document.getElementById(id);
+      let gaeste = [],
+        profile = new Map(),
+        filterAuf = "alle";
+      let ichName = localStorage.getItem("traufeier.gast");
+
+      const esc = (s) =>
+        String(s ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+
+      function melde(text, istFehler = false) {
+        const m = $("meldung");
+        m.textContent = text;
+        m.className = istFehler ? "fehl" : "ok";
+        m.hidden = false;
+        m.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        if (!istFehler)
+          setTimeout(() => {
+            m.hidden = true;
+          }, 4000);
+      }
+
+      function zeige(welche) {
+        for (const a of ["Einladung", "Profil", "Board", "Helfer"])
+          $("ansicht" + a).hidden = a !== welche;
+        for (const b of $("nav").querySelectorAll("button"))
+          b.setAttribute("aria-current", String(b.dataset.ansicht === welche));
+        // Animation neu ausloesen, sonst laeuft sie nur beim ersten Mal.
+        for (const el of $("ansicht" + welche).querySelectorAll(".auftritt")) {
+          el.style.animation = "none";
+          void el.offsetWidth;
+          el.style.animation = "";
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      const fotoUrl = (pfad) =>
+        pfad ? db.storage.from(BUCKET).getPublicUrl(pfad).data.publicUrl : null;
+
+      // Klammerzusaetze wie "Lea (Kind)" nicht in die Initialen uebernehmen
+      const initialen = (name) =>
+        (name.replace(/\(.*?\)/g, "").match(/\p{L}+/gu) || ["?"])
+          .slice(0, 2)
+          .map((w) => w[0])
+          .join("")
+          .toUpperCase();
+
+      // Rollen mit Fragezeichen sind noch nicht bestaetigt – gestrichelt zeigen
+      function rollenChips(rollen, grau = false) {
+        return (rollen || [])
+          .map((r) => {
+            const klasse = r.trim().endsWith("?")
+              ? "unsicher"
+              : grau
+                ? "grau"
+                : "";
+            return '<span class="chip ' + klasse + '">' + esc(r) + "</span>";
+          })
+          .join("");
+      }
+
+      function portrait(gast, p) {
+        const url = fotoUrl(p && p.foto);
+        return (
+          '<div class="portrait">' +
+          (url
+            ? '<img src="' +
+              esc(url) +
+              '" alt="' +
+              esc(gast.name) +
+              '" loading="lazy">'
+            : '<span class="initialen">' +
+              esc(initialen(gast.name)) +
+              "</span>") +
+          "</div>"
+        );
+      }
+
+      // ============================================================== Orte
+      function ortkarte(schluessel) {
+        const o = ORTE[schluessel];
+        const d = 0.004; // Kartenausschnitt, gut fuer eine Strasse
+        const bbox = [o.lon - d, o.lat - d / 2, o.lon + d, o.lat + d / 2].join(
+          ",",
+        );
+        const ziel = o.lat + "," + o.lon;
+        const adresse = o.kurz + ", " + o.strasse + ", " + o.plz;
+
+        const kontakt = [];
+        if (o.web)
+          kontakt.push(
+            '<a href="' +
+              esc(o.web) +
+              '" target="_blank" rel="noopener">Website</a>',
+          );
+        if (o.telefon)
+          kontakt.push(
+            '<a href="tel:' +
+              esc(o.telefon.replace(/\s/g, "")) +
+              '">' +
+              esc(o.telefon) +
+              "</a>",
+          );
+        if (o.instagram)
+          kontakt.push(
+            '<a href="' +
+              esc(o.instagram) +
+              '" target="_blank" rel="noopener">Instagram</a>',
+          );
+
+        return (
+          '<div class="ortkarte" data-ortkarte="' +
+          esc(schluessel) +
+          '">' +
+          '<p class="versalien">' +
+          esc(o.rolle) +
+          "</p>" +
+          '<p class="adresse"><strong>' +
+          esc(o.kurz) +
+          "</strong><br>" +
+          esc(o.strasse) +
+          "<br>" +
+          esc(o.plz) +
+          "</p>" +
+          '<div class="kartenrahmen"><iframe loading="lazy" title="Karte: ' +
+          esc(o.kurz) +
+          '" src="https://www.openstreetmap.org/export/embed.html?bbox=' +
+          bbox +
+          "&amp;layer=mapnik&amp;marker=" +
+          o.lat +
+          "," +
+          o.lon +
+          '"></iframe></div>' +
+          '<p class="kartenquelle"><a href="https://www.openstreetmap.org/?mlat=' +
+          o.lat +
+          "&amp;mlon=" +
+          o.lon +
+          "#map=17/" +
+          o.lat +
+          "/" +
+          o.lon +
+          '" target="_blank" rel="noopener">Größere Karte öffnen</a></p>' +
+          '<div class="routen">' +
+          '<a class="knopf leise" href="https://www.google.com/maps/dir/?api=1&amp;destination=' +
+          ziel +
+          '" target="_blank" rel="noopener">Route (Google)</a>' +
+          '<a class="knopf leise" href="https://maps.apple.com/?daddr=' +
+          ziel +
+          '" target="_blank" rel="noopener">Route (Apple)</a>' +
+          '<button class="knopf leise" data-kopieren="' +
+          esc(adresse) +
+          '">Adresse kopieren</button>' +
+          "</div>" +
+          '<ul class="orthinweise">' +
+          o.hinweise
+            .map(
+              ([marke, text]) =>
+                '<li><span class="marke" aria-hidden="true">' +
+                marke +
+                "</span><span>" +
+                text +
+                "</span></li>",
+            )
+            .join("") +
+          (kontakt.length
+            ? '<li><span class="marke" aria-hidden="true">&#8594;</span><span>' +
+              kontakt.join(" &middot; ") +
+              "</span></li>"
+            : "") +
+          "</ul></div>"
+        );
+      }
+
+      // ========================================================== Kalender
+      // Zwei Termine, damit jeder nur das im Kalender hat, was ihn angeht.
+      // Die Zeitzone steht als vollstaendiger VTIMEZONE-Block drin: sonst
+      // rutscht der Termin in manchen Kalendern um eine Stunde.
+      function icsBauen(mitTrauung) {
+        const tag = FEIER.tag.replace(/-/g, "");
+        const jetzt =
+          new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+        const uhr = (s) => tag + "T" + s.replace(":", "") + "00";
+        const maskiere = (s) =>
+          String(s).replace(/([,;\\])/g, "\\$1").replace(/\n/g, "\\n");
+
+        const termin = (id, titel, von, bis, ortKey, beschreibung) => {
+          const o = ORTE[ortKey];
+          return [
+            "BEGIN:VEVENT",
+            "UID:" + id + "-" + tag + "@traufeier.nthanh.de",
+            "DTSTAMP:" + jetzt,
+            "DTSTART;TZID=Europe/Berlin:" + uhr(von),
+            "DTEND;TZID=Europe/Berlin:" + uhr(bis),
+            "SUMMARY:" + maskiere(titel),
+            "LOCATION:" + maskiere([o.kurz, o.strasse, o.plz].join(", ")),
+            "GEO:" + o.lat + ";" + o.lon,
+            "DESCRIPTION:" + maskiere(beschreibung),
+            "BEGIN:VALARM",
+            "TRIGGER:-P1D",
+            "ACTION:DISPLAY",
+            "DESCRIPTION:" + maskiere(titel),
+            "END:VALARM",
+            "END:VEVENT",
+          ];
+        };
+
+        const zeilen = [
+          "BEGIN:VCALENDAR",
+          "VERSION:2.0",
+          "PRODID:-//Traufeier Christina und Thanh//DE",
+          "CALSCALE:GREGORIAN",
+          "METHOD:PUBLISH",
+          "BEGIN:VTIMEZONE",
+          "TZID:Europe/Berlin",
+          "BEGIN:DAYLIGHT",
+          "TZOFFSETFROM:+0100",
+          "TZOFFSETTO:+0200",
+          "TZNAME:CEST",
+          "DTSTART:19700329T020000",
+          "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
+          "END:DAYLIGHT",
+          "BEGIN:STANDARD",
+          "TZOFFSETFROM:+0200",
+          "TZOFFSETTO:+0100",
+          "TZNAME:CET",
+          "DTSTART:19701025T030000",
+          "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
+          "END:STANDARD",
+          "END:VTIMEZONE",
+        ];
+
+        if (mitTrauung)
+          zeilen.push(
+            ...termin(
+              "trauung",
+              "Trauung Christina & Thanh",
+              FEIER.trauung.von,
+              FEIER.trauung.bis,
+              "trauung",
+              "Standesamtliche Trauung im kleinen Kreis. Bitte zehn Minuten frueher da sein.",
+            ),
+          );
+        zeilen.push(
+          ...termin(
+            "fest",
+            "Traufeier Christina & Thanh",
+            FEIER.fest.von,
+            FEIER.fest.bis,
+            "fest",
+            "Die Feier in der Tanzschule. Alle Infos: hochzeit.nthanh.de",
+          ),
+        );
+        zeilen.push("END:VCALENDAR");
+
+        // Zeilen ueber 75 Zeichen muessen umgebrochen werden, die
+        // Fortsetzung beginnt mit einem Leerzeichen. Getrennt wird nie
+        // hinter einem einzelnen Backslash - das zerrisse eine
+        // Escape-Sequenz mittendrin.
+        const falten = (z) => {
+          const teile = [];
+          let rest = z;
+          while (rest.length > 74) {
+            let n = 74,
+              schraege = 0;
+            while (rest[n - 1 - schraege] === "\\") schraege++;
+            if (schraege % 2 === 1) n--;
+            teile.push(rest.slice(0, n));
+            rest = rest.slice(n);
+          }
+          teile.push(rest);
+          return teile.join("\r\n ");
+        };
+        return zeilen.map(falten).join("\r\n");
+      }
+
+      function kalenderLaden() {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(FEIER.tag))
+          return melde("Das Datum steht noch nicht fest.", true);
+
+        const ich = gaeste.find((g) => g.name === ichName);
+        const mitTrauung =
+          !!ich && (ich.standesamt === "Ja" || ich.standesamt === "(Ja)");
+
+        const url = URL.createObjectURL(
+          new Blob([icsBauen(mitTrauung)], {
+            type: "text/calendar;charset=utf-8",
+          }),
+        );
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "traufeier.ics";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+        melde(
+          mitTrauung
+            ? "Trauung und Feier stehen in der Datei."
+            : "Die Feier steht in der Datei.",
+        );
+      }
+
+      // -------------------------------------------------------- Einladung
+      function zeigeEinladung() {
+        $("heroDatum").textContent = FEIER.datum;
+        $("schlafenText").textContent = FEIER.schlafenText;
+
+        $("ablauf").innerHTML = ABLAUF.map(
+          (s) =>
+            '<li class="' +
+            (s.nebensache ? "nebensache" : "") +
+            '"><span class="zeit">' +
+            esc(s.zeit) +
+            "</span><div><h3>" +
+            esc(s.titel) +
+            '</h3><p class="was">' +
+            esc(s.text) +
+            "</p>" +
+            (s.ort
+              ? '<span class="ortlink" data-ort="' +
+                esc(s.ort) +
+                '">' +
+                esc(ORTE[s.ort].kurz) +
+                " &#8594;</span>"
+              : "") +
+            "</div></li>",
+        ).join("");
+
+        $("orte").innerHTML = ortkarte("trauung") + ortkarte("fest");
+
+        countdown();
+        zeige("Einladung");
+      }
+
+      function countdown() {
+        const ziel = new Date(FEIER.tag + "T12:00");
+        if (isNaN(ziel)) return ($("countdown").textContent = "");
+        const tage = Math.ceil((ziel - new Date()) / 86400000);
+        $("countdown").textContent =
+          tage > 1
+            ? "Noch " + tage + " Tage"
+            : tage === 1
+              ? "Morgen ist es so weit"
+              : tage === 0
+                ? "Heute ist der Tag"
+                : "";
+      }
+
+      // ---------------------------------------------------------- Laden
+      async function laden() {
+        const [g, p] = await Promise.all([
+          db.from("gaeste").select("*").order("name"),
+          db.from("profile").select("*"),
+        ]);
+        if (g.error) throw g.error;
+        if (p.error) throw p.error;
+
+        gaeste = g.data;
+        profile = new Map((p.data || []).map((r) => [r.name, r]));
+
+        const liste =
+          '<option value="">Bitte auswählen …</option>' +
+          gaeste
+            .map(
+              (x) =>
+                '<option value="' +
+                esc(x.name) +
+                '">' +
+                esc(x.name) +
+                "</option>",
+            )
+            .join("");
+        $("wahl").innerHTML = liste;
+        $("wahl2").innerHTML = liste;
+      }
+
+      // ----------------------------------------------------- Mein Platz
+      function angemeldet(ja) {
+        document.body.classList.toggle("angemeldet", ja);
+        $("navband").hidden = !ja;
+        $("karteAuswahl").hidden = ja;
+        $("karteWeiter").hidden = !ja;
+        $("alsName").textContent = ja ? ichName : "–";
+      }
+
+      function wechsleZu(name) {
+        if (!name) return;
+        ichName = name;
+        localStorage.setItem("traufeier.gast", name);
+        angemeldet(true);
+        zeigeProfil();
+      }
+
+      // Wie weit ist jemand? Beschriftet die Haushaltsknoepfe.
+      function stand(name) {
+        const p = profile.get(name) || {};
+        return p.zusage === true
+          ? "kommt"
+          : p.zusage === false
+            ? "kann nicht"
+            : "noch offen";
+      }
+
+      function haushaltKnoepfe(ich, aktiv) {
+        if (!ich || !ich.familie) return "";
+        return gaeste
+          .filter((g) => g.familie === ich.familie)
+          .map(
+            (g) =>
+              '<button class="hausknopf" data-wechsel="' +
+              esc(g.name) +
+              '" aria-current="' +
+              (g.name === aktiv) +
+              '">' +
+              portrait(g, profile.get(g.name)) +
+              "<span>" +
+              esc(g.name) +
+              '<br><span class="stand">' +
+              esc(stand(g.name)) +
+              "</span></span></button>",
+          )
+          .join("");
+      }
+
+      function zeigeProfil() {
+        const ich = gaeste.find((g) => g.name === ichName);
+        if (!ich) {
+          ichName = null;
+          localStorage.removeItem("traufeier.gast");
+          angemeldet(false);
+          return zeigeEinladung();
+        }
+
+        const p = profile.get(ichName) || {};
+        $("meinName").textContent = ich.name;
+        $("alsName").textContent = ich.name;
+
+        // Die Trauung steht nur bei denen, die sie betrifft – und dort als
+        // eine Zeile unter anderen, nicht als Schlagzeile.
+        const zeilen = [["Haushalt", ich.familie || "–"]];
+        const schlafText = !ich.schlafplatz
+          ? null
+          : !ich.schlafort || ich.schlafort === "??"
+            ? "Ja – Ort noch offen"
+            : ich.schlafort;
+        if (schlafText) zeilen.push(["Schlafplatz", schlafText]);
+        if (ich.standesamt === "Ja" || ich.standesamt === "(Ja)")
+          zeilen.push([
+            "Trauung",
+            ich.standesamt === "Ja" ? "Du bist dabei" : "Vorgemerkt",
+          ]);
+
+        $("meineFakten").innerHTML = zeilen
+          .map(([k, v]) => "<dt>" + esc(k) + "</dt><dd>" + esc(v) + "</dd>")
+          .join("");
+        $("meineRollen").innerHTML = rollenChips(ich.rollen);
+
+        // Haushalt nur zeigen, wenn dort ausser mir noch jemand wohnt.
+        const mitbewohner = gaeste.filter(
+          (g) => g.familie && g.familie === ich.familie,
+        );
+        $("karteHaushalt").hidden = mitbewohner.length < 2;
+        $("haushalt").innerHTML = haushaltKnoepfe(ich, ichName);
+
+        $("zusage").value =
+          p.zusage === true ? "ja" : p.zusage === false ? "nein" : "";
+        $("steckbrief").value = p.steckbrief || "";
+
+        const url = fotoUrl(p.foto);
+        $("fotoVorschau").hidden = !url;
+        if (url) $("fotoBild").src = url;
+        $("foto").value = "";
+
+        // Die Kueche kann nicht zurueckgelesen werden (Absicht, siehe
+        // schema.sql) – also merken wir uns lokal, dass etwas ankam.
+        const kStand = localStorage.getItem("traufeier.kueche." + ichName);
+        $("kuecheStand").hidden = !kStand;
+        if (kStand)
+          $("kuecheStand").textContent =
+            "Zuletzt geschickt am " +
+            new Date(kStand).toLocaleDateString("de-DE") +
+            ". Nochmal schicken geht jederzeit.";
+        // Beim Wechsel leeren, sonst landen Annas Allergien bei Bruno.
+        $("allergien").value = "";
+        $("hinweise").value = "";
+
+        schritte(p, kStand);
+        $("weiterText").textContent =
+          "Du antwortest gerade als " + ich.name + ".";
+        zeige("Profil");
+      }
+
+      // Kleine Fortschrittsliste – sie beantwortet die Frage
+      // "und was soll ich hier jetzt tun?".
+      function schritte(p, kStand) {
+        const liste = [
+          [p.zusage === true || p.zusage === false, "Zu- oder Absage gegeben"],
+          [!!p.steckbrief, "Einen Satz über dich geschrieben"],
+          [!!p.foto, "Ein Foto hochgeladen"],
+          [!!kStand, "Der Küche Bescheid gegeben"],
+        ];
+        $("schritte").innerHTML = liste
+          .map(
+            ([fertig, text]) =>
+              '<li class="' +
+              (fertig ? "erledigt" : "") +
+              '"><span class="haken">&#10003;</span>' +
+              esc(text) +
+              "</li>",
+          )
+          .join("");
+        $("navPunkt").hidden = liste.every(([f]) => f);
+      }
+
+      // ------------------------------------------------ Foto verkleinern
+      async function verkleinern(datei, maxKante = 800) {
+        const bild = await createImageBitmap(datei, {
+          imageOrientation: "from-image",
+        });
+        const faktor = Math.min(1, maxKante / Math.max(bild.width, bild.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(bild.width * faktor);
+        c.height = Math.round(bild.height * faktor);
+        c.getContext("2d").drawImage(bild, 0, 0, c.width, c.height);
+        return new Promise((fertig) => c.toBlob(fertig, "image/jpeg", 0.82));
+      }
+
+      // -------------------------------------------------------- Speichern
+      async function speichern() {
+        const knopf = $("speichernButton");
+        const fuer = ichName; // festhalten: waehrend des Uploads kann gewechselt werden
+        knopf.disabled = true;
+        knopf.textContent = "Speichere …";
+        try {
+          const datensatz = {
+            name: fuer,
+            steckbrief: $("steckbrief").value.trim() || null,
+            zusage:
+              $("zusage").value === "ja"
+                ? true
+                : $("zusage").value === "nein"
+                  ? false
+                  : null,
+            geaendert: new Date().toISOString(),
+          };
+
+          const datei = $("foto").files[0];
+          if (datei) {
+            knopf.textContent = "Lade Foto …";
+            const blob = await verkleinern(datei);
+            const pfad = crypto.randomUUID() + ".jpg";
+            const { error } = await db.storage
+              .from(BUCKET)
+              .upload(pfad, blob, { contentType: "image/jpeg" });
+            if (error) throw error;
+            datensatz.foto = pfad;
+          }
+
+          const { error } = await db.from("profile").upsert(datensatz);
+          if (error) throw error;
+
+          profile.set(fuer, { ...(profile.get(fuer) || {}), ...datensatz });
+          if (ichName === fuer) zeigeProfil();
+          melde("Gespeichert für " + fuer + ". Danke!");
+        } catch (e) {
+          melde("Das hat nicht geklappt: " + (e.message ?? e), true);
+        } finally {
+          knopf.disabled = false;
+          knopf.textContent = "Speichern";
+        }
+      }
+
+      async function anKueche() {
+        const knopf = $("kuecheButton");
+        const fuer = ichName;
+        const a = $("allergien").value.trim(),
+          h = $("hinweise").value.trim();
+        if (!a && !h) return melde("Da steht noch nichts drin.", true);
+
+        knopf.disabled = true;
+        try {
+          const { error } = await db
+            .from("kueche")
+            .insert({ name: fuer, allergien: a || null, hinweise: h || null });
+          if (error) throw error;
+          localStorage.setItem(
+            "traufeier.kueche." + fuer,
+            new Date().toISOString(),
+          );
+          if (ichName === fuer) zeigeProfil();
+          melde("Ist bei uns angekommen.");
+        } catch (e) {
+          melde("Das hat nicht geklappt: " + (e.message ?? e), true);
+        } finally {
+          knopf.disabled = false;
+        }
+      }
+
+      // ------------------------------------------------------------ Board
+      function zeigeBoard() {
+        const zugesagt = gaeste.filter(
+          (g) => (profile.get(g.name) || {}).zusage === true,
+        ).length;
+        const offen = gaeste.filter(
+          (g) => (profile.get(g.name) || {}).zusage == null,
+        ).length;
+
+        $("zusagenZahl").textContent = zugesagt;
+        $("zusagenVon").textContent = "von " + gaeste.length;
+        $("zusagenBalken").style.width =
+          (gaeste.length ? (zugesagt / gaeste.length) * 100 : 0) + "%";
+        $("zusagenText").textContent = offen
+          ? offen + " haben noch nicht geantwortet."
+          : "Alle haben geantwortet.";
+
+        const gruppen = [
+          ...new Set(gaeste.map((g) => g.zugehoerigkeit).filter(Boolean)),
+        ].sort();
+        $("filter").innerHTML = ["alle", ...gruppen]
+          .map(
+            (w) =>
+              '<button data-wert="' +
+              esc(w) +
+              '" aria-pressed="' +
+              (filterAuf === w) +
+              '">' +
+              esc(w === "alle" ? "Alle" : w) +
+              "</button>",
+          )
+          .join("");
+
+        const sichtbar =
+          filterAuf === "alle"
+            ? gaeste
+            : gaeste.filter((g) => g.zugehoerigkeit === filterAuf);
+
+        $("board").innerHTML = sichtbar
+          .map((g) => {
+            const p = profile.get(g.name) || {};
+            const zusage =
+              p.zusage === true ? '<span class="chip zusage">kommt</span>' : "";
+            const haus = g.familie
+              ? '<div class="haus">' + esc(g.familie) + "</div>"
+              : "";
+            return (
+              '<button class="gast" data-name="' +
+              esc(g.name) +
+              '">' +
+              portrait(g, p) +
+              '<div class="name">' +
+              esc(g.name) +
+              "</div>" +
+              haus +
+              '<div class="chips">' +
+              zusage +
+              rollenChips(g.rollen, true) +
+              "</div></button>"
+            );
+          })
+          .join("");
+
+        zeige("Board");
+      }
+
+      // ----------------------------------------------------------- Helfer
+      // Die Rollen stehen als Freitext in der Gaesteliste. Hier drehen wir
+      // sie um: nicht "wer hat welche Rolle", sondern "wer macht das hier".
+      function zeigeHelfer() {
+        // Braut und Braeutigam sind keine Aufgaben, die jemand uebernimmt.
+        const KEINE_AUFGABE = ["Braut", "Bräutigam"];
+
+        const nachAufgabe = new Map();
+        for (const g of gaeste)
+          for (const r of g.rollen || []) {
+            const titel = r.trim();
+            if (!titel || titel === "-" || KEINE_AUFGABE.includes(titel))
+              continue;
+            if (!nachAufgabe.has(titel)) nachAufgabe.set(titel, []);
+            nachAufgabe.get(titel).push(g);
+          }
+
+        const sortiert = [...nachAufgabe.entries()].sort((a, b) =>
+          a[0].localeCompare(b[0], "de"),
+        );
+
+        $("aufgaben").innerHTML = sortiert.length
+          ? sortiert
+              .map(
+                ([titel, leute]) =>
+                  '<div class="aufgabe"><h3>' +
+                  esc(titel.replace(/\s*\?$/, "")) +
+                  (titel.trim().endsWith("?")
+                    ? '<span class="offen">noch offen</span>'
+                    : "") +
+                  '</h3><div class="helferliste">' +
+                  leute
+                    .map(
+                      (g) =>
+                        '<span class="helfer">' +
+                        portrait(g, profile.get(g.name)) +
+                        esc(g.name) +
+                        "</span>",
+                    )
+                    .join("") +
+                  "</div></div>",
+              )
+              .join("")
+          : '<p class="leiser">Noch sind keine Aufgaben verteilt.</p>';
+
+        // Bedienstete stehen in der Gaesteliste als eigene Art.
+        const bed = gaeste.filter(
+          (g) => g.art === "Bedienste" || g.zugehoerigkeit === "Bedienste",
+        );
+        $("karteBedienste").hidden = bed.length === 0;
+        $("bediensteText").textContent =
+          bed.length === 1
+            ? "Eine Person hilft uns an dem Tag im Hintergrund."
+            : bed.length + " Menschen helfen uns an dem Tag im Hintergrund.";
+        $("bedienste").innerHTML = bed
+          .map(
+            (g) =>
+              '<span class="helfer">' +
+              portrait(g, profile.get(g.name)) +
+              esc(g.name) +
+              "</span>",
+          )
+          .join("");
+
+        zeige("Helfer");
+      }
+
+      // Detailansicht – das, was man sich beim Durchscrollen fragt:
+      // wer ist das eigentlich?
+      function zeigeGast(name) {
+        const g = gaeste.find((x) => x.name === name);
+        if (!g) return;
+        const p = profile.get(name) || {};
+        const status =
+          p.zusage === true
+            ? '<span class="chip zusage">kommt</span>'
+            : p.zusage === false
+              ? '<span class="chip grau">kann nicht</span>'
+              : '<span class="chip grau">noch offen</span>';
+
+        $("gastDialogInhalt").innerHTML =
+          portrait(g, p) +
+          '<div class="name">' +
+          esc(g.name) +
+          "</div>" +
+          (g.familie
+            ? '<p class="leiser" style="margin:2px 0 0">' +
+              esc(g.familie) +
+              "</p>"
+            : "") +
+          '<div class="chips">' +
+          status +
+          rollenChips(g.rollen, true) +
+          "</div>" +
+          (p.steckbrief
+            ? '<p class="steckbrief">&#8222;' +
+              esc(p.steckbrief) +
+              "&#8220;</p>"
+            : '<p class="hinweis" style="margin-top:16px">Hat noch nichts über sich geschrieben.</p>');
+
+        $("gastDialog").showModal();
+      }
+
+      function zeigeWechsel() {
+        const ich = gaeste.find((g) => g.name === ichName);
+        $("wechselHaushalt").innerHTML = haushaltKnoepfe(ich, ichName);
+        $("wahl2").value = "";
+        $("wechselOk").disabled = true;
+        $("wechselDialog").showModal();
+      }
+
+      // ------------------------------------------------------------ Start
+      const ANSICHTEN = {
+        Einladung: zeigeEinladung,
+        Profil: zeigeProfil,
+        Board: zeigeBoard,
+        Helfer: zeigeHelfer,
+      };
+
+      $("nav").addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (b) ANSICHTEN[b.dataset.ansicht]();
+      });
+
+      document.addEventListener("click", async (e) => {
+        const ziel = e.target.closest("[data-ziel]");
+        if (ziel) return ANSICHTEN[ziel.dataset.ziel]();
+
+        if (e.target.closest("[data-kalender]")) return kalenderLaden();
+
+        // Adresse in die Zwischenablage – spart das Abtippen ins Navi.
+        const kopf = e.target.closest("[data-kopieren]");
+        if (kopf) {
+          try {
+            await navigator.clipboard.writeText(kopf.dataset.kopieren);
+            melde("Adresse kopiert.");
+          } catch {
+            melde("Kopieren ging nicht – bitte von Hand markieren.", true);
+          }
+          return;
+        }
+
+        // Ein Klick im Ablauf springt zur passenden Ortskarte.
+        const ol = e.target.closest("[data-ort]");
+        if (ol) {
+          const k = document.querySelector(
+            '[data-ortkarte="' + ol.dataset.ort + '"]',
+          );
+          if (k) k.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+
+        // Haushalt: in einem Klick zu Partner oder Kind wechseln.
+        const w = e.target.closest("[data-wechsel]");
+        if (w) {
+          if ($("wechselDialog").open) $("wechselDialog").close();
+          wechsleZu(w.dataset.wechsel);
+        }
+      });
+
+      $("filter").addEventListener("click", (e) => {
+        const knopf = e.target.closest("button");
+        if (!knopf) return;
+        filterAuf = knopf.dataset.wert;
+        zeigeBoard();
+      });
+
+      $("board").addEventListener("click", (e) => {
+        const karte = e.target.closest(".gast");
+        if (karte) zeigeGast(karte.dataset.name);
+      });
+      $("gastDialogZu").addEventListener("click", () => $("gastDialog").close());
+      $("gastDialog").addEventListener("click", (e) => {
+        if (e.target === $("gastDialog")) $("gastDialog").close();
+      });
+
+      $("wechselKnopf").addEventListener("click", zeigeWechsel);
+      $("wechselZu").addEventListener("click", () => $("wechselDialog").close());
+      $("wechselDialog").addEventListener("click", (e) => {
+        if (e.target === $("wechselDialog")) $("wechselDialog").close();
+      });
+      $("wahl2").addEventListener("change", (e) => {
+        $("wechselOk").disabled = !e.target.value;
+      });
+      $("wechselOk").addEventListener("click", () => {
+        const n = $("wahl2").value;
+        $("wechselDialog").close();
+        wechsleZu(n);
+      });
+
+      $("wahl").addEventListener("change", (e) => {
+        $("losButton").disabled = !e.target.value;
+      });
+      $("losButton").addEventListener("click", () => wechsleZu($("wahl").value));
+      $("speichernButton").addEventListener("click", speichern);
+      $("kuecheButton").addEventListener("click", anKueche);
+
+      // Die Einladung steht auch ohne Datenbank – sie ist der Kern der Seite.
+      zeigeEinladung();
+      try {
+        await laden();
+        if (ichName && gaeste.some((g) => g.name === ichName)) {
+          angemeldet(true);
+          zeigeProfil();
+        } else {
+          ichName = null;
+          localStorage.removeItem("traufeier.gast");
+          angemeldet(false);
+        }
+      } catch (e) {
+        melde("Keine Verbindung zur Datenbank: " + (e.message ?? e), true);
+      }
+    </script>
+  </body>
+</html>

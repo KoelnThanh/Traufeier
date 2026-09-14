@@ -1,0 +1,10 @@
+[build]
+  publish = "."
+
+# Doppelt haelt besser: robots.txt plus Header, damit weder Namen noch
+# Fotos eurer Gaeste in einem Suchindex landen.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Referrer-Policy = "no-referrer"
