@@ -237,12 +237,12 @@
           font-size: 0.62em;
           line-height: 1.4;
         }
-        body.angemeldet .namen {
+        body.kompakt .namen {
           flex-direction: row;
           align-items: baseline;
           gap: 0 0.18em;
         }
-        body.angemeldet .namen .amp {
+        body.kompakt .namen .amp {
           font-size: 1em;
           line-height: inherit;
         }
@@ -336,30 +336,32 @@
       }
 
       /* Sobald klar ist, wer da ist, tritt der Kopf zurueck und macht
-         Platz fuer den eigentlichen Inhalt. */
-      body.angemeldet .hero {
+         Platz fuer den eigentlichen Inhalt – ausser im Reiter Einladung:
+         Dort steht immer die ganze Karte, sonst saehe sie niemand, der
+         ueber seinen persoenlichen Link kommt. */
+      body.kompakt .hero {
         padding: 26px 20px 8px;
       }
-      body.angemeldet .hero-blatt {
+      body.kompakt .hero-blatt {
         background: none;
         border: 0;
         box-shadow: none;
         padding: 0;
       }
-      body.angemeldet .hero-blatt::after,
-      body.angemeldet .hero .ornament,
-      body.angemeldet .countdown,
-      body.angemeldet .hero .lebendig,
-      body.angemeldet .einordnung,
-      body.angemeldet .zweisaetze,
-      body.angemeldet .hero .versalien {
+      body.kompakt .hero-blatt::after,
+      body.kompakt .hero .ornament,
+      body.kompakt .countdown,
+      body.kompakt .hero .lebendig,
+      body.kompakt .einordnung,
+      body.kompakt .zweisaetze,
+      body.kompakt .hero .versalien {
         display: none;
       }
-      body.angemeldet .namen {
+      body.kompakt .namen {
         font-size: clamp(1.5rem, 6vw, 1.9rem);
         margin: 0;
       }
-      body.angemeldet .eckdaten {
+      body.kompakt .eckdaten {
         font-size: 0.95rem;
         color: var(--leise);
         margin-top: 2px;
@@ -1565,7 +1567,7 @@
       .hero {
         padding-top: 18px;
       }
-      body.angemeldet .hero {
+      body.kompakt .hero {
         padding-top: 2px;
       }
     </style>
@@ -2341,6 +2343,10 @@
 
       function zeige(welche) {
         aktuell = welche;
+        document.body.classList.toggle(
+          "kompakt",
+          document.body.classList.contains("angemeldet") && welche !== "Einladung",
+        );
         for (const a of ["Einladung", "Profil", "Speisen", "Board", "Helfer"])
           $("ansicht" + a).hidden = a !== welche;
         for (const b of $("nav").querySelectorAll("button"))
@@ -2837,7 +2843,8 @@
         $("lebendigHero").innerHTML = zeile;
 
         const ich = gaeste.find((g) => g.name === ichName);
-        let html = "";
+        let html = "",
+          einladung = "";
         if (ich) {
           // Was der eigene Haushalt eingetragen hat, weiss er schon.
           const haus = new Set(haushaltVon(ich).map((g) => g.name));
@@ -2858,21 +2865,25 @@
           if (lieder.length)
             punkte.push(["note", t("neu.musik", { n: lieder.length }), "data-zu-musik"]);
 
-          html = punkte.length
-            ? '<div class="karte auftritt neuigkeiten"><p class="versalien">' +
-              esc(t("neu.titel")) +
-              "</p><ul>" +
-              punkte
-                .map(
-                  ([s, text, ziel]) =>
-                    "<li><button " + ziel + ">" + symbol(s) + "<span>" + text +
-                    '</span><span class="pfeil" aria-hidden="true">&#8594;</span></button></li>',
-                )
-                .join("") +
-              '</ul><p class="lebendig">' + zeile + "</p></div>"
-            : '<p class="lebendig">' + zeile + "</p>";
+          const karte = (mitZeile) =>
+            '<div class="karte auftritt neuigkeiten"><p class="versalien">' +
+            esc(t("neu.titel")) +
+            "</p><ul>" +
+            punkte
+              .map(
+                ([s, text, ziel]) =>
+                  "<li><button " + ziel + ">" + symbol(s) + "<span>" + text +
+                  '</span><span class="pfeil" aria-hidden="true">&#8594;</span></button></li>',
+              )
+              .join("") +
+            "</ul>" +
+            (mitZeile ? '<p class="lebendig">' + zeile + "</p>" : "") +
+            "</div>";
+          // In der Einladung steht die Zeile schon in der Karte darueber.
+          einladung = punkte.length ? karte(false) : "";
+          html = punkte.length ? karte(true) : '<p class="lebendig">' + zeile + "</p>";
         }
-        $("neuEinladung").innerHTML = html;
+        $("neuEinladung").innerHTML = einladung;
         $("neuProfil").innerHTML = html;
       }
 

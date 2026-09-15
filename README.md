@@ -202,8 +202,11 @@ Fünf Ansichten unter einem festen Kopf, in vier Sprachen:
 | Gäste | alle Gäste, filterbar; ein Tipp zeigt den Steckbrief |
 | Helfer | wer welche Aufgabe übernommen hat |
 
-Der Kopf ist beim ersten Besuch eine Einladungskarte mit Countdown. Sobald
-klar ist, wer da ist, schrumpft er auf eine Zeile.
+Der Kopf ist im Reiter **Einladung** immer die ganze Einladungskarte mit
+Countdown, „Traufeier“ und „Euer Dabeisein …“ – auch für angemeldete Gäste,
+sonst sähe sie niemand, der über seinen persönlichen Link kommt. In den
+anderen Reitern schrumpft er auf eine Zeile (`body.kompakt`), damit Platz
+für den Inhalt bleibt.
 
 ### Wie wir feiern
 
