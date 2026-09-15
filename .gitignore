@@ -5,3 +5,7 @@ import.sql
 Thumbs.db
 .DS_Store
 .netlify/
+
+# Projekt-Notizen (Inkremente, Konzept) – lokal. Netlify veroeffentlicht
+# den ganzen Ordner, sie waeren sonst unter traufeier.nthanh.de abrufbar.
+0*-*/

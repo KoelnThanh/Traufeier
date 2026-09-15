@@ -1,296 +1,294 @@
 # Traufeier
 
-Einladung und Gäste-Board für die **Traufeier** von Christina und Thanh –
-standesamtlich, im kleinen Kreis, mit einem langen Abend danach. Die große
-Hochzeit kommt später; die Seite sagt das auf der ersten Ansicht.
+Einladung und Gäste-Board für die **Traufeier** von Christina und Thanh am
+Samstag, 12. Dezember 2026 – standesamtlich im kleinen Kreis, danach ein
+langer Tag in der Tanzschule. Die große Hochzeit kommt später; die Seite
+sagt das auf der ersten Ansicht.
 
-Eine HTML-Datei. Kein Build-Schritt, kein npm.
+Kein Build-Schritt, kein npm. Läuft auf **Netlify** (Hosting) und
+**Supabase** (Daten und Fotos).
 
-Läuft auf: **Netlify** (Hosting) + **Supabase** (Daten & Fotos)
-Ziel-Adresse: `hochzeit.nthanh.de`
+| | |
+|---|---|
+| Einladung | https://traufeier.nthanh.de |
+| Planung (für euch zwei) | https://traufeier.nthanh.de/planung.html |
+| Repo | github.com/KoelnThanh/Traufeier – jeder Push auf `main` geht live |
+
+---
+
+## Dateien
+
+| Datei | Inhalt |
+|---|---|
+| `feier.js` | **Eure Angaben**: Datum, Zeiten, Frist, Orte, Ablauf, Kategorien, Supabase-Schlüssel |
+| `sprachen.js` | **Alle Texte** in Deutsch, Englisch, Spanisch, Vietnamesisch |
+| `index.html` | Die Einladung – liest aus den beiden Dateien oben |
+| `planung.html` | Euer Planungsblick: Antworten, Allergie-Abgleich, Versand, Export |
+| `schema.sql` | Grundtabellen: `gaeste`, `profile`, `kueche` |
+| `storage.sql` | Foto-Bucket |
+| `speisen.sql` | Mitbring-Buffet |
+| `erweiterung.sql` | Persönliche Links, Musikwünsche, Planer-Zugang |
+| `vorschau.jpg`, `favicon.*`, `apple-touch-icon.png` | Link-Vorschau und Icons |
+
+Eine Uhrzeit ändern → `feier.js`. Einen Text ändern → `sprachen.js`, in
+allen vier Sprachen.
 
 ---
 
 ## Einrichtung – in dieser Reihenfolge
 
-### 1. Datenbank anlegen
+Schritte 1–5 sind erledigt. Offen ist **Schritt 6**.
 
-Supabase → **SQL Editor** → Inhalt von `schema.sql` einfügen → **Run**.
+### 1. Datenbank
 
-Legt drei Tabellen an:
+Supabase → **SQL Editor**, nacheinander ausführen: `schema.sql`,
+`storage.sql`, `speisen.sql`.
 
 | Tabelle | Wer schreibt | Wer liest |
 |---|---|---|
-| `gaeste` | ihr, im Dashboard | alle |
+| `gaeste` | ihr, im Table Editor | alle |
 | `profile` | die Gäste | alle |
 | `kueche` | die Gäste | **nur ihr** |
+| `speisen` | die Gäste | alle |
 
-Allergien liegen bewusst getrennt. Ohne echten Login kann die App „dieser Gast"
-nicht von „irgendein Gast" unterscheiden – deshalb darf der öffentliche
-Schlüssel diese Tabelle nur beschreiben, nie auslesen. Ihr lest sie im
-Table Editor.
+Allergien liegen bewusst getrennt: Der öffentliche Schlüssel darf `kueche`
+nur beschreiben, nie auslesen. Schlüssel ist überall der **Name** –
+`on update cascade` lässt Tippfehler-Korrekturen durchschlagen, Namen
+müssen deshalb eindeutig sein.
 
-Schlüssel ist überall der **Name** – `on update cascade` sorgt dafür, dass
-Tippfehler-Korrekturen automatisch auf die anderen Tabellen durchschlagen.
-Namen müssen deshalb eindeutig sein.
+Views zum Draufschauen: `uebersicht`, `standesamt_stand`, `schlafplaetze`,
+`buffet`, `buffet_stand`, `buffet_allergene`.
 
-Dazu kommen drei Views zum Draufschauen: `uebersicht` (alles zusammen),
-`standesamt_stand` (fest / unsicher / frei) und `schlafplaetze`.
+### 2. Gästeliste importieren
 
-Den Foto-Bucket `gaeste-fotos` legt das Skript gleich mit an – im Dashboard
-ist nichts zu klicken. („Public" heißt nur öffentlich *lesen*; ohne die
-mitgelieferte Policy scheitert jeder Upload.)
+`import.sql` im SQL-Editor ausführen (44 Gäste, erzeugt aus
+`Eheschließung - Gästeliste.csv`).
 
-### 2. Mitbring-Buffet nachziehen
+**Achtung:** Das Skript beginnt mit `truncate gaeste cascade` und löscht
+damit auch Profile, Küchenangaben, Buffet und persönliche Links. Sobald
+Gäste etwas eingetragen haben, nicht mehr neu importieren – einzelne Zeilen
+im Table Editor pflegen.
 
-`speisen.sql` in den SQL-Editor → **Run**. Legt die Tabelle `speisen` an
-und ändert nichts an den bestehenden Tabellen. Solange sie fehlt, läuft
-die Seite weiter – der Reiter „Speisen“ bleibt dann nur leer und im
-Browser-Log steht ein Hinweis.
+### 3. Veröffentlichen
 
-Dazu kommen drei Views: `buffet` (alles, was mitgebracht wird),
-`buffet_stand` (was pro Kategorie zusammenkommt) und `buffet_allergene`
-(welches Allergen in welchem Gericht steckt – die Gegenprobe zu dem,
-was euch die Gäste über `kueche` geschickt haben).
+Repo ist mit Netlify verbunden (Projekt `trfeierct`). Build command leer,
+Publish directory `.` – steht in `netlify.toml`.
 
-### 3. Eure Angaben eintragen
+Netlify-Projekte starten **privat** (HTTP 401 für alle). Nach dem ersten
+Deploy **Make public** klicken, sonst kommt kein Gast rein.
 
-Zwei Dateien, sauber getrennt:
+### 4. Eigene Adresse
 
-- **`index.html`** enthält nur, was in jeder Sprache gleich ist: Datum,
-  Zeiten, Adressen, Koordinaten.
-- **`sprachen.js`** enthält alle Texte der Seite in Deutsch, Englisch,
-  Spanisch und Vietnamesisch.
+Netlify → Domain management → Add a domain → `traufeier.nthanh.de`.
+Bei INWX (Nameserver → `nthanh.de`):
 
-Wer einen Text ändern will, ändert ihn in `sprachen.js` – in allen vier
-Sprachen. Wer eine Uhrzeit ändert, ändert sie in `index.html`.
+| Typ | Name | Wert | TTL |
+|---|---|---|---|
+| CNAME | `traufeier` | `trfeierct.netlify.app` | 300 |
 
-**`FEIER`** in `index.html` – Datum und Zeiten:
+Das Let's-Encrypt-Zertifikat stellt Netlify selbst aus. Kommt „We could
+not provision a certificate", war die Domain beim ersten Versuch noch nicht
+zugeordnet → **Verify DNS configuration** klicken.
 
-```js
-const FEIER = {
-  tag: "2026-12-12",                      // JJJJ-MM-TT
-  trauung: { von: "10:45", bis: "11:30" },
-  fest:    { von: "12:30", bis: "22:00" },
-};
-```
+> Das Zertifikat läuft am 13.12.2026 ab, einen Tag nach der Feier.
+> Netlify erneuert es rund 30 Tage vorher selbst. Mitte November kurz
+> nachsehen, ob das geklappt hat.
 
-`tag` ist die einzige Stelle, an der das Datum steht. Daraus entstehen das
-ausgeschriebene Datum im Kopf – in jeder Sprache richtig formatiert
-(„Samstag, 12. Dezember 2026", „Thứ Bảy, 12 tháng 12, 2026") –, der
-Countdown und der Kalendereintrag. Liegt das Datum in der Vergangenheit,
-verschwindet der Countdown stillschweigend.
+### 5. Wachhalter
 
-**`ORTE`** – Trauzimmer und Tanzschule mit Adresse, Koordinaten und den
-Symbolen vor den Hinweisen (`marken`). Die Koordinaten sind gegen
-OpenStreetMap geprüft; sie treiben die Karte, beide Routen-Knöpfe und das
-`GEO:`-Feld im Kalendereintrag. Wer die Adresse ändert, muss `lat`/`lon`
-mitziehen. Die Hinweistexte stehen in `sprachen.js` unter `orteHinweise`,
-in derselben Reihenfolge wie `marken`.
+Supabase legt kostenlose Projekte nach **7 Tagen ohne Anfrage** schlafen.
+`.github/workflows/keepalive.yml` pingt montags und donnerstags sowie bei
+jedem Push. Er braucht keine Secrets – URL und publishable Key sind ohnehin
+öffentlich. Ob er läuft: GitHub → Actions.
 
-**`ABLAUF`** – die Zeiten des Tages. `nebensache: true` stellt einen Punkt
-gedämpft dar (so steht die Trauung dabei, ohne die Feier zu überstrahlen),
-`ort: "trauung"` oder `ort: "fest"` erzeugt den Sprunglink zur passenden
-Karte. Titel und Text stehen in `sprachen.js` unter `ablauf` – **gleiche
-Reihenfolge, gleiche Anzahl**. Ein Punkt mehr heißt: eine Zeile in
-`index.html` und eine Zeile je Sprache in `sprachen.js`.
+> GitHub deaktiviert geplante Workflows nach 60 Tagen ohne Aktivität im
+> Repo. Sobald die Einladung verschickt ist, halten auch die Besuche der
+> Gäste Supabase wach.
 
-### 4. Zugangsdaten eintragen
+### 6. Erweiterung und euer Zugang ← offen
 
-In `index.html` im Script-Block:
+1. **Supabase → Authentication → Users → Add user → Create new user**:
+   E-Mail und Passwort, „Auto Confirm User" anhaken. Für euch beide.
+2. **Authentication → Sign In / Providers**: „Allow new users to sign up"
+   **aus**.
+3. In `erweiterung.sql` ganz unten eure beiden Adressen eintragen, im
+   SQL-Editor ausführen. **Die Datei danach nicht mit euren Adressen
+   committen** – das Repo ist öffentlich.
+4. `planung.html` öffnen, anmelden. Die Küchenangaben erscheinen.
 
-```js
-const SUPABASE_URL = 'https://jlwpzsdpezjxsgefbiws.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_HIER-EINTRAGEN';
-```
+Bis dahin läuft alles weiter; Musikwünsche und persönliche Links bleiben
+nur unsichtbar, und `planung.html` zeigt einen Hinweis.
 
-Der Schlüssel steht unter **Settings → API Keys**.
-
-**Nimm den `sb_publishable_…`-Key**, nicht den alten `anon`-Key aus dem
-Legacy-Tab: Supabase schaltet anon und service_role Ende 2026 ab. Mit dem
-Legacy-Key würde die Einladung mitten in der Planung aufhören zu funktionieren.
-
-Der publishable Key darf öffentlich im Quelltext stehen – dafür ist er gemacht.
-Was er darf, regeln die Policies aus Schritt 1.
-Der `sb_secret_…`-Key gehört **niemals** in diese Datei.
-
-### 5. Gästeliste importieren
-
-`import.sql` in den SQL-Editor → **Run**. Enthält alle 44 Gäste, erzeugt aus
-`Eheschließung - Gästeliste.csv`.
-
-Das Skript beginnt mit `truncate gaeste cascade` und lässt sich deshalb
-beliebig oft wiederholen. **Achtung:** Das löscht auch Profile und
-Küchenhinweise. Sobald Gäste angefangen haben, Daten einzutragen, nicht mehr
-neu importieren – dann einzelne Zeilen im Table Editor pflegen.
-
-Neu erzeugen lässt sich die Datei aus der CSV jederzeit; das Skript dafür
-steht im Verlauf dieses Projekts.
-
-### 6. Lokal testen
+### Lokal testen
 
 ```bash
 python -m http.server 8000
 ```
 
-Dann `http://localhost:8000` öffnen – **nicht** per Doppelklick auf die Datei.
-Bei `file://` blockiert Chrome die Modul-Importe, und der Fehler sieht aus wie
-ein Datenbankproblem.
+Dann `http://localhost:8000` – **nicht** per Doppelklick. Bei `file://`
+blockiert der Browser die Modul-Importe, und der Fehler sieht aus wie ein
+Datenbankproblem.
 
-### 7. Veröffentlichen
-
-Ordner auf [app.netlify.com/drop](https://app.netlify.com/drop) ziehen,
-oder das Repo in Netlify verbinden (dann deployt jeder Push automatisch).
-
-Danach in Netlify **Domain management → Add a domain** →
-`hochzeit.nthanh.de`, und bei INWX einen CNAME setzen:
-
-| Typ | Host | Wert | TTL |
-|---|---|---|---|
-| CNAME | `hochzeit` | `DEIN-SITE-NAME.netlify.app` | 300 |
-
-Der spezifische CNAME sticht den Wildcard-Eintrag von INWX.
-
-### 8. Keep-Alive scharf schalten
-
-Supabase pausiert Free-Projekte nach **7 Tagen ohne API-Anfrage** – dann lädt
-die Einladung keine Daten mehr. `.github/workflows/keepalive.yml` verhindert das.
-
-Im GitHub-Repo unter **Settings → Secrets and variables → Actions** anlegen:
-
-- `SUPABASE_URL`
-- `SUPABASE_KEY`
-
-Danach unter **Actions** einmal manuell auslösen und prüfen, dass `200` kommt.
-
-> GitHub deaktiviert geplante Workflows in Repos, in denen 60 Tage nichts
-> passiert. Setz dir zusätzlich eine monatliche Erinnerung, die Seite einmal
-> selbst zu öffnen – das zählt als Anfrage und ist der verlässlichste Schutz.
+Mit `?jetzt=2026-12-12T14:10` tut die Seite so, als wäre es gerade dann –
+zum Ansehen der Tagesansicht und der Danke-Seite.
 
 ---
 
-## Aufbau der Seite
+## Einladungen verschicken
+
+Alles in `planung.html` unter **Einladungen verschicken**:
+
+1. Pro Haushalt die **Sprache** wählen. Angemeldet wird sie gespeichert,
+   und der persönliche Link öffnet die Seite dann in dieser Sprache.
+2. Den Text prüfen – er lässt sich direkt im Feld anpassen.
+3. **Text kopieren** oder **In WhatsApp öffnen**, Kontakt wählen, senden.
+4. Für alle ohne Smartphone: **Karte drucken** (A6 quer, mit QR-Code zum
+   persönlichen Link).
+
+Die Vorlagen stehen oben im Script von `planung.html` (`VORLAGEN`).
+
+**Vorher testen:** den eigenen Link an sich selbst schicken und prüfen, ob
+WhatsApp die Vorschau mit Bild zeigt. Dann an zwei, drei Menschen, bevor
+alle ihn bekommen – jemand Älteres aus der vietnamesischen Familie,
+jemand Spanischsprachiges, jemand, der sich mit Handys schwertut.
+
+### Persönliche Links
+
+`erweiterung.sql` gibt jedem Haushalt einen Code: `?h=3f9c1a7b2e`. Wer den
+Link öffnet, landet direkt im eigenen Haushalt und sieht zuerst die
+Einladung. Der Code verschwindet danach aus der Adresszeile.
+
+**Das ist Bequemlichkeit, kein Schutz.** Der Code ist mit dem öffentlichen
+Schlüssel lesbar, und auf der Seite kann weiterhin jeder jeden Gast
+auswählen. Er verhindert, dass jemand versehentlich woanders landet – nicht,
+dass jemand es absichtlich tut. Bei 44 Menschen, die sich kennen, ist das
+vertretbar.
+
+Nach einem neuen `import.sql` sind die Codes weg: `erweiterung.sql` noch
+einmal ausführen, und die Links müssen neu raus.
+
+### Link-Vorschau
+
+WhatsApp, Signal und Telegram zeigen Bild, „Christina & Thanh · 12.12.2026"
+und „Einladung · Invitation · Invitación · Thiệp mời". Sprachneutral, weil
+die Vorschau kein JavaScript ausführt und nicht weiß, wer den Link bekommt.
+
+`robots.txt` lässt die Vorschau-Abrufer durch und sperrt Suchmaschinen.
+Netlify sendet zusätzlich `X-Robots-Tag: noindex`. WhatsApp merkt sich
+Vorschauen eine Weile – nach einer Änderung am Bild dauert es, bis sie
+auftaucht.
+
+---
+
+## Aufbau der Einladung
 
 Fünf Ansichten unter einem festen Kopf, in vier Sprachen:
 
 | Ansicht | Zeigt |
 |---|---|
-| Einladung | Ablauf, beide Orte mit Karte, Übernachtung – und für Unbekannte die Namensauswahl |
-| Mein Platz | eigene Stammdaten, Haushalt, Checkliste, Zusage, Steckbrief, Foto, Küche, eigene Buffet-Beiträge |
-| Speisen | das Mittagsbuffet: wer bringt was mit, mit Zutaten und Allergenen |
-| Gäste | alle Gäste, filterbar; ein Tipp auf eine Karte zeigt den Steckbrief |
-| Helfer | wer welche Aufgabe übernommen hat, plus die guten Geister |
+| Einladung | Ablauf, Wie wir feiern, beide Orte mit Karte – für Unbekannte die Namensauswahl |
+| Mein Platz | Haushalt, eigene Angaben, Checkliste, Zusage, Steckbrief, Foto, Buffet-Beiträge, Musikwünsche, Küche |
+| Speisen | das Mittagsbuffet: wer bringt was, mit Zutaten und Allergenen |
+| Gäste | alle Gäste, filterbar; ein Tipp zeigt den Steckbrief |
+| Helfer | wer welche Aufgabe übernommen hat |
 
 Der Kopf ist beim ersten Besuch eine Einladungskarte mit Countdown. Sobald
-klar ist, wer da ist, schrumpft er auf eine Zeile und macht Platz für die
-Navigation. Gesteuert wird das über die Klasse `angemeldet` am `body`.
+klar ist, wer da ist, schrumpft er auf eine Zeile.
 
 ### Wer gerade antwortet
 
-Unter der Navigation steht immer „Du antwortest als …“ mit einem
-Wechsel-Link. Dahinter liegen zwei Wege: die Mitbewohner aus dem eigenen
-Haushalt als Knöpfe mit ihrem aktuellen Stand („kommt“, „noch offen“), und
-darunter die volle Gästeliste.
+Unter der Navigation steht immer „Du antwortest als …" mit Wechsel-Link.
+In „Mein Platz" steht der Haushalt ganz oben – Eltern beantworten so in
+einem Klick die Zusage ihrer Kinder. Beim Wechsel werden die Küchenfelder
+geleert, sonst landen Annas Allergien bei Bruno.
 
-Das ist der Grund, warum es keinen Login gibt: Eltern beantworten so in
-einem Klick die Zusage ihrer Kinder, ohne sich vier Mal neu anzumelden.
-Beim Wechsel werden die Küchenfelder geleert – sonst landen Annas
-Allergien bei Bruno.
+### Frist, Tag der Feier, danach
+
+- **Antwortfrist** (`FEIER.antwortBis`) steht bei der Namensauswahl und bei
+  „Kommst du?", in der Sprache des Gastes formatiert. Danach bittet die
+  Seite nur noch, Änderungen trotzdem zu melden.
+- **Am Tag selbst** markiert der Ablauf, was gerade dran ist.
+- **Nach der Feier** steht „Danke, dass ihr da wart" statt Countdown. Steht
+  in `FEIER.fotos` der Link zur Galerie eurer Fotografin, erscheint ein
+  Knopf dorthin.
 
 ### Kalender
 
-Der Knopf „In meinen Kalender eintragen“ baut die `.ics` im Browser aus
-`FEIER` und `ORTE`; es liegt keine Datei im Repo, die veralten könnte. Wer
-beim Standesamt dabei ist (`standesamt` = `Ja` oder `(Ja)`), bekommt zwei
-Termine, alle anderen nur die Feier.
-
-Die Zeitzone steht als vollständiger `VTIMEZONE`-Block drin. Ohne den
-rutscht der Termin in manchen Kalendern um eine Stunde.
-
-### Helfer
-
-Die Ansicht dreht die Gästeliste um: nicht „wer hat welche Rolle“, sondern
-„wer macht das hier“. Rollen mit Fragezeichen (`DJ?`, `Technik?`) stehen mit
-dem Vermerk **noch offen** da. „Braut“ und „Bräutigam“ sind ausgenommen –
-das sind keine Aufgaben, die jemand übernimmt.
+„In meinen Kalender eintragen" baut die `.ics` im Browser, in der gewählten
+Sprache. Wer beim Standesamt dabei ist, bekommt zwei Termine, alle anderen
+nur die Feier. Die Zeitzone steht als vollständiger `VTIMEZONE`-Block drin,
+Zeilen werden nach Bytes gefaltet – ein vietnamesisches Zeichen ist bis zu
+drei Bytes lang.
 
 ### Mitbring-Buffet
 
-Mittags gibt es ein Buffet aus dem, was die Gäste mitbringen; abends wird
-gekocht und niemand bringt etwas mit. Die Seite trennt das deutlich – der
-Abendblock im Reiter „Speisen“ hat bewusst kein Eingabefeld.
+Mittags bringen alle mit, abends wird gekocht – der Abendblock hat bewusst
+kein Eingabefeld. Ein Gast darf mehrere Beiträge haben.
 
-Eingetragen wird in „Mein Platz“, angesehen unter „Speisen“. Ein Gast darf
-mehrere Beiträge haben (Salat *und* Getränke), deshalb eine eigene Tabelle
-statt eines Feldes an `profile`.
+- **Kategorien** in `feier.js`. `art: null` heißt „der Gast schreibt selbst
+  hin, was es ist".
+- **Allergene sind Häkchen**, sonst ließe sich nicht filtern. Das
+  Zutatenfeld bleibt zusätzlich.
+- **Zutaten sind nicht dasselbe wie Allergien.** Was im Salat steckt, steht
+  offen da. Was ein Mensch nicht verträgt, liegt in `kueche`.
+- **Zurücknehmen statt löschen.** Die Zeile bleibt in der Tabelle; ein
+  Fehlklick soll keine Planung kosten.
+- Die **Lückenanzeige** nennt nur Kategorien, in denen gar nichts steht.
+  Keine Zielzahlen.
 
-Die Kategorien stehen in `KATEGORIEN` im Script. `art: null` heißt „der Gast
-schreibt selbst hin, was es ist“ – so sind Getränke, Kuchen oder Deko
-abgedeckt, ohne dass die Liste sie vorwegnehmen muss. Eine Kategorie mehr
-ist eine Zeile mehr im Array; die Datenbank bleibt, wie sie ist. Soll aus
-Getränken eine eigene Rubrik werden, reicht dort ein
-`{ bereich: "Mittagsbuffet", art: "Getränke" }`.
+### Musikwünsche
 
-Allergene sind Häkchen (`ALLERGENE`), nicht Freitext – nur so lässt sich
-die Liste filtern. Das Zutatenfeld bleibt zusätzlich, weil kein Häkchen
-„Koriander“ abdeckt.
-
-**Zutaten sind nicht dasselbe wie Allergien.** Was in einem Salat steckt,
-ist eine Rezeptangabe und steht offen da. Was ein Mensch nicht verträgt,
-liegt weiter in `kueche`, aus der nichts wieder herauskommt. Beide Seiten
-greifen ineinander: Wer eine Allergie gemeldet hat, liest die Speisenliste.
-
-**Zurücknehmen statt löschen.** Ein Gast, der absagt, setzt
-`zurueckgezogen` – die Zeile verschwindet aus der Liste, bleibt aber in der
-Tabelle. Ohne Login kann jeder alles anfassen; ein Fehlklick soll keine
-drei Wochen Planung kosten.
-
-Die Lückenanzeige nennt nur Kategorien, in denen **gar nichts** steht.
-Bewusst keine Zielzahlen: wie viel für 44 Leute reicht, schätzt jeder
-selbst besser ein als eine ausgedachte Sollgröße.
+In „Mein Platz": Lied und Interpret, alle sehen alle Wünsche, eigene lassen
+sich zurücknehmen. Für den DJ in `planung.html` als Liste zum Kopieren und
+als View `playlist`.
 
 ### Sprachen
 
-Oben rechts steht immer DE · EN · ES · VI – auch vor der Anmeldung, weil
-es da noch keine Navigation gibt. Beim ersten Besuch wählt die Seite die
-Sprache des Browsers, danach die zuletzt gewählte.
-
-Ein paar Regeln, die man beim Pflegen kennen muss:
+DE · EN · ES · VI oben rechts, auch vor der Anmeldung. Erste Wahl ist die
+Sprache des Browsers – oder die, die ihr für den Haushalt festgelegt habt –,
+danach die zuletzt gewählte.
 
 - **Datenbankwerte bleiben deutsch.** Wer auf Spanisch „huevo" anhakt,
-  speichert `Ei`. Sonst würde ein Filter in einer Sprache die Einträge aus
-  einer anderen nicht finden. In `sprachen.js` steht deshalb bei `art`,
-  `allergen` und `kennzeichen` links der Datenbankwert – nur rechts
-  übersetzen.
-- **Was Gäste schreiben, bleibt, wie sie es schreiben.** Steckbriefe,
-  Gerichte, Zutaten, aber auch die Rollen und Haushalte aus eurer
-  Gästeliste werden nicht übersetzt.
-- **Fehlt eine Übersetzung**, erscheint der deutsche Text, und die
-  Browser-Konsole meldet `Übersetzung fehlt: vi schluessel`.
-- **Sprachwechsel verliert nichts.** Halb Getipptes in einem Formular oder
-  im offenen Eintragen-Dialog bleibt stehen; nur die Beschriftung wechselt.
-- Auch der Kalendereintrag kommt in der gewählten Sprache.
+  speichert `Ei`. In `sprachen.js` steht bei `art`, `allergen` und
+  `kennzeichen` links der Datenbankwert – nur rechts übersetzen.
+- **Was Gäste schreiben, bleibt, wie sie es schreiben** – auch Rollen und
+  Haushalte aus der Gästeliste.
+- **Fehlt eine Übersetzung**, erscheint Deutsch, und die Konsole meldet
+  `Übersetzung fehlt`.
+- **Sprachwechsel verliert nichts**, auch nicht halb Getipptes.
 
-Die Übersetzungen sind ein erster Entwurf. Beim Gegenlesen besonders
-prüfen: Vietnamesisch spricht Gäste mit „bạn" an – für ältere Verwandte
-womöglich zu locker. Spanisch ist neutral-lateinamerikanisch („ustedes",
-„auto").
+Erster Entwurf. Beim Gegenlesen: Vietnamesisch sagt „bạn" – für ältere
+Verwandte womöglich zu locker. Spanisch ist neutral-lateinamerikanisch.
 
 ### Schriften und Karten
 
-Schriften kommen von Google Fonts (Cormorant Garamond). Wer das nicht will,
-lädt die zwei `.woff2` herunter, legt sie neben `index.html` und ersetzt den
-`<link>` durch ein `@font-face` – der Fallback (Georgia) steht schon im
-Stylesheet.
+Cormorant Garamond von Google Fonts, Fallback Georgia. Karten sind
+OpenStreetMap-`<iframe>`s ohne Schlüssel, sie laden erst beim Hinscrollen.
 
-Die Karten sind `<iframe>`s von OpenStreetMap, ohne API-Schlüssel und ohne
-Konto. Sie laden erst, wenn jemand hinunterscrollt (`loading="lazy"`).
+---
+
+## Planung
+
+`planung.html` zeigt ohne Anmeldung alles außer den Küchenangaben:
+
+- **Antworten**: Zusagen, Kinder, Plätze Standesamt (von 25), Schlafplätze,
+  Frist, Gruppen, Haushalte ohne Antwort.
+- **Allergien und Buffet** (nur angemeldet): jede Küchenangabe mit
+  automatischem Abgleich gegen die Buffet-Allergene – über Stichwörter in
+  allen vier Sprachen. Findet viel, nicht alles; die Angaben selbst stehen
+  immer darunter. Gerichte ganz ohne Zutaten werden eigens gemeldet.
+- **Buffet**, **Musikwünsche**, **Versand**, **Export** als CSV.
+
+Die Anmeldung speichert ihre Sitzung getrennt von der Einladung. Sonst
+schickte die Einladung im selben Browser ihre Anfragen als „angemeldet" –
+dafür hat sie keine Rechte, Zusagen würden scheitern.
+
+Wer sich anmeldet, aber nicht in `planer` steht, wird sofort wieder
+abgemeldet.
 
 ---
 
 ## Datenmodell
-
-Die Spalten folgen eurer Gästeliste, nicht einem Lehrbuch:
 
 | Spalte | Werte |
 |---|---|
@@ -300,48 +298,47 @@ Die Spalten folgen eurer Gästeliste, nicht einem Lehrbuch:
 | `familie` | Haushalt, z. B. `Nahel & Svijetlana` |
 | `schlafort` | `Hotel`, `Airbnb`, `??` … `null` = keiner nötig |
 | `rollen` | Freitext-Array, wörtlich aus eurer Liste |
-
-Rollen mit Fragezeichen (`Technik?`, `DJ?`) zeigt die App gestrichelt statt
-wie feste Zusagen. Neue Rollen brauchen keine Code-Änderung.
+| `link` | Code für den persönlichen Link, gleich für den ganzen Haushalt |
+| `sprache` | `de`, `en`, `es`, `vi` – gesetzt in `planung.html` |
 
 ---
 
 ## Echte Daten gehören nicht auf GitHub
 
-`*.csv` und `import.sql` stehen in `.gitignore`. Sie enthalten Namen,
-Haushalte und Übernachtungen von 44 realen Personen.
+`*.csv`, `import.sql` und die Projekt-Notizen in `0*-*/` stehen in
+`.gitignore`. Alles andere im Repo ist öffentlich **und** auf der Website
+abrufbar – Netlify veröffentlicht den ganzen Ordner.
 
-## Nach der Hochzeit
+## Nach der Feier
 
-- Storage-Bucket löschen oder auf privat stellen
-- `kueche` leeren
+1. `planung.html` → **Sichern**: alle vier Tabellen als CSV herunterladen.
+2. `FEIER.fotos` in `feier.js` eintragen, pushen – die Danke-Seite zeigt
+   den Knopf zur Galerie.
+3. Nach ein paar Wochen aufräumen, im SQL-Editor:
+   ```sql
+   truncate kueche;                                  -- Gesundheitsangaben
+   update storage.buckets set public = false where id = 'gaeste-fotos';
+   ```
+4. Netlify → Projekt auf privat stellen oder löschen.
 
-Fotos und Gesundheitsangaben von 44 Menschen müssen nicht dauerhaft online sein.
+Fotos und Gesundheitsangaben von 44 Menschen müssen nicht dauerhaft online
+sein.
 
 ---
 
-## Was noch fehlt
-
-Bewusst weggelassen, bis ihr merkt, dass ihr es braucht:
-
-- **Kein Login.** Wer den Link hat, kann jedes Profil ändern. Bei 44 Leuten,
-  die sich kennen, ist das vertretbar. Falls doch nötig: PIN pro Gast.
-- **Kein Admin-Interface.** Stammdaten pflegt ihr im Table Editor,
-  nachgereichte Fotos zieht ihr direkt in den Storage-Bucket.
-- **Keine Mengenplanung.** Die Seite zählt, was zusammenkommt, sagt aber
-  nicht, ob es reicht. Das schätzt ihr besser ein als ein Algorithmus.
-
 ## Offen
 
-- Zählt `(Ja)` beim Standesamt gegen das 25er-Limit? Betrifft Kyan und Yuna.
-  Aktuell: ja, damit steht es bei genau 25/25. Die Zahl steht nur noch in der
-  View `standesamt_stand` – die Gäste sehen sie nicht mehr.
-- „Lea (Kind)“ ist ein Platzhalter, weil `Lea` doppelt vorkam.
-- Der Erich-Sanders-Weg liegt in **Süchteln**, nicht in Dülken – gut 5 km vom
-  Trauzimmer. Auf der Seite steht das als Warnung bei der Tanzschule.
-- Offen im `ABLAUF`: wann es Essen gibt. 17:00 Uhr ist geschätzt, ebenso
-  20:00 Uhr fürs Tanzen – Trauung (10:45–11:30), Beginn (13:00) und Ende
-  (22:00) stehen fest.
-- Offen in `FEIER`: der Text zum Übernachten.
-- Die Feier ist im **Dezember**. Falls es Garderobe, Winterschuh- oder
-  Anreisehinweise braucht, gehören sie als weitere Zeile in `ORTE.fest.hinweise`.
+- **Übernachten**: Die Karte bleibt ausgeblendet, bis in `sprachen.js`
+  unter `schlafen` Text steht.
+- **Garderobe**: Im Dezember kommen alle im Mantel. Gibt es eine, gehört das
+  als Hinweis zur Tanzschule (`orteHinweise.fest` plus `marken` in
+  `feier.js`).
+- **Antwortfrist** 15. November ist ein Vorschlag – in `feier.js` änderbar.
+- **Tanzworkshop** 16:00 ist ein Vorschlag – in `feier.js`.
+- **Übersetzungen** gegenlesen.
+- Zählt `(Ja)` beim Standesamt gegen das 25er-Limit? Aktuell ja, damit steht
+  es bei genau 25/25.
+- „Lea (Kind)" ist ein Platzhalter, weil `Lea` doppelt vorkam.
+- Das Repo ist öffentlich. Zusammen mit dem Schlüssel in `feier.js` ist die
+  Gästeliste für jeden lesbar, der das Repo findet. Privat stellen:
+  GitHub → Settings → General → Change visibility.
