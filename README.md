@@ -129,6 +129,10 @@ Dann `http://localhost:8000` – **nicht** per Doppelklick. Bei `file://`
 blockiert der Browser die Modul-Importe, und der Fehler sieht aus wie ein
 Datenbankproblem.
 
+Erscheint eine Änderung in `sprachen.js` oder `feier.js` lokal nicht: Der
+Python-Server erlaubt dem Browser, alte Kopien zu behalten. Mit
+Strg+Umschalt+R neu laden. Live bei Netlify passiert das nicht.
+
 Mit `?jetzt=2026-12-12T14:10` tut die Seite so, als wäre es gerade dann –
 zum Ansehen der Tagesansicht und der Danke-Seite.
 
