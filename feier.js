@@ -25,6 +25,10 @@ export const FEIER = {
   // Seite nach der Feier einen Knopf dorthin.
   fotos: null,
 
+  // Wer den Tanzworkshop leitet. Steht bei link eine Adresse (Instagram,
+  // Website), wird der Name im Ablauf klickbar.
+  workshop: { name: "Armin", link: null },
+
   // Wie viele Menschen ins Trauzimmer passen.
   plaetzeStandesamt: 25,
 
@@ -62,12 +66,14 @@ export const ORTE = {
 // sprachen.js unter 'ablauf', in derselben Reihenfolge.
 // nebensache: true stellt einen Punkt gedaempft dar,
 // ort: verweist auf einen Schluessel aus ORTE und erzeugt den Link.
+// sprung: "buffet" oder "abends" fuehrt direkt in den Reiter Speisen.
+// leitung: zeigt "mit Armin" (FEIER.workshop), klickbar mit Link.
 export const ABLAUF = [
   { zeit: "10:45", ort: "trauung", nebensache: true },
   { zeit: "12:30", ort: "fest" },
-  { zeit: "13:30" },
-  { zeit: "16:00" },
-  { zeit: "18:30" },
+  { zeit: "13:30", sprung: "buffet" },
+  { zeit: "16:00", leitung: true },
+  { zeit: "18:30", sprung: "abends" },
   { zeit: "20:00" },
   { zeit: "22:00" },
 ];

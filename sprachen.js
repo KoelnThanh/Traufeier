@@ -32,7 +32,7 @@ export const TEXTE = {
     "hero.einordnung":
       "Es ist unsere <strong>Traufeier</strong> – standesamtlich, im kleinen Kreis, mit einem langen Tag danach. Die große Hochzeit feiern wir später.",
     "hero.zweisaetze":
-      "Schenkt uns nichts, kommt einfach.<br>Und zieht euch schick an.",
+      "Euer Dabeisein ist uns Geschenk genug.<br>Und gern schick – es wird getanzt.",
     "countdown.tage": "Noch {n} Tage",
     "countdown.morgen": "Morgen ist es so weit",
     "countdown.heute": "Heute ist der Tag",
@@ -60,8 +60,7 @@ export const TEXTE = {
       "Die Feier in der Tanzschule. Alle Infos: https://traufeier.nthanh.de",
 
     "haltung.titel": "Wie wir feiern",
-    "haltung.intro":
-      "Eine Traufeier ist keine Hochzeit. Damit ihr wisst, worauf ihr euch einlasst:",
+    "haltung.gruss": "Wir freuen uns auf euch!",
 
     "orte.titel": "Wo",
     "ort.trauung": "Trauung",
@@ -111,6 +110,10 @@ export const TEXTE = {
     "zusage.ja": "Ja, ich komme",
     "zusage.nein": "Leider nicht",
     "frist.bitte": "Bitte antwortet bis {datum}.",
+    "ablauf.buffet": "Was schon zusammenkommt",
+    "ablauf.menue": "Zur Speisekarte",
+    "ablauf.leitung": "mit {name}",
+    "m.werBistDu": "Sag uns zuerst, wer du bist – dann kannst du etwas eintragen.",
     "frist.vorbei": "Die Antwortfrist ist vorbei – sagt uns trotzdem Bescheid, wenn sich noch etwas ändert.",
     "jetzt": "jetzt",
     "danke.titel": "Danke, dass ihr da wart.",
@@ -278,11 +281,11 @@ export const TEXTE = {
       ["Einlass", "Ankommen, anstoßen, Zeit zum Reden."],
       [
         "Mittagsbuffet",
-        "Alles, was ihr mitbringt. Was schon zusammengekommen ist, steht unter „Speisen“.",
+        "Alles, was ihr mitbringt.",
       ],
       [
         "Tanzworkshop für alle",
-        "Grundschritt in einer halben Stunde, ohne Vorkenntnisse. Wir stehen vorn, ihr macht mit – danach kann jeder mittanzen.",
+        "Grundschritt in einer halben Stunde, ohne Vorkenntnisse – danach kann jeder mittanzen.",
       ],
       [
         "Abendessen",
@@ -295,35 +298,13 @@ export const TEXTE = {
       ["Ende", "Dann machen wir das Licht aus."],
     ],
 
+    // Als Brief gesetzt, nicht als Liste. HTML erlaubt (<strong>).
     haltung: [
-      [
-        "Schenkt uns nichts",
-        "Wirklich nichts. Dass ihr kommt, ist uns mehr wert als alles, was in Geschenkpapier passt.",
-      ],
-      [
-        "Zieht euch schick an",
-        "Wir haben Lust auf einen eleganten Tag. Und packt Schuhe ein, in denen ihr tanzen könnt – um 16 Uhr gibt es einen Workshop.",
-      ],
-      [
-        "Es gibt kein Catering – es gibt uns",
-        "Mittags bringt jeder etwas mit, und den Teller trägt danach jeder selbst weg. So bleibt es bezahlbar, und wir sind trotzdem alle satt.",
-      ],
-      [
-        "Für die Kinder ist jemand da",
-        "Eine Erzieherin passt auf, damit ihr auch mal in Ruhe sitzen, essen und tanzen könnt.",
-      ],
-      [
-        "Wir stellen uns nicht in die Mitte",
-        "Kaum Programm mit uns. Uns ist lieber, ihr habt miteinander einen schönen Tag.",
-      ],
-      [
-        "Keine gestellten Fotos",
-        "Unsere Fotografin hält fest, was ohnehin passiert. Posieren müsst ihr nicht, wir auch nicht.",
-      ],
-      [
-        "Das große Fest kommt in fünf Jahren",
-        "Wenn die Kinder größer sind und wir mit euch wieder richtig lange feiern können. Deshalb ist auch um 22 Uhr Schluss.",
-      ],
+      "Wir heiraten standesamtlich und feiern das mit euch – bewusst nicht als große Hochzeit, sondern als Traufeier. Geschenke brauchen wir keine: <strong>Dass ihr dabei seid, ist uns Geschenk genug.</strong>",
+      "Weil getanzt wird, darf es gern <strong>schick</strong> sein – das macht ihr ja ohnehin gern. Packt am besten Schuhe ein, in denen ihr euch wohlfühlt: Um 16 Uhr gibt es einen kleinen Tanzworkshop für alle.",
+      "Ein Rundum-Catering gibt es nicht, dafür machen wir vieles <strong>gemeinsam</strong>. Mittags bringt jeder etwas fürs Buffet mit, und wer mag, übernimmt eine kleine Aufgabe – so bleibt mehr Zeit, zusammen zu essen, zu trinken und zu reden. Den eigenen Teller bringt jeder selbst zurück.",
+      "Für die Kinder ist eine <strong>Erzieherin</strong> da, damit auch die Eltern in Ruhe feiern können. Und statt eines Programms rund um uns steht der gemeinsame Tag im Mittelpunkt: <strong>kein Fotoshooting, keine gestellten Bilder</strong> – unsere Fotografin hält einfach fest, was passiert.",
+      "Das große Fest holen wir in ein paar Jahren nach, wenn die Kinder größer sind. Deshalb ist um <strong>22 Uhr</strong> Schluss.",
     ],
 
     orteHinweise: {
@@ -355,7 +336,7 @@ export const TEXTE = {
     "hero.einordnung":
       "It's our <strong>civil wedding celebration</strong> – a small ceremony at the registry office, followed by a long day together. The big wedding comes later.",
     "hero.zweisaetze":
-      "No gifts, please – just come.<br>And dress up a little.",
+      "Having you there is gift enough.<br>And do dress up – there'll be dancing.",
     "countdown.tage": "{n} days to go",
     "countdown.morgen": "It's tomorrow",
     "countdown.heute": "Today's the day",
@@ -383,8 +364,7 @@ export const TEXTE = {
       "The celebration at the dance school. All details: https://traufeier.nthanh.de",
 
     "haltung.titel": "How we celebrate",
-    "haltung.intro":
-      "A civil wedding celebration isn't a big wedding. So you know what you're in for:",
+    "haltung.gruss": "We're looking forward to seeing you!",
 
     "orte.titel": "Where",
     "ort.trauung": "Ceremony",
@@ -433,6 +413,10 @@ export const TEXTE = {
     "zusage.ja": "Yes, I'm coming",
     "zusage.nein": "Sadly not",
     "frist.bitte": "Please reply by {datum}.",
+    "ablauf.buffet": "See what's coming",
+    "ablauf.menue": "See the menu",
+    "ablauf.leitung": "with {name}",
+    "m.werBistDu": "Tell us who you are first – then you can add something.",
     "frist.vorbei": "The reply deadline has passed – but do let us know if anything changes.",
     "jetzt": "now",
     "danke.titel": "Thank you for being there.",
@@ -599,11 +583,11 @@ export const TEXTE = {
       ["Doors open", "Arrive, raise a glass, time to talk."],
       [
         "Lunch buffet",
-        "Everything you bring. What's already signed up is under “Food”.",
+        "Everything you bring.",
       ],
       [
         "Dance workshop for everyone",
-        "Basic steps in half an hour, no experience needed. We lead, you join in – after that, everyone can dance.",
+        "Basic steps in half an hour, no experience needed – after that, everyone can join in.",
       ],
       ["Dinner", "Soup and a few warm dishes. Nothing to bring here."],
       [
@@ -613,35 +597,13 @@ export const TEXTE = {
       ["The end", "Then we turn out the lights."],
     ],
 
+    // Als Brief gesetzt, nicht als Liste. HTML erlaubt (<strong>).
     haltung: [
-      [
-        "No gifts, please",
-        "Really, nothing. You being there means more to us than anything that fits in wrapping paper.",
-      ],
-      [
-        "Dress up",
-        "We'd love an elegant day. And bring shoes you can dance in – there's a workshop at 16:00.",
-      ],
-      [
-        "No catering – just all of us",
-        "Everyone brings something for lunch, and everyone takes their own plate back afterwards. That keeps it affordable, and we'll all still be well fed.",
-      ],
-      [
-        "Someone's looking after the kids",
-        "A trained childcare worker will be there, so you can actually sit, eat and dance in peace.",
-      ],
-      [
-        "It's not about us",
-        "Hardly any programme centred on us. We'd much rather you have a great day together.",
-      ],
-      [
-        "No posed photos",
-        "Our photographer captures what happens anyway. No posing needed – not for you, not for us.",
-      ],
-      [
-        "The big party comes in five years",
-        "When the kids are older and we can celebrate with you until late again. That's also why we finish at 22:00.",
-      ],
+      "We're getting married at the registry office and celebrating with you – not as a big wedding, but as a small civil wedding celebration. We don't need any gifts: <strong>having you there is gift enough.</strong>",
+      "Since there will be dancing, feel free to dress <strong>smartly</strong> – you like to anyway. Bring shoes you feel comfortable in: at 16:00 there's a short dance workshop for everyone.",
+      "There's no all-inclusive catering – instead, we'll do a lot of it <strong>together</strong>. Everyone brings something for the lunch buffet, and anyone who likes can take on a small task – that leaves more time to eat, drink and talk together. Everyone takes their own plate back afterwards.",
+      "A <strong>childcare worker</strong> will look after the kids, so parents can relax and celebrate too. And rather than a programme centred on us, the focus is on the day together: <strong>no photo shoot, no posed pictures</strong> – our photographer simply captures what happens.",
+      "We'll have the big party in a few years, when the kids are older. That's why we finish at <strong>22:00</strong>.",
     ],
 
     orteHinweise: {
@@ -675,7 +637,8 @@ export const TEXTE = {
     "hero.ueberzeile": "Nos casamos",
     "hero.einordnung":
       "Es nuestra <strong>celebración de boda civil</strong>: una ceremonia pequeña en el registro civil y después un largo día juntos. La gran boda la celebraremos más adelante.",
-    "hero.zweisaetze": "Sin regalos, solo vengan.<br>Y vístanse elegantes.",
+    "hero.zweisaetze":
+      "Su presencia es nuestro mejor regalo.<br>Y vengan elegantes: habrá baile.",
     "countdown.tage": "Faltan {n} días",
     "countdown.morgen": "Es mañana",
     "countdown.heute": "Hoy es el día",
@@ -703,8 +666,7 @@ export const TEXTE = {
       "La celebración en la escuela de baile. Toda la información: https://traufeier.nthanh.de",
 
     "haltung.titel": "Cómo lo celebramos",
-    "haltung.intro":
-      "Una celebración de boda civil no es una gran boda. Para que sepan qué les espera:",
+    "haltung.gruss": "¡Tenemos muchas ganas de verlos!",
 
     "orte.titel": "Dónde",
     "ort.trauung": "Ceremonia",
@@ -753,6 +715,10 @@ export const TEXTE = {
     "zusage.ja": "Sí, voy",
     "zusage.nein": "Lamentablemente no",
     "frist.bitte": "Por favor, respondan antes del {datum}.",
+    "ablauf.buffet": "Ver lo que ya hay",
+    "ablauf.menue": "Ver el menú",
+    "ablauf.leitung": "con {name}",
+    "m.werBistDu": "Primero dinos quién eres; después puedes apuntar algo.",
     "frist.vorbei": "El plazo para responder ya pasó, pero avísennos si algo cambia.",
     "jetzt": "ahora",
     "danke.titel": "Gracias por estar con nosotros.",
@@ -921,11 +887,11 @@ export const TEXTE = {
       ["Llegada", "Llegar, brindar, tiempo para charlar."],
       [
         "Bufé del mediodía",
-        "Todo lo que traigan. Lo que ya está apuntado aparece en «Comida».",
+        "Todo lo que traigan.",
       ],
       [
         "Taller de baile para todos",
-        "Pasos básicos en media hora, sin experiencia previa. Nosotros enseñamos, ustedes bailan, y después todo el mundo puede unirse.",
+        "Pasos básicos en media hora, sin experiencia previa; después, todo el mundo puede unirse.",
       ],
       [
         "Cena",
@@ -938,35 +904,13 @@ export const TEXTE = {
       ["Fin", "Luego apagamos las luces."],
     ],
 
+    // Als Brief gesetzt, nicht als Liste. HTML erlaubt (<strong>).
     haltung: [
-      [
-        "Sin regalos",
-        "De verdad, nada. Que vengan vale más para nosotros que cualquier cosa envuelta en papel de regalo.",
-      ],
-      [
-        "Vístanse elegantes",
-        "Tenemos ganas de un día elegante. Y traigan zapatos con los que puedan bailar: a las 16:00 hay un taller.",
-      ],
-      [
-        "No hay catering: estamos todos",
-        "Al mediodía cada uno trae algo, y después cada uno lleva su propio plato. Así sale asequible y todos comemos bien.",
-      ],
-      [
-        "Alguien cuida a los niños",
-        "Habrá una educadora infantil para que ustedes también puedan sentarse, comer y bailar tranquilos.",
-      ],
-      [
-        "No queremos ser el centro",
-        "Casi nada de programa sobre nosotros. Preferimos que ustedes pasen un día bonito juntos.",
-      ],
-      [
-        "Nada de fotos posadas",
-        "Nuestra fotógrafa captura lo que pase de forma natural. Nadie tiene que posar, ni ustedes ni nosotros.",
-      ],
-      [
-        "La gran fiesta, dentro de cinco años",
-        "Cuando los niños sean mayores y podamos celebrar con ustedes hasta tarde. Por eso también terminamos a las 22:00.",
-      ],
+      "Nos casamos por lo civil y lo celebramos con ustedes, no como una gran boda, sino como una celebración íntima. No necesitamos regalos: <strong>que estén con nosotros es el mejor regalo.</strong>",
+      "Como habrá baile, vístanse <strong>elegantes</strong>, algo que de todos modos les encanta. Traigan zapatos con los que se sientan cómodos: a las 16:00 hay un pequeño taller de baile para todos.",
+      "No habrá un catering completo; en cambio, haremos muchas cosas <strong>juntos</strong>. Al mediodía cada uno trae algo para el bufé, y quien quiera puede encargarse de una pequeña tarea: así queda más tiempo para comer, beber y charlar juntos. Cada uno lleva su propio plato de vuelta.",
+      "Una <strong>educadora infantil</strong> cuidará de los niños para que también los padres puedan celebrar tranquilos. Y en lugar de un programa centrado en nosotros, lo importante es el día compartido: <strong>sin sesión de fotos ni fotos posadas</strong>; nuestra fotógrafa simplemente captura lo que pase.",
+      "La gran fiesta la haremos dentro de unos años, cuando los niños sean mayores. Por eso terminamos a las <strong>22:00</strong>.",
     ],
 
     orteHinweise: {
@@ -1001,7 +945,7 @@ export const TEXTE = {
     "hero.einordnung":
       "Đây là <strong>buổi lễ đăng ký kết hôn</strong> của chúng mình – một nghi thức nhỏ tại phòng hộ tịch, sau đó là một ngày dài bên nhau. Đám cưới lớn sẽ tổ chức sau.",
     "hero.zweisaetze":
-      "Xin đừng mang quà, chỉ cần đến thôi.<br>Và nhớ ăn mặc thật đẹp nhé.",
+      "Có mọi người đến đã là món quà quý nhất.<br>Và nhớ ăn mặc đẹp – sẽ có khiêu vũ.",
     "countdown.tage": "Còn {n} ngày",
     "countdown.morgen": "Ngày mai là ngày vui",
     "countdown.heute": "Hôm nay là ngày vui",
@@ -1029,8 +973,7 @@ export const TEXTE = {
       "Buổi tiệc tại trường dạy nhảy. Mọi thông tin: https://traufeier.nthanh.de",
 
     "haltung.titel": "Chúng mình tổ chức thế nào",
-    "haltung.intro":
-      "Buổi lễ đăng ký kết hôn không phải là đám cưới lớn. Để mọi người biết trước:",
+    "haltung.gruss": "Chúng mình rất mong được gặp mọi người!",
 
     "orte.titel": "Địa điểm",
     "ort.trauung": "Lễ đăng ký",
@@ -1080,6 +1023,10 @@ export const TEXTE = {
     "zusage.ja": "Có, tôi sẽ đến",
     "zusage.nein": "Rất tiếc là không",
     "frist.bitte": "Vui lòng trả lời trước {datum}.",
+    "ablauf.buffet": "Xem các món đã có",
+    "ablauf.menue": "Xem thực đơn",
+    "ablauf.leitung": "cùng {name}",
+    "m.werBistDu": "Hãy cho chúng mình biết bạn là ai trước – rồi bạn có thể đăng ký.",
     "frist.vorbei": "Đã quá hạn trả lời – nhưng nếu có gì thay đổi, cứ báo chúng mình nhé.",
     "jetzt": "bây giờ",
     "danke.titel": "Cảm ơn mọi người đã đến chung vui.",
@@ -1248,11 +1195,11 @@ export const TEXTE = {
       ["Đón khách", "Đến nơi, nâng ly, trò chuyện cùng nhau."],
       [
         "Buffet trưa",
-        "Tất cả những món mọi người mang đến. Những gì đã có được liệt kê ở mục “Món ăn”.",
+        "Tất cả những món mọi người mang đến.",
       ],
       [
         "Lớp nhảy cho mọi người",
-        "Học bước cơ bản trong nửa tiếng, không cần biết nhảy trước. Chúng mình hướng dẫn, mọi người cùng nhảy – sau đó ai cũng có thể tham gia.",
+        "Học bước cơ bản trong nửa tiếng, không cần biết nhảy trước – sau đó ai cũng có thể tham gia.",
       ],
       ["Bữa tối", "Súp và vài món nóng. Phần này không cần mang gì."],
       [
@@ -1262,35 +1209,13 @@ export const TEXTE = {
       ["Kết thúc", "Rồi chúng mình tắt đèn."],
     ],
 
+    // Als Brief gesetzt, nicht als Liste. HTML erlaubt (<strong>).
     haltung: [
-      [
-        "Xin đừng mang quà",
-        "Thật sự không cần gì cả. Việc mọi người đến với chúng mình quý hơn bất cứ món quà nào.",
-      ],
-      [
-        "Hãy ăn mặc thật đẹp",
-        "Chúng mình muốn có một ngày thanh lịch. Nhớ mang theo giày để nhảy nhé – 16:00 có lớp nhảy.",
-      ],
-      [
-        "Không có dịch vụ tiệc – chỉ có tất cả chúng ta",
-        "Buổi trưa mỗi người mang một món, và sau khi ăn thì ai cũng tự mang đĩa của mình đi cất. Như vậy chi phí vừa phải mà ai cũng no.",
-      ],
-      [
-        "Có người trông trẻ",
-        "Sẽ có một cô giáo mầm non trông các bé, để mọi người cũng có thể ngồi, ăn và nhảy thong thả.",
-      ],
-      [
-        "Chúng mình không muốn là tâm điểm",
-        "Gần như không có tiết mục nào xoay quanh chúng mình. Chúng mình chỉ mong mọi người có một ngày vui bên nhau.",
-      ],
-      [
-        "Không chụp ảnh tạo dáng",
-        "Nhiếp ảnh gia của chúng mình sẽ ghi lại những khoảnh khắc tự nhiên. Không ai phải tạo dáng – kể cả chúng mình.",
-      ],
-      [
-        "Đám cưới lớn sẽ là năm năm nữa",
-        "Khi các con lớn hơn và chúng mình có thể cùng mọi người vui chơi đến khuya. Cũng vì vậy mà 22:00 là kết thúc.",
-      ],
+      "Chúng mình đăng ký kết hôn và muốn cùng mọi người ăn mừng – không phải một đám cưới lớn, mà là một buổi tiệc mừng ấm cúng. Chúng mình không cần quà: <strong>có mọi người ở bên đã là món quà quý nhất.</strong>",
+      "Vì sẽ có khiêu vũ, mọi người cứ <strong>ăn mặc thật đẹp</strong> nhé – dù sao mọi người cũng thích vậy mà. Nhớ mang theo đôi giày thoải mái: 16:00 có một lớp nhảy nhỏ cho tất cả mọi người.",
+      "Sẽ không có dịch vụ tiệc trọn gói – thay vào đó, chúng ta sẽ <strong>cùng nhau</strong> làm nhiều việc. Buổi trưa mỗi người mang một món cho tiệc buffet, ai muốn thì nhận một việc nhỏ – như vậy mọi người có nhiều thời gian hơn để cùng ăn, uống và trò chuyện. Ăn xong, ai cũng tự mang đĩa của mình đi cất.",
+      "Sẽ có <strong>cô giáo mầm non</strong> trông các bé, để bố mẹ cũng được thong thả vui chơi. Thay vì một chương trình xoay quanh chúng mình, điều quan trọng là ngày vui chung: <strong>không chụp ảnh cưới, không tạo dáng</strong> – nhiếp ảnh gia chỉ ghi lại những khoảnh khắc tự nhiên.",
+      "Đám cưới lớn chúng mình sẽ tổ chức sau vài năm nữa, khi các con lớn hơn. Vì vậy buổi tiệc kết thúc lúc <strong>22:00</strong>.",
     ],
 
     orteHinweise: {

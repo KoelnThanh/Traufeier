@@ -199,6 +199,17 @@ Fünf Ansichten unter einem festen Kopf, in vier Sprachen:
 Der Kopf ist beim ersten Besuch eine Einladungskarte mit Countdown. Sobald
 klar ist, wer da ist, schrumpft er auf eine Zeile.
 
+### Wie wir feiern
+
+Bewusst als kurzer Brief gesetzt, nicht als Liste: fünf Absätze mit
+goldener Initiale, die wichtigen Stellen fett, unterschrieben mit
+„Christina & Thanh". Die Absätze stehen in `sprachen.js` unter `haltung`
+(HTML wie `<strong>` erlaubt), der Gruß darüber unter `haltung.gruss`.
+
+Im Ablauf führen „Was schon zusammenkommt" (Mittagsbuffet) und „Zur
+Speisekarte" (Abendessen) direkt in den Reiter Speisen – gesteuert über
+`sprung` in `ABLAUF`. Beim Workshop steht „mit Armin" (`FEIER.workshop`).
+
 ### Wer gerade antwortet
 
 Unter der Navigation steht immer „Du antwortest als …" mit Wechsel-Link.
@@ -336,6 +347,10 @@ sein.
   unter `schlafen` Text steht.
 - **Antwortfrist** 15. November ist ein Vorschlag – in `feier.js` änderbar.
 - **Tanzworkshop** 16:00 ist ein Vorschlag – in `feier.js`.
+- **Link zu Armin** fehlt: in `feier.js` bei `workshop.link` eintragen
+  (Instagram, Website), dann wird „mit Armin" im Ablauf klickbar.
+- **Speisekarte am Abend**: Sobald feststeht, was es gibt, gehört es in
+  `sprachen.js` unter `abendessen` – der Link aus dem Ablauf führt dorthin.
 - **Übersetzungen** gegenlesen.
 - Zählt `(Ja)` beim Standesamt gegen das 25er-Limit? Aktuell ja, damit steht
   es bei genau 25/25.

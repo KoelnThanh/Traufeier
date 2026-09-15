@@ -877,30 +877,48 @@
       }
 
       /* ---------------------------------------------------------- Haltung */
-      ul.haltung {
-        list-style: none;
-        margin: 0;
-        padding: 0;
+      /* Als Brief gesetzt, nicht als Liste: ein paar Absaetze mit
+         Initiale, die wichtigen Stellen dezent fett, unterschrieben. */
+      .brief p {
+        font-size: 15.5px;
+        line-height: 1.8;
+        margin: 0 0 16px;
       }
-      ul.haltung li {
-        padding: 14px 0;
-        border-top: 1px solid var(--linie);
-      }
-      ul.haltung li:first-child {
-        border-top: 0;
-        padding-top: 0;
-      }
-      ul.haltung h3 {
+      .brief p:first-child::first-letter {
+        float: left;
         font-family: var(--display);
-        font-size: 1.25rem;
-        font-weight: 500;
-        margin: 0 0 3px;
+        font-size: 3.6em;
+        line-height: 0.82;
+        padding: 5px 9px 0 0;
+        color: var(--gold);
       }
-      ul.haltung p {
-        font-size: 14px;
-        line-height: 1.6;
+      .brief strong {
+        font-weight: 600;
+      }
+      .brief .gruss {
+        margin: 24px 0 0;
+        text-align: right;
+        font-family: var(--display);
+        font-size: 1.2rem;
+        font-style: italic;
         color: var(--leise);
-        margin: 0;
+      }
+      .brief .unterschrift {
+        display: block;
+        font-size: 1.7rem;
+        font-style: normal;
+        line-height: 1.2;
+        color: var(--tinte);
+      }
+      ol.ablauf .ortlink.ohne {
+        color: var(--leise);
+        text-decoration: none;
+        cursor: default;
+      }
+      /* Spruenge aus dem Ablauf landen unter der festen Navigation. */
+      #speisenKopf,
+      #karteAbends {
+        scroll-margin-top: 130px;
       }
 
       /* Die zwei Saetze, die jeder lesen soll, bevor er weiterscrollt. */
@@ -1420,15 +1438,7 @@
 
         <div class="karte auftritt">
           <h2 data-t="haltung.titel">Wie wir feiern</h2>
-          <p
-            class="leiser"
-            style="margin-bottom: 18px"
-            data-t="haltung.intro"
-          >
-            Eine Traufeier ist keine Hochzeit. Damit ihr wisst, worauf ihr euch
-            einlasst:
-          </p>
-          <ul class="haltung" id="haltung"></ul>
+          <div class="brief" id="haltung"></div>
         </div>
 
         <div class="karte auftritt">
@@ -1664,7 +1674,7 @@
 
       <!-- =============================================== Speisen ===== -->
       <section id="ansichtSpeisen" hidden>
-        <div class="karte auftritt">
+        <div class="karte auftritt" id="speisenKopf">
           <h2 data-t="speisen.titel">Das Mittagsbuffet</h2>
           <p class="leiser" id="buffetStand"></p>
           <div id="luecken"></div>
@@ -1676,7 +1686,7 @@
 
         <div id="speisenListe"></div>
 
-        <div class="karte auftritt">
+        <div class="karte auftritt" id="karteAbends">
           <h2 data-t="speisen.abends">Abends</h2>
           <div class="abendblock">
             <p class="leiser" id="abendText"></p>
@@ -2331,6 +2341,33 @@
         $("fristZusage").textContent = text;
       }
 
+      // "mit Armin" beim Workshop – klickbar, sobald in feier.js ein Link steht.
+      function leitung() {
+        const w = FEIER.workshop;
+        if (!w || !w.name) return "";
+        const text = esc(t("ablauf.leitung", { name: w.name }));
+        return w.link
+          ? '<a class="ortlink" href="' +
+              esc(w.link) +
+              '" target="_blank" rel="noopener">' +
+              text +
+              " &#8599;</a>"
+          : '<span class="ortlink ohne">' + text + "</span>";
+      }
+
+      // Aus dem Ablauf direkt zum Buffet oder zur Speisekarte am Abend.
+      // Zweimal hinscrollen: die Liste darueber laedt nach und verschiebt
+      // die Abendkarte noch einmal.
+      async function springe(ziel) {
+        const el = $(ziel === "abends" ? "karteAbends" : "speisenKopf");
+        const geladen = zeigeSpeisen();
+        requestAnimationFrame(() =>
+          el.scrollIntoView({ behavior: "smooth", block: "start" }),
+        );
+        await geladen;
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
       function countdown() {
         const [j, m, d] = FEIER.tag.split("-").map(Number);
         if (!j || !m || !d) return ($("countdown").textContent = "");
@@ -2407,16 +2444,24 @@
                 esc(ORTE[s.ort].kurz) +
                 " &#8594;</span>"
               : "") +
+            (s.sprung
+              ? '<span class="ortlink" data-sprung="' +
+                esc(s.sprung) +
+                '">' +
+                esc(t(s.sprung === "abends" ? "ablauf.menue" : "ablauf.buffet")) +
+                " &#8594;</span>"
+              : "") +
+            (s.leitung ? leitung() : "") +
             "</div></li>"
           );
         }).join("");
 
-        $("haltung").innerHTML = (L("haltung") || [])
-          .map(
-            ([titel, text]) =>
-              "<li><h3>" + esc(titel) + "</h3><p>" + esc(text) + "</p></li>",
-          )
-          .join("");
+        // Eigene Texte aus sprachen.js – duerfen <strong> enthalten.
+        $("haltung").innerHTML =
+          (L("haltung") || []).map((absatz) => "<p>" + absatz + "</p>").join("") +
+          '<p class="gruss">' +
+          esc(t("haltung.gruss")) +
+          '<span class="unterschrift">Christina &amp; Thanh</span></p>';
 
         $("orte").innerHTML = ortkarte("trauung") + ortkarte("fest");
 
@@ -3332,7 +3377,22 @@
         const mw = e.target.closest("[data-musik-weg]");
         if (mw) return musikWeg(Number(mw.dataset.musikWeg));
 
-        if (e.target.closest("[data-beitrag-neu]")) return oeffneBeitrag(null);
+        const sp = e.target.closest("[data-sprung]");
+        if (sp) return springe(sp.dataset.sprung);
+
+        // Wer ueber die Speisekarte kommt, ohne sich ausgewaehlt zu haben,
+        // kann noch nichts eintragen – erst zur Namensauswahl.
+        if (e.target.closest("[data-beitrag-neu]")) {
+          if (!ichName) {
+            zeigeEinladung();
+            melde(t("m.werBistDu"));
+            return $("karteAuswahl").scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          }
+          return oeffneBeitrag(null);
+        }
 
         const bb = e.target.closest("[data-beitrag-bearbeiten]");
         if (bb) return oeffneBeitrag(bb.dataset.beitragBearbeiten);
