@@ -525,6 +525,14 @@
         margin-top: 7px;
       }
 
+      .trauungtext p {
+        margin: 0 0 12px;
+        line-height: 1.55;
+      }
+      .trauungtext p:last-child {
+        margin-bottom: 0;
+      }
+
       /* Foto: zwei Knoepfe statt eines Dateifelds. Das unsichtbare Feld
          liegt ueber dem ganzen Knopf – so trifft jeder Tipp, auch in
          Browsern, die Klicks auf ein Label nicht weiterreichen. */
@@ -1645,6 +1653,12 @@
           <div class="chips" id="meineRollen"></div>
         </div>
 
+        <!-- Nur fuer Haushalte, in denen jemand zur Trauung eingeladen ist. -->
+        <div class="karte auftritt" id="karteTrauung" hidden>
+          <h2 data-t="trauung.titel">Die Trauung</h2>
+          <div class="trauungtext" id="trauungText"></div>
+        </div>
+
         <div class="karte auftritt">
           <h2 data-t="schritte.titel">Noch zu tun</h2>
           <ul class="schritte" id="schritte"></ul>
@@ -2493,7 +2507,7 @@
 
         const ich = gaeste.find((g) => g.name === ichName);
         const mitTrauung =
-          !!ich && (ich.standesamt === "Ja" || ich.standesamt === "(Ja)");
+          !!ich && zurTrauung(ich);
 
         const url = URL.createObjectURL(
           new Blob([icsBauen(mitTrauung)], {
@@ -2599,6 +2613,60 @@
                 : "";
       }
 
+      // ---------------------------------------------------------- Trauung
+      // Die Trauung ist bewusst klein und vertraulich. Sie steht nur bei
+      // Haushalten, in denen jemand eingeladen ist ("Ja" oder "(Ja)") –
+      // dort aber fuer alle, damit Partner wissen, wer wann wo ist.
+      // Unbekannte Besucher sehen sie nicht.
+      const zurTrauung = (g) => g.standesamt === "Ja" || g.standesamt === "(Ja)";
+
+      const haushaltVon = (ich) =>
+        ich.familie ? gaeste.filter((g) => g.familie === ich.familie) : [ich];
+
+      function namenListe(namen) {
+        try {
+          return new Intl.ListFormat(L("_locale"), { type: "conjunction" }).format(namen);
+        } catch {
+          return namen.join(", ");
+        }
+      }
+
+      function trauungSichtbar() {
+        const ich = gaeste.find((g) => g.name === ichName);
+        return !!ich && haushaltVon(ich).some(zurTrauung);
+      }
+
+      function trauungKarte() {
+        const ich = gaeste.find((g) => g.name === ichName);
+        $("karteTrauung").hidden = !trauungSichtbar();
+        if ($("karteTrauung").hidden) return;
+
+        // Erwachsene zuerst: "Lea und Lasse", nicht "Lasse und Lea".
+        const andere = haushaltVon(ich)
+          .filter((g) => zurTrauung(g) && g.name !== ich.name)
+          .sort((a, b) => (a.art === "Kind") - (b.art === "Kind"))
+          .map((g) => g.name);
+        const absaetze = [];
+        if (zurTrauung(ich)) {
+          absaetze.push(t("trauung.du"));
+          if (andere.length)
+            absaetze.push(t("trauung.auch", { n: andere.length, namen: esc(namenListe(andere)) }));
+        } else {
+          absaetze.push(t("trauung.haushalt", { n: andere.length, namen: esc(namenListe(andere)) }));
+        }
+        absaetze.push(
+          esc(t("trauung.wann", { von: FEIER.trauung.von, bis: FEIER.trauung.bis, ort: ORTE.trauung.kurz })),
+          t("trauung.grund", { n: FEIER.plaetzeStandesamt }),
+        );
+        // Leer in sprachen.js = noch kein Treffpunkt, dann kein Absatz.
+        if (t("trauung.treffpunkt")) absaetze.push(t("trauung.treffpunkt"));
+
+        // Eigene Texte aus sprachen.js – duerfen <strong> enthalten.
+        $("trauungText").innerHTML =
+          absaetze.map((a) => "<p>" + a + "</p>").join("") +
+          '<p class="leiser">' + t("trauung.diskret") + "</p>";
+      }
+
       // -------------------------------------------------------- Einladung
       function zeigeEinladung() {
         $("schlafenText").textContent = t("schlafen");
@@ -2623,8 +2691,10 @@
             if (s.zeit <= uhr) jetztIndex = i;
           });
 
+        const mitTrauung = trauungSichtbar();
         const ablaufTexte = L("ablauf") || [];
         $("ablauf").innerHTML = ABLAUF.map((s, i) => {
+          if (s.ort === "trauung" && !mitTrauung) return "";
           const [titel, text] = ablaufTexte[i] || ["", ""];
           return (
             '<li class="' +
@@ -2666,7 +2736,8 @@
           esc(t("haltung.gruss")) +
           '<span class="unterschrift">Christina &amp; Thanh</span></p>';
 
-        $("orte").innerHTML = ortkarte("trauung") + ortkarte("fest");
+        $("orte").innerHTML =
+          (mitTrauung ? ortkarte("trauung") : "") + ortkarte("fest");
 
         countdown();
         zeige("Einladung");
@@ -2796,7 +2867,7 @@
             ? t("fakten.ortOffen")
             : ich.schlafort;
         if (schlafText) zeilen.push([t("fakten.schlafplatz"), schlafText]);
-        if (ich.standesamt === "Ja" || ich.standesamt === "(Ja)")
+        if (zurTrauung(ich))
           zeilen.push([
             t("fakten.trauung"),
             t(ich.standesamt === "Ja" ? "fakten.dabei" : "fakten.vorgemerkt"),
@@ -2823,6 +2894,7 @@
             datum: new Date(kStand).toLocaleDateString(L("_locale")),
           });
 
+        trauungKarte();
         fotoFeld();
         meineBeitraege();
         rendereMusik();
@@ -2835,17 +2907,7 @@
       function weiterZeilen() {
         const ich = gaeste.find((g) => g.name === ichName);
         if (!ich) return;
-        const haus = ich.familie
-          ? gaeste.filter((g) => g.familie === ich.familie).map((g) => g.name)
-          : [ich.name];
-        let namen;
-        try {
-          namen = new Intl.ListFormat(L("_locale"), {
-            type: "conjunction",
-          }).format(haus);
-        } catch {
-          namen = haus.join(", ");
-        }
+        const namen = namenListe(haushaltVon(ich).map((g) => g.name));
         $("weiterFuer").textContent = t("weiter.fuer", { namen });
         $("weiterText").textContent = t("weiter.text", { name: ich.name });
       }

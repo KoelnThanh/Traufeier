@@ -28,6 +28,7 @@ Kein Build-Schritt, kein npm. Läuft auf **Netlify** (Hosting) und
 | `storage.sql` | Foto-Bucket |
 | `speisen.sql` | Mitbring-Buffet |
 | `erweiterung.sql` | Persönliche Links, Musikwünsche, Planer-Zugang |
+| `benachrichtigung.sql` | Sammelnachricht an eure Telegram-Gruppe bei Änderungen |
 | `vorschau.jpg`, `favicon.*`, `apple-touch-icon.png` | Link-Vorschau und Icons |
 
 Eine Uhrzeit ändern → `feier.js`. Einen Text ändern → `sprachen.js`, in
@@ -237,6 +238,23 @@ die Galerie fehlt.
   (ältere iPhones, HEIC in Chrome), geht es über ein `<img>`. Kann der
   Browser das Bild gar nicht lesen, sagt die Seite das in Klartext.
 
+### Trauung
+
+Im Trauzimmer sind 25 Plätze, eingeladen sind einzelne Menschen, nicht
+ganze Haushalte (`standesamt` = `Ja` oder `(Ja)`). Die Trauung ist
+bewusst ein kleiner, vertraulicher Rahmen:
+
+- **Sichtbar nur für Haushalte, in denen jemand eingeladen ist** – dort
+  aber für alle, damit Partner wissen, wer wann wo ist. Wer das nicht ist
+  und wer noch keinen Namen gewählt hat, sieht weder den Ablauf-Punkt
+  noch das Trauzimmer.
+- **Karte „Die Trauung“ in Mein Platz**: persönlich eingeladen oder wer
+  aus dem Haushalt dabei ist, Uhrzeit, der Grund (Kinder, einer bleibt
+  bei ihnen) und die Bitte, es eher für sich zu behalten.
+- **Treffpunkt für alle anderen**: steht in `sprachen.js` unter
+  `trauung.treffpunkt`. Leer = kein Absatz. Ein ganzer Satz, in allen
+  vier Sprachen.
+
 ### Frist, Tag der Feier, danach
 
 - **Antwortfrist** (`FEIER.antwortBis`) steht bei der Namensauswahl und bei
@@ -338,6 +356,57 @@ abgemeldet.
 
 ---
 
+## Benachrichtigungen
+
+Wenn Gäste etwas ändern, schickt Supabase alle 15 Minuten **eine**
+Sammelnachricht an eure Telegram-Gruppe mit `@Thanh_assistent_bot` –
+nur wenn sich etwas getan hat, nicht zwischen 22 und 8 Uhr:
+
+```
+Traufeier · 3 Neuigkeiten
+
+✅ Anna M. kommt
+📷 Bruno hat ein Foto hochgeladen
+🍲 Lea bringt Nudelsalat (für ca. 10)
+
+Stand: 18 kommen · 3 können nicht · 23 offen
+```
+
+Küchenangaben erscheinen nur als „hat der Küche etwas mitgeteilt“ –
+Gesundheitsdaten gehören nicht in einen Gruppenchat.
+
+### Einrichten
+
+1. Supabase → **SQL Editor**: `benachrichtigung.sql` komplett ausführen.
+2. **Chat-ID** der Gruppe: [web.telegram.org](https://web.telegram.org)
+   öffnen, Gruppe anklicken – die Adresse endet auf `#-123456789`. Die
+   Zahl mit Minus ist die Chat-ID.
+3. Token und Chat-ID in den **Vault**. Im SQL-Editor einfügen, die
+   Platzhalter dort ersetzen, ausführen – **nicht in eine Datei im Repo
+   schreiben**. Den Token findest du in `wochen-briefing/.env` unter
+   `TELEGRAM_BOT_TOKEN`.
+   ```sql
+   select vault.create_secret('BOT-TOKEN', 'traufeier_telegram_token');
+   select vault.create_secret('CHAT-ID',   'traufeier_telegram_chat');
+   ```
+4. Testen:
+   ```sql
+   select intern.telegram('Traufeier-Benachrichtigungen sind verbunden ✅');
+   -- ein paar Sekunden später: 200 heißt angekommen
+   select status_code, content from net._http_response order by id desc limit 1;
+   ```
+   Kommt `chat not found`: Chat-ID mit `-100` davor versuchen und ändern:
+   ```sql
+   select vault.update_secret(id, 'NEUE-CHAT-ID')
+     from vault.secrets where name = 'traufeier_telegram_chat';
+   ```
+
+Was zuletzt mitgeschrieben wurde:
+`select * from intern.meldungen order by id desc limit 20;`
+Sofort senden statt warten: `select intern.sammeln(false);`
+Pausieren: `select cron.unschedule('traufeier-telegram');` – wieder an:
+`benachrichtigung.sql` noch einmal ausführen.
+
 ## Echte Daten gehören nicht auf GitHub
 
 `*.csv`, `import.sql` und die Projekt-Notizen in `0*-*/` stehen in
@@ -353,6 +422,7 @@ abrufbar – Netlify veröffentlicht den ganzen Ordner.
    ```sql
    truncate kueche;                                  -- Gesundheitsangaben
    update storage.buckets set public = false where id = 'gaeste-fotos';
+   select cron.unschedule('traufeier-telegram');     -- Benachrichtigungen aus
    ```
 4. Netlify → Projekt auf privat stellen oder löschen.
 

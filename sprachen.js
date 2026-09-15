@@ -97,6 +97,22 @@ export const TEXTE = {
     "fakten.dabei": "Du bist dabei",
     "fakten.vorgemerkt": "Vorgemerkt",
 
+    // Karte "Die Trauung" – nur fuer Haushalte, in denen jemand dabei ist.
+    "trauung.titel": "Die Trauung",
+    "trauung.du": "<strong>Du bist bei unserer Trauung dabei</strong> – persönlich eingeladen.",
+    "trauung.auch": "Aus eurem Haushalt außerdem dabei: {namen}",
+    "trauung.haushalt": {
+      one: "Aus eurem Haushalt ist bei der Trauung dabei: <strong>{namen}</strong>",
+      other: "Aus eurem Haushalt sind bei der Trauung dabei: <strong>{namen}</strong>",
+    },
+    "trauung.wann": "{von} Uhr im {ort}, bis etwa {bis} Uhr.",
+    "trauung.grund":
+      "Im Trauzimmer gibt es nur {n} Plätze. Deshalb laden wir einzelne Menschen ein und nicht ganze Haushalte: Die meisten von euch haben Kinder, und so kann jeweils einer bei ihnen bleiben. Wir wünschen uns, dass genau diese {n} dabei sind.",
+    // Leer = kein Treffpunkt-Absatz. Sonst ein ganzer Satz, <strong> erlaubt.
+    "trauung.treffpunkt": "",
+    "trauung.diskret":
+      "Die Trauung ist bewusst klein und nah. Weil nicht alle dabei sein können, die uns am Herzen liegen, freuen wir uns, wenn ihr das eher für euch behaltet.",
+
     "schritte.titel": "Noch zu tun",
     "schritte.zusage": "Zu- oder Absage gegeben",
     "schritte.steckbrief": "Einen Satz über dich geschrieben",
@@ -417,6 +433,17 @@ export const TEXTE = {
     "fakten.dabei": "You're on the list",
     "fakten.vorgemerkt": "Pencilled in",
 
+    "trauung.titel": "The ceremony",
+    "trauung.du": "<strong>You're invited to our wedding ceremony</strong> – personally.",
+    "trauung.auch": "Also coming from your household: {namen}",
+    "trauung.haushalt": "Coming to the ceremony from your household: <strong>{namen}</strong>",
+    "trauung.wann": "{von} at {ort}, until about {bis}.",
+    "trauung.grund":
+      "There are only {n} seats in the ceremony room, so we're inviting individuals rather than whole households: most of you have children, and this way one of you can stay with them. We'd love for exactly these {n} people to be there.",
+    "trauung.treffpunkt": "",
+    "trauung.diskret":
+      "We've kept the ceremony deliberately small and close. Since not everyone who matters to us can be there, we'd be grateful if you kept it mostly to yourselves.",
+
     "schritte.titel": "Still to do",
     "schritte.zusage": "Said yes or no",
     "schritte.steckbrief": "Wrote a line about yourself",
@@ -733,6 +760,23 @@ export const TEXTE = {
     "fakten.ortOffen": "Sí – lugar por decidir",
     "fakten.dabei": "Estás en la lista",
     "fakten.vorgemerkt": "Apuntado provisionalmente",
+
+    "trauung.titel": "La ceremonia",
+    "trauung.du": "<strong>Te invitamos personalmente a nuestra ceremonia civil.</strong>",
+    "trauung.auch": {
+      one: "De tu hogar también asiste: {namen}",
+      other: "De tu hogar también asisten: {namen}",
+    },
+    "trauung.haushalt": {
+      one: "De tu hogar asiste a la ceremonia: <strong>{namen}</strong>",
+      other: "De tu hogar asisten a la ceremonia: <strong>{namen}</strong>",
+    },
+    "trauung.wann": "A las {von} en {ort}, hasta las {bis} aproximadamente.",
+    "trauung.grund":
+      "En la sala solo hay {n} lugares, por eso invitamos a personas y no a hogares completos: la mayoría tiene hijos, y así uno de ustedes puede quedarse con ellos. Nos gustaría que estén exactamente estas {n} personas.",
+    "trauung.treffpunkt": "",
+    "trauung.diskret":
+      "Queremos que la ceremonia sea pequeña e íntima. Como no pueden estar todas las personas que queremos, les agradeceríamos que no lo comenten mucho.",
 
     "schritte.titel": "Pendiente",
     "schritte.zusage": "Confirmar si vienes",
@@ -1057,6 +1101,17 @@ export const TEXTE = {
     "fakten.ortOffen": "Có – chưa rõ ở đâu",
     "fakten.dabei": "Bạn có tên trong danh sách",
     "fakten.vorgemerkt": "Đã ghi tên tạm",
+
+    "trauung.titel": "Lễ đăng ký kết hôn",
+    "trauung.du": "<strong>Bạn được mời riêng đến lễ đăng ký kết hôn của chúng mình.</strong>",
+    "trauung.auch": "Trong gia đình bạn còn có: {namen}",
+    "trauung.haushalt": "Trong gia đình bạn, người được mời dự lễ đăng ký: <strong>{namen}</strong>",
+    "trauung.wann": "{von} tại {ort}, đến khoảng {bis}.",
+    "trauung.grund":
+      "Phòng làm lễ chỉ có {n} chỗ ngồi, vì vậy chúng mình mời từng người chứ không mời cả gia đình: phần lớn mọi người đều có con nhỏ, như vậy sẽ có một người ở lại trông các bé. Chúng mình mong đúng {n} người này sẽ có mặt.",
+    "trauung.treffpunkt": "",
+    "trauung.diskret":
+      "Lễ đăng ký được tổ chức nhỏ và ấm cúng. Vì không phải ai thân thương cũng có thể tham dự, chúng mình rất cảm ơn nếu mọi người giữ chuyện này cho riêng mình.",
 
     "schritte.titel": "Việc cần làm",
     "schritte.zusage": "Đã trả lời có đến hay không",
