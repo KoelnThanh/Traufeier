@@ -6,6 +6,35 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#faf7f2" />
     <title>Christina &amp; Thanh</title>
+    <meta
+      name="description"
+      content="Christina &amp; Thanh · 12. Dezember 2026 · Viersen"
+    />
+
+    <!-- Link-Vorschau in WhatsApp, Signal, Telegram. Sprachneutral, weil
+         die Vorschau kein JavaScript ausfuehrt und nicht weiss, wer
+         den Link bekommt. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://traufeier.nthanh.de/" />
+    <meta property="og:title" content="Christina &amp; Thanh · 12.12.2026" />
+    <meta
+      property="og:description"
+      content="Einladung · Invitation · Invitación · Thiệp mời"
+    />
+    <meta
+      property="og:image"
+      content="https://traufeier.nthanh.de/vorschau.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Christina &amp; Thanh, 12. Dezember 2026, Viersen"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1163,6 +1192,50 @@
           transition-duration: 0.01ms !important;
         }
       }
+      /* ------------------------------------------------------------ Frist */
+      .frist {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--gold);
+        margin: 10px 0 0;
+      }
+
+      /* Am Tag selbst: was gerade dran ist. Hebt auch die gedaempfte
+         Trauung auf volle Deckkraft, solange sie laeuft. */
+      ol.ablauf li.jetzt {
+        opacity: 1;
+        position: relative;
+      }
+      ol.ablauf li.jetzt::before {
+        content: "";
+        position: absolute;
+        left: -24px;
+        top: 12px;
+        bottom: 12px;
+        width: 2px;
+        background: var(--gold);
+      }
+      ol.ablauf .jetztmarke {
+        display: inline-block;
+        margin-left: 8px;
+        padding: 2px 8px;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        vertical-align: 2px;
+        color: var(--karte);
+        background: var(--gold);
+        border-radius: 999px;
+      }
+
+      .hero .fotos {
+        display: inline-block;
+        width: auto;
+        margin-top: 16px;
+        padding: 10px 22px;
+      }
+
       /* ---------------------------------------------------------- Sprache */
       /* Steht ueber allem, auch vor der Anmeldung. Deshalb bekommt der
          Kopf darunter weniger Luft nach oben – die Leiste nimmt sie ein. */
@@ -1250,6 +1323,15 @@
           <span>Viersen</span>
         </p>
         <p class="countdown" id="countdown"></p>
+        <a
+          class="knopf leise fotos"
+          id="fotosLink"
+          target="_blank"
+          rel="noopener"
+          hidden
+          data-t="danke.fotos"
+          >Zu den Fotos</a
+        >
         <p class="einordnung" data-t-html="hero.einordnung">
           Es ist unsere <strong>Traufeier</strong> – standesamtlich, im kleinen
           Kreis, mit einem langen Tag danach. Die große Hochzeit feiern wir
@@ -1318,7 +1400,7 @@
           <div id="orte"></div>
         </div>
 
-        <div class="karte auftritt">
+        <div class="karte auftritt" id="karteSchlafen" hidden>
           <h2 data-t="schlafen.titel">Übernachten</h2>
           <p id="schlafenText"></p>
         </div>
@@ -1331,6 +1413,7 @@
             anderen Gäste. Für Kinder und Mitbewohner kannst du danach in einem
             Klick mitantworten.
           </p>
+          <p class="frist" id="fristAuswahl"></p>
           <label for="wahl" style="margin-top: 18px" data-t="auswahl.label"
             >Dein Name</label
           >
@@ -1382,6 +1465,7 @@
 
         <div class="karte auftritt">
           <h2 data-t="zusage.titel">Kommst du?</h2>
+          <p class="frist" id="fristZusage" style="margin: -8px 0 12px"></p>
           <select id="zusage" aria-label="Zusage" data-t-aria="zusage.aria">
             <option value="" data-t="zusage.offen">Noch offen</option>
             <option value="ja" data-t="zusage.ja">Ja, ich komme</option>
@@ -1686,7 +1770,23 @@
 
         trauung: { von: "10:45", bis: "11:30" },
         fest: { von: "12:30", bis: "22:00" },
+
+        // Bis wann die Gaeste antworten sollen. Danach bittet die Seite
+        // nur noch darum, Aenderungen trotzdem zu melden.
+        antwortBis: "2026-11-15",
+
+        // Link zur Galerie eurer Fotografin. Steht er drin, zeigt die
+        // Seite nach der Feier einen Knopf dorthin.
+        fotos: null,
       };
+
+      // Zum Ausprobieren: ?jetzt=2026-12-12T14:10 laesst die Seite so tun,
+      // als waere es gerade dann – fuer "Heute"-Ansicht und Danke-Seite.
+      const JETZT_TEST = new URLSearchParams(location.search).get("jetzt");
+      const jetzt = () =>
+        JETZT_TEST && !isNaN(new Date(JETZT_TEST))
+          ? new Date(JETZT_TEST)
+          : new Date();
 
       // Die beiden Orte. Koordinaten gegen OpenStreetMap geprueft.
       // 'marken' sind die Symbole vor den Hinweisen; die Texte dazu stehen
@@ -1698,7 +1798,7 @@
           plz: "41751 Viersen-Dülken",
           lat: 51.2489191,
           lon: 6.3312341,
-          marken: ["&#9200;", "&#9855;", "&#128101;", "&#9742;"],
+          marken: ["&#9200;", "&#128663;", "&#9855;", "&#128101;", "&#9742;"],
         },
         fest: {
           kurz: "Tanzschule Bachata Viersen",
@@ -2242,12 +2342,42 @@
               year: "numeric",
             }).format(d);
         countdown();
+        frist();
+      }
+
+      function frist() {
+        const vorbei = jetzt() > new Date(FEIER.antwortBis + "T23:59:59");
+        const text = vorbei
+          ? t("frist.vorbei")
+          : t("frist.bitte", {
+              datum: new Intl.DateTimeFormat(L("_locale"), {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+              }).format(new Date(FEIER.antwortBis + "T12:00")),
+            });
+        $("fristAuswahl").textContent = text;
+        $("fristZusage").textContent = text;
       }
 
       function countdown() {
-        const ziel = new Date(FEIER.tag + "T12:00");
-        if (isNaN(ziel)) return ($("countdown").textContent = "");
-        const tage = Math.ceil((ziel - new Date()) / 86400000);
+        const [j, m, d] = FEIER.tag.split("-").map(Number);
+        if (!j || !m || !d) return ($("countdown").textContent = "");
+
+        // Nach dem Ende der Feier: Danke statt Countdown.
+        const vorbei = jetzt() > new Date(FEIER.tag + "T" + FEIER.fest.bis);
+        $("fotosLink").hidden = !(vorbei && FEIER.fotos);
+        if (FEIER.fotos) $("fotosLink").href = FEIER.fotos;
+        if (vorbei) return ($("countdown").textContent = t("danke.titel"));
+
+        // In Kalendertagen zaehlen, nicht in Stunden – sonst steht am
+        // Morgen des Tages noch "Morgen ist es so weit".
+        const n = jetzt();
+        const tage = Math.round(
+          (Date.UTC(j, m - 1, d) -
+            Date.UTC(n.getFullYear(), n.getMonth(), n.getDate())) /
+            86400000,
+        );
         $("countdown").textContent =
           tage > 1
             ? t("countdown.tage", { n: tage })
@@ -2261,6 +2391,26 @@
       // -------------------------------------------------------- Einladung
       function zeigeEinladung() {
         $("schlafenText").textContent = t("schlafen");
+        $("karteSchlafen").hidden = !t("schlafen");
+
+        // Am Tag selbst: der letzte Punkt, dessen Uhrzeit schon erreicht
+        // ist. Vor 10:45 und nach Ende ist nichts markiert.
+        const n = jetzt();
+        const heute =
+          n.getFullYear() +
+          "-" +
+          String(n.getMonth() + 1).padStart(2, "0") +
+          "-" +
+          String(n.getDate()).padStart(2, "0");
+        const uhr =
+          String(n.getHours()).padStart(2, "0") +
+          ":" +
+          String(n.getMinutes()).padStart(2, "0");
+        let jetztIndex = -1;
+        if (heute === FEIER.tag && uhr < FEIER.fest.bis)
+          ABLAUF.forEach((s, i) => {
+            if (s.zeit <= uhr) jetztIndex = i;
+          });
 
         const ablaufTexte = L("ablauf") || [];
         $("ablauf").innerHTML = ABLAUF.map((s, i) => {
@@ -2268,10 +2418,14 @@
           return (
             '<li class="' +
             (s.nebensache ? "nebensache" : "") +
+            (i === jetztIndex ? " jetzt" : "") +
             '"><span class="zeit">' +
             esc(s.zeit) +
             "</span><div><h3>" +
             esc(titel) +
+            (i === jetztIndex
+              ? '<span class="jetztmarke">' + esc(t("jetzt")) + "</span>"
+              : "") +
             '</h3><p class="was">' +
             esc(text) +
             "</p>" +

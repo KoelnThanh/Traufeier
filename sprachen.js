@@ -109,6 +109,11 @@ export const TEXTE = {
     "zusage.offen": "Noch offen",
     "zusage.ja": "Ja, ich komme",
     "zusage.nein": "Leider nicht",
+    "frist.bitte": "Bitte antwortet bis {datum}.",
+    "frist.vorbei": "Die Antwortfrist ist vorbei – sagt uns trotzdem Bescheid, wenn sich noch etwas ändert.",
+    "jetzt": "jetzt",
+    "danke.titel": "Danke, dass ihr da wart.",
+    "danke.fotos": "Zu den Fotos",
     "steckbrief.label":
       "Ein Satz über dich <span class='zusatz'>— für die anderen Gäste</span>",
     "steckbrief.ph": "Wie kennst du uns? Was machst du so?",
@@ -127,7 +132,7 @@ export const TEXTE = {
 
     "kueche.titel": "Für die Küche",
     "kueche.hinweis":
-      "Sehen nur Christina und Thanh – nicht die anderen Gäste. Aus dem gleichen Grund können wir es dir später nicht wieder anzeigen.",
+      "Sehen nur Christina und Thanh – nicht die anderen Gäste. Aus dem gleichen Grund können wir es dir später nicht wieder anzeigen. Nach der Feier löschen wir es.",
     "kueche.allergien": "Allergien oder Unverträglichkeiten",
     "kueche.allergienPh": "z. B. Nüsse, laktosefrei, vegetarisch",
     "kueche.hinweise": "Sonstige Hinweise",
@@ -247,8 +252,8 @@ export const TEXTE = {
     "m.raus": "Ist aus der Liste raus.",
     "m.titelFehlt": "Schreib bitte dazu, was du mitbringst.",
 
-    schlafen:
-      "TODO: Hotelkontingent, Airbnb, wer bei wem unterkommt. Wenn in deinem Platz ein Schlafplatz steht, ist er für dich reserviert.",
+    // Leer = Karte "Übernachten" bleibt ausgeblendet.
+    schlafen: "",
     abendessen:
       "Um 18:30 Uhr gibt es Abendessen – Suppe und ein paar warme Sachen. Dafür ist gesorgt, ihr müsst nichts mitbringen. Wer kocht, steht unter „Helfer“.",
 
@@ -284,7 +289,7 @@ export const TEXTE = {
       ],
       [
         "Zieht euch schick an",
-        "Wir haben Lust auf einen eleganten Tag. Mehr Vorgaben gibt es nicht.",
+        "Wir haben Lust auf einen eleganten Tag. Und packt Schuhe ein, in denen ihr tanzen könnt – um 16 Uhr gibt es einen Workshop.",
       ],
       [
         "Es gibt kein Catering – es gibt uns",
@@ -311,6 +316,7 @@ export const TEXTE = {
     orteHinweise: {
       trauung: [
         "<strong>Bitte zehn Minuten früher da sein.</strong> Um 11:30 Uhr wird der Raum wieder gebraucht.",
+        "Parken: direkt am Verwaltungsgebäude, weitere Plätze am Eligiusplatz (rund 100 m) und am Peterboroughplatz.",
         "Verwaltungsgebäude II der Stadt Viersen. Ein Aufzug führt hinauf – auch mit Rollstuhl oder Kinderwagen kein Problem.",
         "25 Sitzplätze. Deshalb ist die Trauung der kleine Teil des Tages.",
         "Standesamt Viersen: <a href='tel:+492162101253'>02162 101-253</a>",
@@ -411,6 +417,11 @@ export const TEXTE = {
     "zusage.offen": "Not sure yet",
     "zusage.ja": "Yes, I'm coming",
     "zusage.nein": "Sadly not",
+    "frist.bitte": "Please reply by {datum}.",
+    "frist.vorbei": "The reply deadline has passed – but do let us know if anything changes.",
+    "jetzt": "now",
+    "danke.titel": "Thank you for being there.",
+    "danke.fotos": "See the photos",
     "steckbrief.label":
       "A line about you <span class='zusatz'>— for the other guests</span>",
     "steckbrief.ph": "How do you know us? What do you do?",
@@ -429,7 +440,7 @@ export const TEXTE = {
 
     "kueche.titel": "For the kitchen",
     "kueche.hinweis":
-      "Only Christina and Thanh see this – not the other guests. For the same reason, we can't show it to you again later.",
+      "Only Christina and Thanh see this – not the other guests. For the same reason, we can't show it to you again later. We'll delete it after the celebration.",
     "kueche.allergien": "Allergies or intolerances",
     "kueche.allergienPh": "e.g. nuts, lactose-free, vegetarian",
     "kueche.hinweise": "Anything else",
@@ -548,8 +559,8 @@ export const TEXTE = {
     "m.raus": "Removed from the list.",
     "m.titelFehlt": "Please say what you're bringing.",
 
-    schlafen:
-      "TODO: hotel rooms, Airbnb, who stays with whom. If your spot shows a place to sleep, it's reserved for you.",
+    // Leer = Karte "Übernachten" bleibt ausgeblendet.
+    schlafen: "",
     abendessen:
       "Dinner is at 18:30 – soup and a few warm dishes. It's all taken care of, you don't need to bring anything. Who's cooking is listed under “Helpers”.",
 
@@ -580,7 +591,10 @@ export const TEXTE = {
         "No gifts, please",
         "Really, nothing. You being there means more to us than anything that fits in wrapping paper.",
       ],
-      ["Dress up", "We'd love an elegant day. That's the only rule."],
+      [
+        "Dress up",
+        "We'd love an elegant day. And bring shoes you can dance in – there's a workshop at 16:00.",
+      ],
       [
         "No catering – just all of us",
         "Everyone brings something for lunch, and everyone takes their own plate back afterwards. That keeps it affordable, and we'll all still be well fed.",
@@ -606,6 +620,7 @@ export const TEXTE = {
     orteHinweise: {
       trauung: [
         "<strong>Please arrive ten minutes early.</strong> The room is needed again at 11:30.",
+        "Parking: right by the building, with more spaces at Eligiusplatz (about 100 m) and Peterboroughplatz.",
         "Administrative Building II of the City of Viersen. A lift takes you up – no problem with a wheelchair or pram.",
         "25 seats. That's why the ceremony is the small part of the day.",
         "Viersen registry office: <a href='tel:+492162101253'>+49 2162 101-253</a>",
@@ -708,6 +723,11 @@ export const TEXTE = {
     "zusage.offen": "Todavía no lo sé",
     "zusage.ja": "Sí, voy",
     "zusage.nein": "Lamentablemente no",
+    "frist.bitte": "Por favor, respondan antes del {datum}.",
+    "frist.vorbei": "El plazo para responder ya pasó, pero avísennos si algo cambia.",
+    "jetzt": "ahora",
+    "danke.titel": "Gracias por estar con nosotros.",
+    "danke.fotos": "Ver las fotos",
     "steckbrief.label":
       "Una frase sobre ti <span class='zusatz'>— para los demás invitados</span>",
     "steckbrief.ph": "¿De qué nos conoces? ¿A qué te dedicas?",
@@ -726,7 +746,7 @@ export const TEXTE = {
 
     "kueche.titel": "Para la cocina",
     "kueche.hinweis":
-      "Solo lo ven Christina y Thanh, no los demás invitados. Por la misma razón, después no podemos volver a mostrártelo.",
+      "Solo lo ven Christina y Thanh, no los demás invitados. Por la misma razón, después no podemos volver a mostrártelo. Después de la celebración lo borramos.",
     "kueche.allergien": "Alergias o intolerancias",
     "kueche.allergienPh": "p. ej. frutos secos, sin lactosa, vegetariano",
     "kueche.hinweise": "Otras indicaciones",
@@ -847,8 +867,8 @@ export const TEXTE = {
     "m.raus": "Quitado de la lista.",
     "m.titelFehlt": "Escribe, por favor, qué vas a traer.",
 
-    schlafen:
-      "TODO: habitaciones de hotel, Airbnb, quién se queda con quién. Si en tu lugar aparece un sitio para dormir, está reservado para ti.",
+    // Leer = Karte "Übernachten" bleibt ausgeblendet.
+    schlafen: "",
     abendessen:
       "A las 18:30 hay cena: sopa y algunos platos calientes. Todo está organizado, no hace falta que traigan nada. Quién cocina aparece en «Ayudantes».",
 
@@ -884,7 +904,7 @@ export const TEXTE = {
       ],
       [
         "Vístanse elegantes",
-        "Tenemos ganas de un día elegante. No hay más reglas.",
+        "Tenemos ganas de un día elegante. Y traigan zapatos con los que puedan bailar: a las 16:00 hay un taller.",
       ],
       [
         "No hay catering: estamos todos",
@@ -911,6 +931,7 @@ export const TEXTE = {
     orteHinweise: {
       trauung: [
         "<strong>Lleguen diez minutos antes, por favor.</strong> A las 11:30 se vuelve a necesitar la sala.",
+        "Estacionamiento: justo al lado del edificio, y más plazas en Eligiusplatz (a unos 100 m) y en Peterboroughplatz.",
         "Edificio administrativo II de la ciudad de Viersen. Hay ascensor: sin problema con silla de ruedas o cochecito.",
         "25 asientos. Por eso la ceremonia es la parte pequeña del día.",
         "Registro civil de Viersen: <a href='tel:+492162101253'>+49 2162 101-253</a>",
@@ -1015,6 +1036,11 @@ export const TEXTE = {
     "zusage.offen": "Chưa biết",
     "zusage.ja": "Có, tôi sẽ đến",
     "zusage.nein": "Rất tiếc là không",
+    "frist.bitte": "Vui lòng trả lời trước {datum}.",
+    "frist.vorbei": "Đã quá hạn trả lời – nhưng nếu có gì thay đổi, cứ báo chúng mình nhé.",
+    "jetzt": "bây giờ",
+    "danke.titel": "Cảm ơn mọi người đã đến chung vui.",
+    "danke.fotos": "Xem ảnh",
     "steckbrief.label":
       "Một câu về bạn <span class='zusatz'>— cho các khách mời khác</span>",
     "steckbrief.ph": "Bạn quen chúng mình thế nào? Bạn làm gì?",
@@ -1033,7 +1059,7 @@ export const TEXTE = {
 
     "kueche.titel": "Cho nhà bếp",
     "kueche.hinweis":
-      "Chỉ Christina và Thanh xem được – các khách mời khác thì không. Cũng vì vậy mà sau này chúng mình không thể hiển thị lại cho bạn.",
+      "Chỉ Christina và Thanh xem được – các khách mời khác thì không. Cũng vì vậy mà sau này chúng mình không thể hiển thị lại cho bạn. Sau buổi tiệc, chúng mình sẽ xóa thông tin này.",
     "kueche.allergien": "Dị ứng hoặc không dung nạp",
     "kueche.allergienPh": "ví dụ: các loại hạt, không lactose, ăn chay",
     "kueche.hinweise": "Lưu ý khác",
@@ -1154,8 +1180,8 @@ export const TEXTE = {
     "m.raus": "Đã bỏ khỏi danh sách.",
     "m.titelFehlt": "Vui lòng ghi bạn sẽ mang món gì.",
 
-    schlafen:
-      "TODO: phòng khách sạn, Airbnb, ai ở cùng ai. Nếu ở chỗ của bạn có ghi chỗ ngủ, chỗ đó đã được giữ cho bạn.",
+    // Leer = Karte "Übernachten" bleibt ausgeblendet.
+    schlafen: "",
     abendessen:
       "18:30 có bữa tối – súp và vài món nóng. Mọi thứ đã được chuẩn bị, mọi người không cần mang gì. Ai nấu thì xem ở mục “Người giúp”.",
 
@@ -1188,7 +1214,7 @@ export const TEXTE = {
       ],
       [
         "Hãy ăn mặc thật đẹp",
-        "Chúng mình muốn có một ngày thanh lịch. Chỉ vậy thôi.",
+        "Chúng mình muốn có một ngày thanh lịch. Nhớ mang theo giày để nhảy nhé – 16:00 có lớp nhảy.",
       ],
       [
         "Không có dịch vụ tiệc – chỉ có tất cả chúng ta",
@@ -1215,6 +1241,7 @@ export const TEXTE = {
     orteHinweise: {
       trauung: [
         "<strong>Vui lòng đến sớm mười phút.</strong> Đến 11:30 phòng sẽ được dùng tiếp.",
+        "Đậu xe: ngay cạnh tòa nhà, ngoài ra còn chỗ ở Eligiusplatz (khoảng 100 m) và Peterboroughplatz.",
         "Tòa nhà hành chính II của thành phố Viersen. Có thang máy – đi xe lăn hay đẩy xe em bé đều không sao.",
         "25 chỗ ngồi. Vì vậy lễ đăng ký là phần nhỏ của ngày hôm đó.",
         "Phòng hộ tịch Viersen: <a href='tel:+492162101253'>+49 2162 101-253</a>",

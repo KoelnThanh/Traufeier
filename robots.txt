@@ -1,2 +1,21 @@
+# Suchmaschinen: bitte nicht. Namen und Fotos der Gaeste gehoeren in
+# keinen Index. Zusaetzlich sendet Netlify "X-Robots-Tag: noindex".
+#
+# Die Vorschau-Abrufer von WhatsApp, Signal & Co. duerfen die Seite
+# lesen – sonst erscheint im Chat nur ein nackter Link ohne Bild.
+# Sie indexieren nichts, sie bauen nur die Vorschaukarte.
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
 User-agent: *
 Disallow: /

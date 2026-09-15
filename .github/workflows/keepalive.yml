@@ -1,18 +1,35 @@
 name: Supabase wachhalten
 
+# Supabase legt kostenlose Projekte nach 7 Tagen ohne Anfrage schlafen –
+# dann laedt die Einladung keine Daten mehr.
+#
+# Zweimal pro Woche statt einmal: GitHub startet geplante Laeufe oft
+# Stunden zu spaet. Ein woechentlicher Ping landet genau an der
+# 7-Tage-Grenze und reisst sie irgendwann.
+#
+# Keine Secrets noetig: URL und publishable Key stehen ohnehin
+# oeffentlich in index.html – dafuer ist dieser Key gemacht. Ein
+# vergessenes Secret kann den Waechter so nicht mehr lahmlegen.
+
 on:
   schedule:
-    - cron: '0 6 * * 1'   # jeden Montag 06:00 UTC
-  workflow_dispatch:       # plus Knopf zum manuellen Ausloesen
+    - cron: "0 6 * * 1" # montags 06:00 UTC
+    - cron: "0 6 * * 4" # donnerstags 06:00 UTC
+  push:
+    branches: [main] # jeder Push prueft gleich mit, ob es noch geht
+  workflow_dispatch: # plus Knopf zum manuellen Ausloesen
 
 jobs:
   ping:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: https://jlwpzsdpezjxsgefbiws.supabase.co
+      SUPABASE_KEY: sb_publishable_HBsRUKuS-hKMz1X2rNYzQw_eD2Q1eBv
     steps:
       - name: Datenbank anpingen
         run: |
           code=$(curl -sS -o /dev/null -w "%{http_code}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/gaeste?select=name&limit=1" \
-            -H "apikey: ${{ secrets.SUPABASE_KEY }}")
+            "$SUPABASE_URL/rest/v1/gaeste?select=name&limit=1" \
+            -H "apikey: $SUPABASE_KEY")
           echo "Supabase antwortete mit $code"
           test "$code" = "200"
