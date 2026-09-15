@@ -208,7 +208,9 @@ goldener Initiale, die wichtigen Stellen fett, unterschrieben mit
 
 Im Ablauf führen „Was schon zusammenkommt" (Mittagsbuffet) und „Zur
 Speisekarte" (Abendessen) direkt in den Reiter Speisen – gesteuert über
-`sprung` in `ABLAUF`. Beim Workshop steht „mit Armin" (`FEIER.workshop`).
+`sprung` in `ABLAUF`. Beim Workshop steht „mit Amin"; ein Tipp öffnet
+seinen Steckbrief (`FEIER.workshop.gast`, Name genau wie in der
+Gästeliste).
 
 ### Wer gerade antwortet
 
@@ -314,7 +316,7 @@ abgemeldet.
 | `schlafort` | `Hotel`, `Airbnb`, `??` … `null` = keiner nötig |
 | `rollen` | Freitext-Array, wörtlich aus eurer Liste |
 | `link` | Code für den persönlichen Link, gleich für den ganzen Haushalt |
-| `sprache` | `de`, `en`, `es`, `vi` – gesetzt in `planung.html` |
+| `sprache` | `de`, `en`, `es`, `vi` oder leer – am besten in `planung.html` setzen (dort für den ganzen Haushalt); im Table Editor für jedes Mitglied |
 
 ---
 
@@ -347,8 +349,6 @@ sein.
   unter `schlafen` Text steht.
 - **Antwortfrist** 15. November ist ein Vorschlag – in `feier.js` änderbar.
 - **Tanzworkshop** 16:00 ist ein Vorschlag – in `feier.js`.
-- **Link zu Armin** fehlt: in `feier.js` bei `workshop.link` eintragen
-  (Instagram, Website), dann wird „mit Armin" im Ablauf klickbar.
 - **Speisekarte am Abend**: Sobald feststeht, was es gibt, gehört es in
   `sprachen.js` unter `abendessen` – der Link aus dem Ablauf führt dorthin.
 - **Übersetzungen** gegenlesen.

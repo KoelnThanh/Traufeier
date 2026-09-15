@@ -25,9 +25,9 @@ export const FEIER = {
   // Seite nach der Feier einen Knopf dorthin.
   fotos: null,
 
-  // Wer den Tanzworkshop leitet. Steht bei link eine Adresse (Instagram,
-  // Website), wird der Name im Ablauf klickbar.
-  workshop: { name: "Armin", link: null },
+  // Wer den Tanzworkshop leitet – der Name genau wie in der Gaesteliste.
+  // Im Ablauf steht dann "mit Amin", ein Tipp oeffnet seinen Steckbrief.
+  workshop: { gast: "Amin" },
 
   // Wie viele Menschen ins Trauzimmer passen.
   plaetzeStandesamt: 25,
@@ -67,7 +67,7 @@ export const ORTE = {
 // nebensache: true stellt einen Punkt gedaempft dar,
 // ort: verweist auf einen Schluessel aus ORTE und erzeugt den Link.
 // sprung: "buffet" oder "abends" fuehrt direkt in den Reiter Speisen.
-// leitung: zeigt "mit Armin" (FEIER.workshop), klickbar mit Link.
+// leitung: zeigt "mit Amin" (FEIER.workshop), oeffnet seinen Steckbrief.
 export const ABLAUF = [
   { zeit: "10:45", ort: "trauung", nebensache: true },
   { zeit: "12:30", ort: "fest" },

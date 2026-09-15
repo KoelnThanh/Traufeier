@@ -2341,18 +2341,19 @@
         $("fristZusage").textContent = text;
       }
 
-      // "mit Armin" beim Workshop – klickbar, sobald in feier.js ein Link steht.
+      // "mit Amin" beim Workshop – ein Tipp oeffnet seinen Steckbrief.
+      // Unabhaengig davon, ob die Gaeste schon geladen sind: geklickt wird
+      // ohnehin erst danach.
       function leitung() {
         const w = FEIER.workshop;
-        if (!w || !w.name) return "";
-        const text = esc(t("ablauf.leitung", { name: w.name }));
-        return w.link
-          ? '<a class="ortlink" href="' +
-              esc(w.link) +
-              '" target="_blank" rel="noopener">' +
-              text +
-              " &#8599;</a>"
-          : '<span class="ortlink ohne">' + text + "</span>";
+        if (!w || !w.gast) return "";
+        return (
+          '<span class="ortlink" data-gast="' +
+          esc(w.gast) +
+          '">' +
+          esc(t("ablauf.leitung", { name: w.gast })) +
+          " &#8594;</span>"
+        );
       }
 
       // Aus dem Ablauf direkt zum Buffet oder zur Speisekarte am Abend.
@@ -3380,6 +3381,9 @@
         const sp = e.target.closest("[data-sprung]");
         if (sp) return springe(sp.dataset.sprung);
 
+        const gs = e.target.closest("[data-gast]");
+        if (gs) return zeigeGast(gs.dataset.gast);
+
         // Wer ueber die Speisekarte kommt, ohne sich ausgewaehlt zu haben,
         // kann noch nichts eintragen – erst zur Namensauswahl.
         if (e.target.closest("[data-beitrag-neu]")) {
@@ -3503,8 +3507,10 @@
               haus[0];
             ichName = erster.name;
             localStorage.setItem("traufeier.gast", ichName);
-            if (!localStorage.getItem("traufeier.sprache") && erster.sprache)
-              setzeSprache(erster.sprache);
+            // Von Hand im Table Editor eingetragen? " VI" gilt auch.
+            const dbSprache = String(erster.sprache || "").trim().toLowerCase();
+            if (!localStorage.getItem("traufeier.sprache") && TEXTE[dbSprache])
+              setzeSprache(dbSprache);
             perLink = true;
           }
           // Den Code nicht in der Adresszeile stehen lassen – wer die Seite

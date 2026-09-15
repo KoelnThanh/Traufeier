@@ -484,7 +484,11 @@
             name,
             leute,
             link: leute.map((g) => g.link).find(Boolean) || null,
-            sprache: sprachen.get(name) || leute.map((g) => g.sprache).find(Boolean) || "de",
+            // Von Hand eingetragene Werte wie " VI" ebenfalls verstehen.
+            sprache:
+              sprachen.get(name) ||
+              leute.map((g) => String(g.sprache || "").trim().toLowerCase()).find((s) => TEXTE[s]) ||
+              "de",
           }))
           .sort((a, b) => a.name.localeCompare(b.name, "de"));
       }
