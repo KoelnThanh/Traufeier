@@ -54,7 +54,7 @@ export const ORTE = {
     web: "https://www.bachata-viersen.de",
     telefon: "+49 178 868 3013",
     instagram: "https://www.instagram.com/bachata.viersen/",
-    marken: ["&#9888;", "&#128663;", "&#128652;", "&#127925;"],
+    marken: ["&#9888;", "&#128663;", "&#129509;", "&#128652;", "&#127925;"],
   },
 };
 

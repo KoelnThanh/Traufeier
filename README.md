@@ -37,7 +37,7 @@ allen vier Sprachen.
 
 ## Einrichtung – in dieser Reihenfolge
 
-Schritte 1–5 sind erledigt. Offen ist **Schritt 6**.
+Alle Schritte sind erledigt – die Anleitung bleibt für den Fall, dass ihr neu aufsetzt.
 
 ### 1. Datenbank
 
@@ -105,7 +105,7 @@ jedem Push. Er braucht keine Secrets – URL und publishable Key sind ohnehin
 > Repo. Sobald die Einladung verschickt ist, halten auch die Besuche der
 > Gäste Supabase wach.
 
-### 6. Erweiterung und euer Zugang ← offen
+### 6. Erweiterung und euer Zugang
 
 1. **Supabase → Authentication → Users → Add user → Create new user**:
    E-Mail und Passwort, „Auto Confirm User" anhaken. Für euch beide.
@@ -330,9 +330,6 @@ sein.
 
 - **Übernachten**: Die Karte bleibt ausgeblendet, bis in `sprachen.js`
   unter `schlafen` Text steht.
-- **Garderobe**: Im Dezember kommen alle im Mantel. Gibt es eine, gehört das
-  als Hinweis zur Tanzschule (`orteHinweise.fest` plus `marken` in
-  `feier.js`).
 - **Antwortfrist** 15. November ist ein Vorschlag – in `feier.js` änderbar.
 - **Tanzworkshop** 16:00 ist ein Vorschlag – in `feier.js`.
 - **Übersetzungen** gegenlesen.

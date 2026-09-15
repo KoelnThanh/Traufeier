@@ -337,6 +337,7 @@ export const TEXTE = {
       fest: [
         "<strong>Süchteln, nicht Dülken.</strong> Von der Trauung sind es gut 5 km – mit dem Auto etwa 15 Minuten.",
         "Parkplätze sind direkt an der Tanzschule – ihr müsst nichts suchen.",
+        "Es gibt eine Garderobe – Mäntel und Wechselschuhe könnt ihr dort lassen.",
         "Mit dem Bus bis Süchteln Busbahnhof. Die Linien 067, 074 und 083 verbinden Dülken und Süchteln.",
         "Wir feiern bis 22:00 Uhr. Wer ein Taxi braucht, bestellt es besser vorher.",
       ],
@@ -654,6 +655,7 @@ export const TEXTE = {
       fest: [
         "<strong>Süchteln, not Dülken.</strong> It's a good 5 km from the ceremony – about 15 minutes by car.",
         "Parking is right at the dance school – no need to search.",
+        "There's a cloakroom – you can leave coats and spare shoes there.",
         "By bus to Süchteln Busbahnhof. Lines 067, 074 and 083 connect Dülken and Süchteln.",
         "We celebrate until 22:00. If you need a taxi, best to book it in advance.",
       ],
@@ -978,6 +980,7 @@ export const TEXTE = {
       fest: [
         "<strong>Süchteln, no Dülken.</strong> Desde la ceremonia hay unos 5 km, unos 15 minutos en auto.",
         "Hay estacionamiento justo en la escuela de baile, no hace falta buscar.",
+        "Hay guardarropa: ahí pueden dejar abrigos y zapatos para cambiarse.",
         "En autobús hasta Süchteln Busbahnhof. Las líneas 067, 074 y 083 conectan Dülken y Süchteln.",
         "Celebramos hasta las 22:00. Si necesitas un taxi, mejor pídelo con antelación.",
       ],
@@ -1301,6 +1304,7 @@ export const TEXTE = {
       fest: [
         "<strong>Ở Süchteln, không phải Dülken.</strong> Từ nơi làm lễ đi khoảng 5 km – mất chừng 15 phút lái xe.",
         "Có chỗ đậu xe ngay tại trường dạy nhảy – không cần tìm.",
+        "Có chỗ gửi đồ – mọi người có thể để áo khoác và giày thay ở đó.",
         "Đi xe buýt đến trạm Süchteln Busbahnhof. Các tuyến 067, 074 và 083 nối Dülken và Süchteln.",
         "Tiệc kéo dài đến 22:00. Nếu cần taxi, tốt nhất nên đặt trước.",
       ],
