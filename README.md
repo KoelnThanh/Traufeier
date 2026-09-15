@@ -219,6 +219,19 @@ In „Mein Platz" steht der Haushalt ganz oben – Eltern beantworten so in
 einem Klick die Zusage ihrer Kinder. Beim Wechsel werden die Küchenfelder
 geleert, sonst landen Annas Allergien bei Bruno.
 
+### Foto
+
+Zwei Knöpfe statt eines Dateifelds: **Aus meinen Fotos** und **Foto
+machen** (öffnet direkt die Kamera, am Rechner ausgeblendet). Ein
+einzelnes Feld zeigt auf manchen Android-Handys nur Kamera und Dateien,
+die Galerie fehlt.
+
+- **Geht sofort hoch**, ohne „Speichern“. Nur `foto` wird geschrieben –
+  halb getippter Steckbrief und Zusage bleiben unberührt.
+- **Verkleinert auf 800 px, als JPEG.** Klappt `createImageBitmap` nicht
+  (ältere iPhones, HEIC in Chrome), geht es über ein `<img>`. Kann der
+  Browser das Bild gar nicht lesen, sagt die Seite das in Klartext.
+
 ### Frist, Tag der Feier, danach
 
 - **Antwortfrist** (`FEIER.antwortBis`) steht bei der Namensauswahl und bei

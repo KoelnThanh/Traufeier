@@ -93,7 +93,7 @@
       * {
         box-sizing: border-box;
       }
-      /* Muss hinter jede display-Regel: nav, .punkt und die Fotovorschau
+      /* Muss hinter jede display-Regel: nav, .punkt und das Fotobild
          setzen selbst ein display und wuerden das hidden-Attribut sonst
          ueberstimmen. */
       [hidden] {
@@ -523,6 +523,83 @@
         line-height: 1.5;
         color: var(--leise);
         margin-top: 7px;
+      }
+
+      /* Foto: zwei Knoepfe statt eines Dateifelds. Das unsichtbare Feld
+         liegt ueber dem ganzen Knopf – so trifft jeder Tipp, auch in
+         Browsern, die Klicks auf ein Label nicht weiterreichen. */
+      .fotofeld {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .fotofeld .portrait {
+        width: 76px;
+        height: 76px;
+        transition: opacity 0.2s;
+      }
+      .fotofeld .portrait[aria-busy="true"] {
+        opacity: 0.5;
+      }
+      .fotofeld-rechts {
+        flex: 1;
+        min-width: 0;
+      }
+      .fotofeld-rechts .leiser {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+      .fotoknoepfe {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .fotoknoepfe .fotoknopf {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        flex: 1 1 150px;
+        width: auto;
+        margin: 0;
+        padding: 12px 14px;
+        cursor: pointer;
+      }
+      .fotoknopf svg {
+        width: 18px;
+        height: 18px;
+        flex: none;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .fotoknopf input[type="file"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .fotoknopf:has(input:focus-visible) {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+      .fotoknopf:has(input:disabled) {
+        opacity: 0.45;
+        cursor: default;
+      }
+      /* Am Rechner oeffnet "Foto machen" ohnehin nur den Dateidialog. */
+      @media (hover: hover) and (pointer: fine) {
+        .fotoknopf.kamera {
+          display: none;
+        }
       }
 
       /* ----------------------------------------------------------- Ablauf */
@@ -1530,27 +1607,49 @@
             data-t-ph="steckbrief.ph"
           ></textarea>
 
-          <label for="foto" data-t="foto.label">Dein Foto</label>
-          <div
-            id="fotoVorschau"
-            hidden
-            style="
-              display: flex;
-              align-items: center;
-              gap: 12px;
-              margin-bottom: 10px;
-            "
-          >
-            <div class="portrait" style="width: 52px; height: 52px">
-              <img id="fotoBild" alt="Dein aktuelles Foto" data-t-alt="foto.alt" />
+          <label for="fotoGalerie" data-t="foto.label">Dein Foto</label>
+          <div class="fotofeld">
+            <div class="portrait" id="fotoRahmen" aria-busy="false">
+              <img
+                id="fotoBild"
+                alt="Dein aktuelles Foto"
+                data-t-alt="foto.alt"
+                hidden
+              />
+              <span class="initialen" id="fotoInitialen"></span>
             </div>
-            <span class="leiser" data-t="foto.schon"
-              >Dein Foto steht schon auf dem Board.</span
-            >
+            <div class="fotofeld-rechts">
+              <p class="leiser" id="fotoStand" aria-live="polite"></p>
+              <div class="fotoknoepfe">
+                <label class="knopf leise fotoknopf">
+                  <input type="file" id="fotoGalerie" accept="image/*" />
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                    <circle cx="9" cy="10" r="2" />
+                    <path d="m21 16-5-5-9 9" />
+                  </svg>
+                  <span data-t="foto.galerie">Aus meinen Fotos</span>
+                </label>
+                <label class="knopf leise fotoknopf kamera">
+                  <input
+                    type="file"
+                    id="fotoKamera"
+                    accept="image/*"
+                    capture="user"
+                  />
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"
+                    />
+                    <circle cx="12" cy="13.5" r="3.5" />
+                  </svg>
+                  <span data-t="foto.kamera">Foto machen</span>
+                </label>
+              </div>
+            </div>
           </div>
-          <input type="file" id="foto" accept="image/*" />
           <p class="hinweis" data-t="foto.hinweis">
-            Wird vor dem Hochladen automatisch verkleinert.
+            Wird sofort gespeichert und vorher automatisch verkleinert.
           </p>
 
           <button class="knopf" id="speichernButton" data-t="speichern">
@@ -2567,11 +2666,6 @@
           p.zusage === true ? "ja" : p.zusage === false ? "nein" : "";
         $("steckbrief").value = p.steckbrief || "";
 
-        const url = fotoUrl(p.foto);
-        $("fotoVorschau").hidden = !url;
-        if (url) $("fotoBild").src = url;
-        $("foto").value = "";
-
         // Beim Wechsel leeren, sonst landen Annas Allergien bei Bruno.
         $("allergien").value = "";
         $("hinweise").value = "";
@@ -2626,6 +2720,7 @@
             datum: new Date(kStand).toLocaleDateString(L("_locale")),
           });
 
+        fotoFeld();
         meineBeitraege();
         rendereMusik();
         schritte(p, kStand);
@@ -2675,17 +2770,129 @@
         $("navPunkt").hidden = liste.every(([f]) => f);
       }
 
-      // ------------------------------------------------ Foto verkleinern
+      // ------------------------------------------------------------- Foto
+      // Das Foto geht sofort nach der Auswahl hoch – ein zusaetzliches
+      // "Speichern" wird leicht vergessen. Solange es laeuft, zeigt der
+      // Kreis schon das neue Bild, halb durchsichtig.
+      let fotoLaeuft = null; // { fuer, url }
+
+      function fotoFeld() {
+        if (!ichName) return;
+        const p = profile.get(ichName) || {};
+        const laeuft = !!fotoLaeuft && fotoLaeuft.fuer === ichName;
+        const url = (laeuft && fotoLaeuft.url) || fotoUrl(p.foto);
+        const bild = $("fotoBild");
+        bild.hidden = !url;
+        if (url && bild.getAttribute("src") !== url) bild.src = url;
+        $("fotoInitialen").hidden = !!url;
+        $("fotoInitialen").textContent = initialen(ichName);
+        $("fotoRahmen").setAttribute("aria-busy", String(laeuft));
+        $("fotoStand").textContent = t(
+          laeuft ? "speichern.foto" : p.foto ? "foto.schon" : "foto.leer",
+        );
+        for (const i of document.querySelectorAll(".fotoknopf input"))
+          i.disabled = !!fotoLaeuft;
+      }
+
+      // createImageBitmap ist schnell, scheitert aber in aelteren Safaris an
+      // "from-image" und in Chrome an HEIC. Dann ueber ein <img> – das dreht
+      // nach EXIF ebenfalls richtig herum und liest in Safari auch HEIC.
+      async function ladeBild(datei) {
+        try {
+          const b = await createImageBitmap(datei, {
+            imageOrientation: "from-image",
+          });
+          return { quelle: b, w: b.width, h: b.height, weg: () => b.close() };
+        } catch {
+          const url = URL.createObjectURL(datei);
+          const img = new Image();
+          try {
+            await new Promise((ok, nok) => {
+              img.onload = ok;
+              img.onerror = nok;
+              img.src = url;
+            });
+          } catch {
+            URL.revokeObjectURL(url);
+            throw new Error("Bildformat");
+          }
+          const weg = () => URL.revokeObjectURL(url);
+          return { quelle: img, w: img.naturalWidth, h: img.naturalHeight, weg };
+        }
+      }
+
       async function verkleinern(datei, maxKante = 800) {
-        const bild = await createImageBitmap(datei, {
-          imageOrientation: "from-image",
-        });
-        const faktor = Math.min(1, maxKante / Math.max(bild.width, bild.height));
+        const bild = await ladeBild(datei);
         const c = document.createElement("canvas");
-        c.width = Math.round(bild.width * faktor);
-        c.height = Math.round(bild.height * faktor);
-        c.getContext("2d").drawImage(bild, 0, 0, c.width, c.height);
-        return new Promise((fertig) => c.toBlob(fertig, "image/jpeg", 0.82));
+        try {
+          if (!bild.w || !bild.h) throw new Error("Bildformat");
+          const faktor = Math.min(1, maxKante / Math.max(bild.w, bild.h));
+          c.width = Math.round(bild.w * faktor);
+          c.height = Math.round(bild.h * faktor);
+          const ctx = c.getContext("2d");
+          ctx.fillStyle = "#fff"; // transparente PNGs sonst schwarz
+          ctx.fillRect(0, 0, c.width, c.height);
+          ctx.drawImage(bild.quelle, 0, 0, c.width, c.height);
+        } finally {
+          bild.weg();
+        }
+        const blob = await new Promise((fertig) =>
+          c.toBlob(fertig, "image/jpeg", 0.82),
+        );
+        if (!blob) throw new Error("Bildformat");
+        return blob;
+      }
+
+      async function fotoGewaehlt(e) {
+        const input = e.target;
+        const datei = input.files && input.files[0];
+        if (!datei || fotoLaeuft) return;
+        const fuer = ichName; // festhalten: waehrend des Uploads kann gewechselt werden
+        fotoLaeuft = { fuer, url: null };
+        fotoFeld();
+        try {
+          let blob;
+          try {
+            blob = await verkleinern(datei);
+          } catch {
+            melde(t("foto.format"), true);
+            return;
+          }
+          fotoLaeuft.url = URL.createObjectURL(blob);
+          fotoFeld();
+
+          // randomUUID fehlt in iOS vor 15.4
+          const pfad =
+            (crypto.randomUUID
+              ? crypto.randomUUID()
+              : Date.now().toString(36) + Math.random().toString(36).slice(2)) +
+            ".jpg";
+          const hoch = await db.storage
+            .from(BUCKET)
+            .upload(pfad, blob, { contentType: "image/jpeg" });
+          if (hoch.error) throw hoch.error;
+
+          // Nur das Foto – halb getippter Steckbrief und Zusage bleiben
+          // im Formular und in der Datenbank unberuehrt.
+          const datensatz = {
+            name: fuer,
+            foto: pfad,
+            geaendert: new Date().toISOString(),
+          };
+          const { error } = await db.from("profile").upsert(datensatz);
+          if (error) throw error;
+
+          profile.set(fuer, { ...(profile.get(fuer) || {}), ...datensatz });
+          melde(t("foto.gespeichert", { name: fuer }));
+        } catch (e) {
+          fehler(e);
+        } finally {
+          const alt = fotoLaeuft.url;
+          fotoLaeuft = null;
+          input.value = ""; // dasselbe Bild laesst sich erneut waehlen
+          rendereProfil();
+          if (alt) URL.revokeObjectURL(alt);
+        }
       }
 
       // -------------------------------------------------------- Speichern
@@ -2706,18 +2913,6 @@
                   : null,
             geaendert: new Date().toISOString(),
           };
-
-          const datei = $("foto").files[0];
-          if (datei) {
-            knopf.textContent = t("speichern.foto");
-            const blob = await verkleinern(datei);
-            const pfad = crypto.randomUUID() + ".jpg";
-            const { error } = await db.storage
-              .from(BUCKET)
-              .upload(pfad, blob, { contentType: "image/jpeg" });
-            if (error) throw error;
-            datensatz.foto = pfad;
-          }
 
           const { error } = await db.from("profile").upsert(datensatz);
           if (error) throw error;
@@ -3483,6 +3678,8 @@
       });
       $("losButton").addEventListener("click", () => wechsleZu($("wahl").value));
       $("speichernButton").addEventListener("click", speichern);
+      for (const i of document.querySelectorAll(".fotoknopf input"))
+        i.addEventListener("change", fotoGewaehlt);
       $("musikButton").addEventListener("click", musikWuenschen);
       $("kuecheButton").addEventListener("click", anKueche);
 
