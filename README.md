@@ -30,6 +30,11 @@ Kein Build-Schritt, kein npm. Läuft auf **Netlify** (Hosting) und
 | `erweiterung.sql` | Persönliche Links, Musikwünsche, Planer-Zugang |
 | `benachrichtigung.sql` | Sammelnachricht an eure Telegram-Gruppe bei Änderungen |
 | `vorschau.jpg`, `favicon.*`, `apple-touch-icon.png` | Link-Vorschau und Icons |
+| `saal.jpg` | Der gedeckte Saal – über der Adresse der Feier (`ORTE.fest.bild`) |
+
+Originalfotos liegen in `02-MVP/bilder/` (nicht auf GitHub). Auf die Seite
+kommt nur, was ihr bewusst ins Hauptverzeichnis legt – es ist öffentlich
+abrufbar.
 
 Eine Uhrzeit ändern → `feier.js`. Einen Text ändern → `sprachen.js`, in
 allen vier Sprachen.
@@ -249,8 +254,8 @@ bewusst ein kleiner, vertraulicher Rahmen:
   und wer noch keinen Namen gewählt hat, sieht weder den Ablauf-Punkt
   noch das Trauzimmer.
 - **Karte „Die Trauung“ in Mein Platz**: persönlich eingeladen oder wer
-  aus dem Haushalt dabei ist, Uhrzeit, der Grund (Kinder, einer bleibt
-  bei ihnen) und die Bitte, es eher für sich zu behalten.
+  aus dem Haushalt dabei ist, Uhrzeit und der Grund (Kinder, einer
+  bleibt bei ihnen).
 - **Treffpunkt für alle anderen**: steht in `sprachen.js` unter
   `trauung.treffpunkt`. Leer = kein Absatz. Ein ganzer Satz, in allen
   vier Sprachen.
@@ -315,8 +320,18 @@ Verwandte womöglich zu locker. Spanisch ist neutral-lateinamerikanisch.
 
 ### Schriften und Karten
 
-Cormorant Garamond von Google Fonts, Fallback Georgia. Karten sind
-OpenStreetMap-`<iframe>`s ohne Schlüssel, sie laden erst beim Hinscrollen.
+Cormorant Garamond von Google Fonts, Fallback Georgia.
+
+Keine eingebettete Karte – die bunte Kartenansicht passte nicht zur
+Farbwelt. Stattdessen ein Knopf **Route planen**: iPhone, iPad und Mac
+öffnen Apple Karten, alle anderen Google Maps. Die Koordinaten in
+`feier.js` treiben den Knopf und den Kalendereintrag.
+
+Die Symbole vor den Hinweisen sind feine goldene Linien statt Emojis
+(`SYMBOLE` in `index.html`, Namen in `feier.js` unter `marken`).
+
+Der Ablauf ist als Zeitleiste gesetzt: goldene Linie, ein Punkt je
+Programmpunkt, am Tag selbst ist der aktuelle Punkt gefüllt.
 
 ---
 

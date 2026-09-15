@@ -37,9 +37,11 @@ export const FEIER = {
   adresse: "https://traufeier.nthanh.de/",
 };
 
-// Die beiden Orte. Koordinaten gegen OpenStreetMap geprueft.
-// 'marken' sind die Symbole vor den Hinweisen; die Texte dazu stehen
-// in sprachen.js unter orteHinweise, in derselben Reihenfolge.
+// Die beiden Orte. Koordinaten gegen OpenStreetMap geprueft; sie
+// treiben den Routen-Knopf und den Kalendereintrag.
+// 'marken' sind die Symbole vor den Hinweisen – Namen aus SYMBOLE in
+// index.html. Die Texte dazu stehen in sprachen.js unter orteHinweise,
+// in derselben Reihenfolge.
 export const ORTE = {
   trauung: {
     kurz: "Trauzimmer Dülken",
@@ -47,7 +49,7 @@ export const ORTE = {
     plz: "41751 Viersen-Dülken",
     lat: 51.2489191,
     lon: 6.3312341,
-    marken: ["&#9200;", "&#128663;", "&#9855;", "&#128101;", "&#9742;"],
+    marken: ["uhr", "auto", "aufzug", "plaetze", "telefon"],
   },
   fest: {
     kurz: "Tanzschule Bachata Viersen",
@@ -58,7 +60,10 @@ export const ORTE = {
     web: "https://www.bachata-viersen.de",
     telefon: "+49 178 868 3013",
     instagram: "https://www.instagram.com/bachata.viersen/",
-    marken: ["&#9888;", "&#128663;", "&#129509;", "&#128652;", "&#127925;"],
+    // Steht ueber der Adresse. Breite/Hoehe halten den Platz frei, bevor
+    // das Bild geladen ist. Bildbeschreibung: sprachen.js, "ort.bild.fest".
+    bild: { datei: "saal.jpg", breite: 1024, hoehe: 765 },
+    marken: ["ort", "auto", "garderobe", "bus", "nacht"],
   },
 };
 

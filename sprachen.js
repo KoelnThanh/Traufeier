@@ -65,10 +65,8 @@ export const TEXTE = {
     "orte.titel": "Wo",
     "ort.trauung": "Trauung",
     "ort.fest": "Die Feier",
-    "ort.karte": "Größere Karte öffnen",
-    "ort.kartenTitel": "Karte: {name}",
-    "ort.google": "Route (Google)",
-    "ort.apple": "Route (Apple)",
+    "ort.route": "Route planen",
+    "ort.bild.fest": "Der Saal der Tanzschule, festlich gedeckt",
     "ort.kopieren": "Adresse kopieren",
     "ort.website": "Website",
 
@@ -110,8 +108,6 @@ export const TEXTE = {
       "Im Trauzimmer gibt es nur {n} Plätze. Deshalb laden wir einzelne Menschen ein und nicht ganze Haushalte: Die meisten von euch haben Kinder, und so kann jeweils einer bei ihnen bleiben. Wir wünschen uns, dass genau diese {n} dabei sind.",
     // Leer = kein Treffpunkt-Absatz. Sonst ein ganzer Satz, <strong> erlaubt.
     "trauung.treffpunkt": "",
-    "trauung.diskret":
-      "Die Trauung ist bewusst klein und nah. Weil nicht alle dabei sein können, die uns am Herzen liegen, freuen wir uns, wenn ihr das eher für euch behaltet.",
 
     "schritte.titel": "Noch zu tun",
     "schritte.zusage": "Zu- oder Absage gegeben",
@@ -402,10 +398,8 @@ export const TEXTE = {
     "orte.titel": "Where",
     "ort.trauung": "Ceremony",
     "ort.fest": "Celebration",
-    "ort.karte": "Open larger map",
-    "ort.kartenTitel": "Map: {name}",
-    "ort.google": "Directions (Google)",
-    "ort.apple": "Directions (Apple)",
+    "ort.route": "Get directions",
+    "ort.bild.fest": "The dance school hall, set for the celebration",
     "ort.kopieren": "Copy address",
     "ort.website": "Website",
 
@@ -441,8 +435,6 @@ export const TEXTE = {
     "trauung.grund":
       "There are only {n} seats in the ceremony room, so we're inviting individuals rather than whole households: most of you have children, and this way one of you can stay with them. We'd love for exactly these {n} people to be there.",
     "trauung.treffpunkt": "",
-    "trauung.diskret":
-      "We've kept the ceremony deliberately small and close. Since not everyone who matters to us can be there, we'd be grateful if you kept it mostly to yourselves.",
 
     "schritte.titel": "Still to do",
     "schritte.zusage": "Said yes or no",
@@ -730,10 +722,8 @@ export const TEXTE = {
     "orte.titel": "Dónde",
     "ort.trauung": "Ceremonia",
     "ort.fest": "Celebración",
-    "ort.karte": "Abrir mapa más grande",
-    "ort.kartenTitel": "Mapa: {name}",
-    "ort.google": "Ruta (Google)",
-    "ort.apple": "Ruta (Apple)",
+    "ort.route": "Cómo llegar",
+    "ort.bild.fest": "El salón de la escuela de baile, decorado para la fiesta",
     "ort.kopieren": "Copiar dirección",
     "ort.website": "Sitio web",
 
@@ -775,8 +765,6 @@ export const TEXTE = {
     "trauung.grund":
       "En la sala solo hay {n} lugares, por eso invitamos a personas y no a hogares completos: la mayoría tiene hijos, y así uno de ustedes puede quedarse con ellos. Nos gustaría que estén exactamente estas {n} personas.",
     "trauung.treffpunkt": "",
-    "trauung.diskret":
-      "Queremos que la ceremonia sea pequeña e íntima. Como no pueden estar todas las personas que queremos, les agradeceríamos que no lo comenten mucho.",
 
     "schritte.titel": "Pendiente",
     "schritte.zusage": "Confirmar si vienes",
@@ -1070,10 +1058,8 @@ export const TEXTE = {
     "orte.titel": "Địa điểm",
     "ort.trauung": "Lễ đăng ký",
     "ort.fest": "Buổi tiệc",
-    "ort.karte": "Mở bản đồ lớn hơn",
-    "ort.kartenTitel": "Bản đồ: {name}",
-    "ort.google": "Chỉ đường (Google)",
-    "ort.apple": "Chỉ đường (Apple)",
+    "ort.route": "Chỉ đường",
+    "ort.bild.fest": "Hội trường của trường khiêu vũ, được trang trí cho buổi tiệc",
     "ort.kopieren": "Sao chép địa chỉ",
     "ort.website": "Trang web",
 
@@ -1110,8 +1096,6 @@ export const TEXTE = {
     "trauung.grund":
       "Phòng làm lễ chỉ có {n} chỗ ngồi, vì vậy chúng mình mời từng người chứ không mời cả gia đình: phần lớn mọi người đều có con nhỏ, như vậy sẽ có một người ở lại trông các bé. Chúng mình mong đúng {n} người này sẽ có mặt.",
     "trauung.treffpunkt": "",
-    "trauung.diskret":
-      "Lễ đăng ký được tổ chức nhỏ và ấm cúng. Vì không phải ai thân thương cũng có thể tham dự, chúng mình rất cảm ơn nếu mọi người giữ chuyện này cho riêng mình.",
 
     "schritte.titel": "Việc cần làm",
     "schritte.zusage": "Đã trả lời có đến hay không",
