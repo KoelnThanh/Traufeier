@@ -49,7 +49,6 @@ export const ORTE = {
     plz: "41751 Viersen-Dülken",
     lat: 51.2489191,
     lon: 6.3312341,
-    bild: { datei: "trauzimmer.jpg", breite: 1024, hoehe: 683 },
     marken: ["uhr", "auto", "aufzug", "plaetze", "telefon"],
   },
   fest: {

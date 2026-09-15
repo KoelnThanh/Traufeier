@@ -30,7 +30,7 @@ Kein Build-Schritt, kein npm. Läuft auf **Netlify** (Hosting) und
 | `erweiterung.sql` | Persönliche Links, Musikwünsche, Planer-Zugang |
 | `benachrichtigung.sql` | Sammelnachricht an eure Telegram-Gruppe bei Änderungen |
 | `vorschau.jpg`, `favicon.*`, `apple-touch-icon.png` | Link-Vorschau und Icons |
-| `saal.jpg`, `trauzimmer.jpg` | Fotos über den Adressen (`ORTE.fest.bild`, `ORTE.trauung.bild`) |
+| `saal.jpg` | Der gedeckte Saal – über der Adresse der Feier (`ORTE.fest.bild`) |
 
 Originalfotos liegen in `02-MVP/bilder/` (nicht auf GitHub). Auf die Seite
 kommt nur, was ihr bewusst ins Hauptverzeichnis legt – es ist öffentlich
