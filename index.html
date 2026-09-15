@@ -1215,6 +1215,69 @@
       .dialog-inhalt .chips {
         justify-content: center;
       }
+      /* Zuschnitt: das Bild liegt als Canvas auf der Buehne und wird nur
+         per transform bewegt; der Kreis darueber ist das spaetere Portraet. */
+      .buehne {
+        position: relative;
+        width: min(100%, 52vh);
+        aspect-ratio: 1;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 3px;
+        background: #1e1a16;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        cursor: grab;
+      }
+      .buehne:active {
+        cursor: grabbing;
+      }
+      .buehne:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+      .buehne canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+        max-width: none;
+        transform-origin: 0 0;
+        will-change: transform;
+      }
+      .buehne::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(
+          circle closest-side,
+          transparent calc(100% - 2px),
+          rgba(255, 255, 255, 0.85) calc(100% - 2px),
+          rgba(255, 255, 255, 0.85) 100%,
+          rgba(20, 17, 14, 0.55) 100%
+        );
+      }
+      .zoomzeile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .zoomzeile input {
+        flex: 1;
+        min-width: 0;
+        accent-color: var(--gold);
+      }
+      .zoomzeile svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
+        fill: none;
+        stroke: var(--leise);
+        stroke-width: 2;
+        stroke-linecap: round;
+      }
       .dialog-schliessen {
         display: block;
         width: 100%;
@@ -1649,7 +1712,7 @@
             </div>
           </div>
           <p class="hinweis" data-t="foto.hinweis">
-            Wird sofort gespeichert und vorher automatisch verkleinert.
+            Du wählst noch den Ausschnitt, dann wird es sofort gespeichert.
           </p>
 
           <button class="knopf" id="speichernButton" data-t="speichern">
@@ -1924,6 +1987,46 @@
         </button>
       </div>
       <button class="dialog-schliessen" id="wechselZu" data-t="abbrechen">
+        Abbrechen
+      </button>
+    </dialog>
+
+    <dialog id="zuschnittDialog">
+      <div class="dialog-inhalt">
+        <h2 style="margin-bottom: 6px" data-t="zuschnitt.titel">
+          Ausschnitt wählen
+        </h2>
+        <p class="leiser" style="margin-bottom: 16px" data-t="zuschnitt.text">
+          Mit einem Finger verschieben, mit zwei Fingern oder dem Regler
+          zoomen. Was im Kreis ist, sehen die anderen.
+        </p>
+        <div
+          class="buehne"
+          id="zBuehne"
+          tabindex="0"
+          role="img"
+          aria-label="Bildausschnitt"
+          data-t-aria="zuschnitt.aria"
+        ></div>
+        <div class="zoomzeile">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12" /></svg>
+          <input
+            type="range"
+            id="zZoom"
+            min="1"
+            max="4"
+            step="any"
+            value="1"
+            aria-label="Zoom"
+            data-t-aria="zuschnitt.zoom"
+          />
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 12h12M12 6v12" />
+          </svg>
+        </div>
+        <button class="knopf" id="zOk" data-t="zuschnitt.ok">Übernehmen</button>
+      </div>
+      <button class="dialog-schliessen" id="zAbbrechen" data-t="abbrechen">
         Abbrechen
       </button>
     </dialog>
@@ -2821,26 +2924,123 @@
         }
       }
 
-      async function verkleinern(datei, maxKante = 800) {
+      // Arbeitskopie fuer den Zuschnitt: hoechstens 2000 px, damit auch
+      // aeltere Handys beim Verschieben nicht ins Stocken geraten.
+      async function arbeitsbild(datei, maxKante = 2000) {
         const bild = await ladeBild(datei);
-        const c = document.createElement("canvas");
         try {
           if (!bild.w || !bild.h) throw new Error("Bildformat");
           const faktor = Math.min(1, maxKante / Math.max(bild.w, bild.h));
-          c.width = Math.round(bild.w * faktor);
-          c.height = Math.round(bild.h * faktor);
+          const c = document.createElement("canvas");
+          c.width = Math.max(1, Math.round(bild.w * faktor));
+          c.height = Math.max(1, Math.round(bild.h * faktor));
           const ctx = c.getContext("2d");
           ctx.fillStyle = "#fff"; // transparente PNGs sonst schwarz
           ctx.fillRect(0, 0, c.width, c.height);
           ctx.drawImage(bild.quelle, 0, 0, c.width, c.height);
+          return c;
         } finally {
           bild.weg();
         }
+      }
+
+      // Ausschnitt der Arbeitskopie als JPEG, lange Kante hoechstens 800 px.
+      async function alsJpeg(quelle, sx, sy, sw, sh, maxKante = 800) {
+        const faktor = Math.min(1, maxKante / Math.max(sw, sh));
+        const c = document.createElement("canvas");
+        c.width = Math.max(1, Math.round(sw * faktor));
+        c.height = Math.max(1, Math.round(sh * faktor));
+        c.getContext("2d").drawImage(quelle, sx, sy, sw, sh, 0, 0, c.width, c.height);
         const blob = await new Promise((fertig) =>
-          c.toBlob(fertig, "image/jpeg", 0.82),
+          c.toBlob(fertig, "image/jpeg", 0.85),
         );
         if (!blob) throw new Error("Bildformat");
         return blob;
+      }
+
+      // -------------------------------------------------------- Zuschnitt
+      // Der Kreis ist das spaetere Portraet. Gemerkt wird, welcher Punkt
+      // des Bildes in der Mitte liegt und wie weit gezoomt ist – nicht die
+      // Pixelposition. So stimmt alles weiter, wenn sich die Buehne beim
+      // Drehen des Handys aendert.
+      const zs = { w: 0, h: 0, zoom: 1, max: 1, cx: 0, cy: 0, zeiger: new Map(), fertig: null };
+
+      function zMass() {
+        const S = $("zBuehne").clientWidth;
+        return { S, s: (S / Math.min(zs.w, zs.h)) * zs.zoom };
+      }
+
+      function zMalen() {
+        const halb = Math.min(zs.w, zs.h) / zs.zoom / 2;
+        zs.cx = Math.min(Math.max(zs.cx, halb), zs.w - halb);
+        zs.cy = Math.min(Math.max(zs.cy, halb), zs.h - halb);
+        const { S, s } = zMass();
+        const bild = $("zBuehne").firstElementChild;
+        if (bild)
+          bild.style.transform =
+            "translate(" + (S / 2 - zs.cx * s) + "px, " + (S / 2 - zs.cy * s) + "px) scale(" + s + ")";
+        $("zZoom").value = zs.zoom;
+      }
+
+      function zVerschieben(dx, dy) {
+        const { s } = zMass();
+        zs.cx -= dx / s;
+        zs.cy -= dy / s;
+        zMalen();
+      }
+
+      // Zoomen um einen Punkt der Buehne: Was unter den Fingern liegt,
+      // bleibt dort liegen.
+      function zZoomen(zoom, px, py) {
+        const vor = zMass();
+        const ux = zs.cx + (px - vor.S / 2) / vor.s;
+        const uy = zs.cy + (py - vor.S / 2) / vor.s;
+        zs.zoom = Math.min(Math.max(zoom, 1), zs.max);
+        const { S, s } = zMass();
+        zs.cx = ux - (px - S / 2) / s;
+        zs.cy = uy - (py - S / 2) / s;
+        zMalen();
+      }
+
+      // Quadratischer Ausschnitt als JPEG – oder null, wenn abgebrochen.
+      async function zuschneiden(datei) {
+        const quelle = await arbeitsbild(datei);
+        const d = $("zuschnittDialog");
+        // Ohne <dialog> (iOS vor 15.4) das ganze Bild; rund beschnitten
+        // wird es beim Anzeigen ohnehin.
+        if (typeof d.showModal !== "function")
+          return alsJpeg(quelle, 0, 0, quelle.width, quelle.height);
+
+        Object.assign(zs, {
+          w: quelle.width,
+          h: quelle.height,
+          zoom: 1,
+          cx: quelle.width / 2,
+          cy: quelle.height / 2,
+        });
+        // Nicht naeher als auf rund 300 Bildpunkte – darunter wird das
+        // Portraet auf scharfen Handydisplays matschig.
+        zs.max = Math.max(1, Math.min(5, Math.min(zs.w, zs.h) / 300));
+        $("zZoom").max = zs.max;
+        zs.zeiger.clear();
+        $("zBuehne").replaceChildren(quelle);
+        d.showModal();
+        $("zBuehne").blur(); // sonst traegt sie sofort den Fokusrahmen
+        zMalen();
+
+        const ok = await new Promise((fertig) => (zs.fertig = fertig));
+        if (!ok) return null;
+        const seite = Math.min(zs.w, zs.h) / zs.zoom;
+        return alsJpeg(quelle, zs.cx - seite / 2, zs.cy - seite / 2, seite, seite);
+      }
+
+      function zEnde(ok) {
+        const fertig = zs.fertig;
+        zs.fertig = null;
+        if (!fertig) return;
+        if ($("zuschnittDialog").open) $("zuschnittDialog").close();
+        $("zBuehne").replaceChildren();
+        fertig(ok);
       }
 
       async function fotoGewaehlt(e) {
@@ -2853,11 +3053,12 @@
         try {
           let blob;
           try {
-            blob = await verkleinern(datei);
+            blob = await zuschneiden(datei);
           } catch {
             melde(t("foto.format"), true);
             return;
           }
+          if (!blob) return; // Zuschnitt abgebrochen
           fotoLaeuft.url = URL.createObjectURL(blob);
           fotoFeld();
 
@@ -2972,10 +3173,11 @@
           : t("board.fertig");
 
         // Die Gruppen (Christina, Thanh, …) sind Daten und bleiben, wie sie
-        // in der Gaesteliste stehen. Nur "Alle" wird uebersetzt.
+        // in der Gaesteliste stehen – ausser "Alle" und was in sprachen.js
+        // unter gruppe steht ("Bedienste" -> "Servicekraft").
         const gruppen = [
           ...new Set(gaeste.map((g) => g.zugehoerigkeit).filter(Boolean)),
-        ].sort();
+        ].sort((a, b) => wort("gruppe", a).localeCompare(wort("gruppe", b)));
         $("filter").innerHTML = ["alle", ...gruppen]
           .map(
             (w) =>
@@ -2984,7 +3186,7 @@
               '" aria-pressed="' +
               (filterAuf === w) +
               '">' +
-              esc(w === "alle" ? t("board.alle") : w) +
+              esc(w === "alle" ? t("board.alle") : wort("gruppe", w)) +
               "</button>",
           )
           .join("");
@@ -3473,7 +3675,7 @@
               .join("")
           : '<p class="leiser">' + esc(t("helfer.keine")) + "</p>";
 
-        // Bedienstete stehen in der Gaesteliste als eigene Art.
+        // Servicekraefte stehen in der Gaesteliste als eigene Art ("Bedienste").
         const bed = gaeste.filter(
           (g) => g.art === "Bedienste" || g.zugehoerigkeit === "Bedienste",
         );
@@ -3680,6 +3882,67 @@
       $("speichernButton").addEventListener("click", speichern);
       for (const i of document.querySelectorAll(".fotoknopf input"))
         i.addEventListener("change", fotoGewaehlt);
+
+      // Zuschnitt: ein Finger verschiebt, zwei zoomen und verschieben.
+      const buehne = $("zBuehne");
+      buehne.addEventListener("pointerdown", (e) => {
+        buehne.setPointerCapture(e.pointerId);
+        zs.zeiger.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      });
+      buehne.addEventListener("pointermove", (e) => {
+        const alt = zs.zeiger.get(e.pointerId);
+        if (!alt) return;
+        const neu = { x: e.clientX, y: e.clientY };
+        if (zs.zeiger.size === 1) {
+          zs.zeiger.set(e.pointerId, neu);
+          return zVerschieben(neu.x - alt.x, neu.y - alt.y);
+        }
+        const paar = () => {
+          const [p, q] = zs.zeiger.values();
+          return {
+            d: Math.hypot(p.x - q.x, p.y - q.y),
+            x: (p.x + q.x) / 2,
+            y: (p.y + q.y) / 2,
+          };
+        };
+        const vor = paar();
+        zs.zeiger.set(e.pointerId, neu);
+        const nach = paar();
+        zVerschieben(nach.x - vor.x, nach.y - vor.y);
+        const r = buehne.getBoundingClientRect();
+        if (vor.d > 0)
+          zZoomen(zs.zoom * (nach.d / vor.d), nach.x - r.left, nach.y - r.top);
+      });
+      for (const typ of ["pointerup", "pointercancel"])
+        buehne.addEventListener(typ, (e) => zs.zeiger.delete(e.pointerId));
+      buehne.addEventListener(
+        "wheel",
+        (e) => {
+          e.preventDefault();
+          const r = buehne.getBoundingClientRect();
+          zZoomen(zs.zoom * Math.exp(-e.deltaY * 0.002), e.clientX - r.left, e.clientY - r.top);
+        },
+        { passive: false },
+      );
+      buehne.addEventListener("keydown", (e) => {
+        const S = buehne.clientWidth;
+        const weg = { ArrowLeft: [-20, 0], ArrowRight: [20, 0], ArrowUp: [0, -20], ArrowDown: [0, 20] }[e.key];
+        if (weg) zVerschieben(...weg);
+        else if (e.key === "+" || e.key === "=") zZoomen(zs.zoom * 1.15, S / 2, S / 2);
+        else if (e.key === "-") zZoomen(zs.zoom / 1.15, S / 2, S / 2);
+        else return;
+        e.preventDefault();
+      });
+      $("zZoom").addEventListener("input", (e) => {
+        const S = buehne.clientWidth;
+        zZoomen(+e.target.value, S / 2, S / 2);
+      });
+      $("zOk").addEventListener("click", () => zEnde(true));
+      $("zAbbrechen").addEventListener("click", () => zEnde(false));
+      $("zuschnittDialog").addEventListener("close", () => zEnde(false));
+      addEventListener("resize", () => {
+        if ($("zuschnittDialog").open) zMalen();
+      });
       $("musikButton").addEventListener("click", musikWuenschen);
       $("kuecheButton").addEventListener("click", anKueche);
 

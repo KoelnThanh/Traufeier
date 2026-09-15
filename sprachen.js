@@ -127,7 +127,14 @@ export const TEXTE = {
     "foto.leer": "Noch kein Foto – so erkennen dich die anderen leichter.",
     "foto.galerie": "Aus meinen Fotos",
     "foto.kamera": "Foto machen",
-    "foto.hinweis": "Wird sofort gespeichert und vorher automatisch verkleinert.",
+    "foto.hinweis": "Du wählst noch den Ausschnitt, dann wird es sofort gespeichert.",
+    "zuschnitt.titel": "Ausschnitt wählen",
+    "zuschnitt.text":
+      "Mit einem Finger verschieben, mit zwei Fingern oder dem Regler zoomen. Was im Kreis ist, sehen die anderen.",
+    "zuschnitt.aria":
+      "Bildausschnitt – mit den Pfeiltasten verschieben, mit Plus und Minus zoomen",
+    "zuschnitt.zoom": "Zoom",
+    "zuschnitt.ok": "Übernehmen",
     "foto.gespeichert": "Foto gespeichert für {name}.",
     "foto.format":
       "Dieses Bild lässt sich hier nicht öffnen. Nimm ein anderes oder mach direkt ein Foto.",
@@ -169,6 +176,10 @@ export const TEXTE = {
     },
     "board.fertig": "Alle haben geantwortet.",
     "board.alle": "Alle",
+    // Filter im Reiter Gaeste. Links der Wert aus der Gaesteliste.
+    gruppe: {
+      Bedienste: "Servicekraft",
+    },
     "board.tipp": "Tipp: Auf einen Gast tippen zeigt seinen Steckbrief.",
     "board.keinSteckbrief": "Hat noch nichts über sich geschrieben.",
     "status.kommt": "kommt",
@@ -436,7 +447,13 @@ export const TEXTE = {
     "foto.leer": "No photo yet – it helps the others recognise you.",
     "foto.galerie": "From my photos",
     "foto.kamera": "Take a photo",
-    "foto.hinweis": "Saved right away and resized automatically first.",
+    "foto.hinweis": "You'll pick the crop first, then it's saved right away.",
+    "zuschnitt.titel": "Adjust your photo",
+    "zuschnitt.text":
+      "Drag with one finger, pinch or use the slider to zoom. What's inside the circle is what the others see.",
+    "zuschnitt.aria": "Photo crop – arrow keys move it, plus and minus zoom",
+    "zuschnitt.zoom": "Zoom",
+    "zuschnitt.ok": "Use this",
     "foto.gespeichert": "Photo saved for {name}.",
     "foto.format":
       "This picture can't be opened here. Pick another one or take a photo directly.",
@@ -477,6 +494,9 @@ export const TEXTE = {
     },
     "board.fertig": "Everyone has replied.",
     "board.alle": "All",
+    gruppe: {
+      Bedienste: "Service staff",
+    },
     "board.tipp": "Tip: tap a guest to see their profile.",
     "board.keinSteckbrief": "Hasn't written anything yet.",
     "status.kommt": "coming",
@@ -744,7 +764,14 @@ export const TEXTE = {
     "foto.leer": "Aún no hay foto: así los demás te reconocen más fácil.",
     "foto.galerie": "De mis fotos",
     "foto.kamera": "Tomar una foto",
-    "foto.hinweis": "Se guarda al instante y antes se reduce automáticamente.",
+    "foto.hinweis": "Primero eliges el recorte y luego se guarda al instante.",
+    "zuschnitt.titel": "Ajusta tu foto",
+    "zuschnitt.text":
+      "Arrastra con un dedo; pellizca o usa el control para hacer zoom. Lo que queda dentro del círculo es lo que verán los demás.",
+    "zuschnitt.aria":
+      "Recorte de la foto: muévelo con las flechas, haz zoom con más y menos",
+    "zuschnitt.zoom": "Zoom",
+    "zuschnitt.ok": "Usar esta",
     "foto.gespeichert": "Foto guardada para {name}.",
     "foto.format":
       "Esta imagen no se puede abrir aquí. Elige otra o toma una foto directamente.",
@@ -786,6 +813,9 @@ export const TEXTE = {
     },
     "board.fertig": "Todos han respondido.",
     "board.alle": "Todos",
+    gruppe: {
+      Bedienste: "Personal de servicio",
+    },
     "board.tipp": "Consejo: toca a un invitado para ver su perfil.",
     "board.keinSteckbrief": "Todavía no ha escrito nada.",
     "status.kommt": "viene",
@@ -1058,7 +1088,14 @@ export const TEXTE = {
     "foto.leer": "Chưa có ảnh – có ảnh thì mọi người dễ nhận ra bạn hơn.",
     "foto.galerie": "Chọn từ thư viện ảnh",
     "foto.kamera": "Chụp ảnh",
-    "foto.hinweis": "Ảnh được lưu ngay và tự động thu nhỏ trước khi tải lên.",
+    "foto.hinweis": "Bạn chọn vùng ảnh trước, sau đó ảnh được lưu ngay.",
+    "zuschnitt.titel": "Căn chỉnh ảnh",
+    "zuschnitt.text":
+      "Kéo bằng một ngón tay, dùng hai ngón tay hoặc thanh trượt để phóng to. Phần trong vòng tròn là phần mọi người sẽ thấy.",
+    "zuschnitt.aria":
+      "Vùng cắt ảnh – dùng phím mũi tên để di chuyển, phím cộng và trừ để phóng to",
+    "zuschnitt.zoom": "Thu phóng",
+    "zuschnitt.ok": "Dùng ảnh này",
     "foto.gespeichert": "Đã lưu ảnh cho {name}.",
     "foto.format":
       "Không mở được ảnh này. Hãy chọn ảnh khác hoặc chụp ảnh trực tiếp.",
@@ -1100,6 +1137,9 @@ export const TEXTE = {
     },
     "board.fertig": "Mọi người đều đã trả lời.",
     "board.alle": "Tất cả",
+    gruppe: {
+      Bedienste: "Nhân viên phục vụ",
+    },
     "board.tipp": "Mẹo: bấm vào một khách mời để xem phần giới thiệu.",
     "board.keinSteckbrief": "Chưa viết gì về mình.",
     "status.kommt": "sẽ đến",

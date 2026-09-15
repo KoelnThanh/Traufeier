@@ -226,9 +226,14 @@ machen** (öffnet direkt die Kamera, am Rechner ausgeblendet). Ein
 einzelnes Feld zeigt auf manchen Android-Handys nur Kamera und Dateien,
 die Galerie fehlt.
 
-- **Geht sofort hoch**, ohne „Speichern“. Nur `foto` wird geschrieben –
+- **Erst der Ausschnitt.** Nach der Auswahl öffnet sich ein Dialog mit
+  Kreis: ein Finger verschiebt, zwei Finger oder der Regler zoomen, am
+  Rechner auch Mausrad und Pfeiltasten. Gezoomt wird höchstens so weit,
+  dass noch rund 300 Bildpunkte übrig bleiben. Ohne `<dialog>` (iOS vor
+  15.4) geht das ganze Bild hoch.
+- **Dann sofort hoch**, ohne „Speichern“. Nur `foto` wird geschrieben –
   halb getippter Steckbrief und Zusage bleiben unberührt.
-- **Verkleinert auf 800 px, als JPEG.** Klappt `createImageBitmap` nicht
+- **Quadratisch, höchstens 800 px, als JPEG.** Klappt `createImageBitmap` nicht
   (ältere iPhones, HEIC in Chrome), geht es über ein `<img>`. Kann der
   Browser das Bild gar nicht lesen, sagt die Seite das in Klartext.
 
@@ -279,8 +284,8 @@ Sprache des Browsers – oder die, die ihr für den Haushalt festgelegt habt –
 danach die zuletzt gewählte.
 
 - **Datenbankwerte bleiben deutsch.** Wer auf Spanisch „huevo" anhakt,
-  speichert `Ei`. In `sprachen.js` steht bei `art`, `allergen` und
-  `kennzeichen` links der Datenbankwert – nur rechts übersetzen.
+  speichert `Ei`. In `sprachen.js` steht bei `art`, `allergen`,
+  `kennzeichen` und `gruppe` links der Datenbankwert – nur rechts übersetzen.
 - **Was Gäste schreiben, bleibt, wie sie es schreiben** – auch Rollen und
   Haushalte aus der Gästeliste.
 - **Fehlt eine Übersetzung**, erscheint Deutsch, und die Konsole meldet
@@ -323,7 +328,7 @@ abgemeldet.
 | Spalte | Werte |
 |---|---|
 | `art` | `Erwachsen`, `Kind`, `Bedienste` |
-| `zugehoerigkeit` | `Christina`, `Thanh`, `Bedienste` |
+| `zugehoerigkeit` | `Christina`, `Thanh`, `Bedienste` – auf der Seite „Servicekraft“ (`gruppe` in `sprachen.js`) |
 | `standesamt` | `Ja`, `Nein`, `(Ja)` |
 | `familie` | Haushalt, z. B. `Nahel & Svijetlana` |
 | `schlafort` | `Hotel`, `Airbnb`, `??` … `null` = keiner nötig |
@@ -360,7 +365,8 @@ sein.
 
 - **Übernachten**: Die Karte bleibt ausgeblendet, bis in `sprachen.js`
   unter `schlafen` Text steht.
-- **Antwortfrist** 15. November ist ein Vorschlag – in `feier.js` änderbar.
+- **Antwortfrist** 15. Oktober – früh wegen Getränken, Sitzplänen und der
+  Weihnachtsfeier-Zeit. In `feier.js` änderbar.
 - **Tanzworkshop** 16:00 ist ein Vorschlag – in `feier.js`.
 - **Speisekarte am Abend**: Sobald feststeht, was es gibt, gehört es in
   `sprachen.js` unter `abendessen` – der Link aus dem Ablauf führt dorthin.

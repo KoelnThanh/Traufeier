@@ -19,7 +19,7 @@ export const FEIER = {
 
   // Bis wann die Gaeste antworten sollen. Danach bittet die Seite
   // nur noch darum, Aenderungen trotzdem zu melden.
-  antwortBis: "2026-11-15",
+  antwortBis: "2026-10-15",
 
   // Link zur Galerie eurer Fotografin. Steht er drin, zeigt die
   // Seite nach der Feier einen Knopf dorthin.

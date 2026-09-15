@@ -576,7 +576,7 @@
             .map((gr) => {
               const d = gaeste.filter((g) => (g.zugehoerigkeit || "–") === gr);
               const c = (s) => d.filter((g) => status(g.name) === s).length;
-              return "<tr><td>" + esc(gr) + '</td><td class="n">' + c("ja") + '</td><td class="n">' + c("nein") + '</td><td class="n">' + c("offen") + '</td><td class="n">' + d.length + "</td></tr>";
+              return "<tr><td>" + esc((TEXTE.de.gruppe || {})[gr] || gr) + '</td><td class="n">' + c("ja") + '</td><td class="n">' + c("nein") + '</td><td class="n">' + c("offen") + '</td><td class="n">' + d.length + "</td></tr>";
             })
             .join("");
 
