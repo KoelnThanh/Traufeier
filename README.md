@@ -243,6 +243,22 @@ die Galerie fehlt.
   (ältere iPhones, HEIC in Chrome), geht es über ein `<img>`. Kann der
   Browser das Bild gar nicht lesen, sagt die Seite das in Klartext.
 
+### Die Seite lebt
+
+Gäste sollen wissen, dass sich Wiederkommen lohnt:
+
+- **Im Kopf** (vor der Anmeldung) und oben in Einladung und Mein Platz:
+  ein ruhig pulsierender Punkt mit „Diese Seite wächst bis zur Feier mit ·
+  zuletzt etwas Neues vor 2 Stunden“ – gerechnet über Profile, Buffet und
+  Musikwünsche aller Gäste.
+- **„Neu seit deinem letzten Besuch“**: Wer wiederkommt, sieht, von wem es
+  Neues gibt, was neu am Buffet steht und wie viele Musikwünsche dazukamen
+  – jede Zeile führt dorthin. Was der eigene Haushalt eingetragen hat,
+  zählt nicht. Ein Besuch endet nach 30 Minuten ohne die Seite; gemerkt
+  wird das im Browser (`traufeier.gesehen`, `traufeier.stichtag`).
+- **In der WhatsApp-Einladung** steht, dass die Seite bis zur Feier
+  mitwächst.
+
 ### Trauung
 
 Im Trauzimmer sind 25 Plätze, eingeladen sind einzelne Menschen, nicht

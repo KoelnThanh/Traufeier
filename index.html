@@ -264,6 +264,68 @@
         text-transform: uppercase;
         color: var(--leise);
       }
+      /* Die Seite lebt: ein ruhig pulsierender Punkt und wann zuletzt
+         etwas dazukam – damit Gaeste wissen, dass sich Wiederkommen lohnt. */
+      .lebendig {
+        margin: 10px auto 0;
+        max-width: 36ch;
+        font-size: 12px;
+        line-height: 1.5;
+        text-align: center;
+        color: var(--leise);
+      }
+      .lebendig:empty {
+        display: none;
+      }
+      /* Im Text statt daneben: bricht die Zeile um, bleibt der Punkt am
+         Anfang der ersten Zeile. */
+      .puls {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        margin-right: 7px;
+        vertical-align: 1px;
+        border-radius: 50%;
+        background: var(--gold);
+        animation: puls 2.4s ease-in-out infinite;
+      }
+      @keyframes puls {
+        50% {
+          opacity: 0.3;
+        }
+      }
+      #neuEinladung > .lebendig,
+      #neuProfil > .lebendig {
+        margin: 0 0 14px;
+      }
+      .neuigkeiten ul {
+        list-style: none;
+        margin: 6px 0 0;
+        padding: 0;
+      }
+      .neuigkeiten li + li {
+        border-top: 1px solid var(--linie);
+      }
+      .neuigkeiten button {
+        display: grid;
+        grid-template-columns: 20px 1fr auto;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 11px 0;
+        font-size: 14px;
+        line-height: 1.45;
+        text-align: left;
+      }
+      .neuigkeiten .pfeil {
+        color: var(--gold);
+      }
+      .neuigkeiten .lebendig {
+        max-width: none;
+        margin-top: 10px;
+        text-align: left;
+      }
+
       /* Traufeier, nicht Hochzeit – das gehoert auf die erste Seite. */
       .einordnung {
         max-width: 36ch;
@@ -287,6 +349,7 @@
       body.angemeldet .hero-blatt::after,
       body.angemeldet .hero .ornament,
       body.angemeldet .countdown,
+      body.angemeldet .hero .lebendig,
       body.angemeldet .einordnung,
       body.angemeldet .zweisaetze,
       body.angemeldet .hero .versalien {
@@ -1555,6 +1618,7 @@
           <span>Viersen</span>
         </p>
         <p class="countdown" id="countdown"></p>
+        <p class="lebendig" id="lebendigHero"></p>
         <a
           class="knopf leise fotos"
           id="fotosLink"
@@ -1603,6 +1667,7 @@
 
       <!-- ============================================= Einladung ===== -->
       <section id="ansichtEinladung" hidden>
+        <div id="neuEinladung"></div>
         <div class="karte auftritt">
           <h2 data-t="einl.tag">Der Tag</h2>
           <ol class="ablauf" id="ablauf"></ol>
@@ -1664,6 +1729,7 @@
 
       <!-- ============================================ Mein Platz ===== -->
       <section id="ansichtProfil" hidden>
+        <div id="neuProfil"></div>
         <div class="karte auftritt" id="karteHaushalt" hidden>
           <h2 data-t="haushalt.titel">Dein Haushalt</h2>
           <p
@@ -2125,6 +2191,22 @@
         ruhig = false; // true: neu beschriften, ohne zu scrollen
       let ichName = localStorage.getItem("traufeier.gast");
 
+      // "Neu seit deinem letzten Besuch": Ein Besuch endet nach 30 Minuten
+      // ohne die Seite – sonst waere nach jedem Neuladen schon alles
+      // "gesehen". Beim allerersten Besuch ist nichts neu.
+      const stichtag = (() => {
+        const nun = Date.now();
+        const gesehen = Number(localStorage.getItem("traufeier.gesehen")) || 0;
+        let tag = Number(localStorage.getItem("traufeier.stichtag")) || nun;
+        if (gesehen && nun - gesehen > 30 * 60 * 1000) tag = gesehen;
+        localStorage.setItem("traufeier.stichtag", tag);
+        localStorage.setItem("traufeier.gesehen", nun);
+        return tag;
+      })();
+      addEventListener("visibilitychange", () => {
+        if (document.hidden) localStorage.setItem("traufeier.gesehen", Date.now());
+      });
+
       // ============================================================ Sprache
       // Gespeicherte Wahl zuerst, dann die Browsersprache, sonst Deutsch.
       function waehleSprache() {
@@ -2339,6 +2421,8 @@
         bus: '<rect x="5" y="3.5" width="14" height="14" rx="2.5"/><path d="M5 11h14M8 17.5v2.5M16 17.5v2.5"/><circle cx="8.5" cy="14.3" r=".6"/><circle cx="15.5" cy="14.3" r=".6"/>',
         nacht: '<path d="M19.5 14.2A7.8 7.8 0 1 1 9.8 4.5a6.2 6.2 0 0 0 9.7 9.7Z"/>',
         link: '<path d="M10.5 13.5a3.8 3.8 0 0 0 5.4 0l2.7-2.7a3.8 3.8 0 0 0-5.4-5.4l-.9.9"/><path d="M13.5 10.5a3.8 3.8 0 0 0-5.4 0l-2.7 2.7a3.8 3.8 0 0 0 5.4 5.4l.9-.9"/>',
+        schale: '<path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0Z"/><path d="M8.5 20.5h7M9.5 8c0-1.6 1-1.6 1-3.2M13.5 8c0-1.6 1-1.6 1-3.2"/>',
+        note: '<path d="M9 18V5.8l10-2.3V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>',
       };
       const symbol = (name) =>
         '<svg class="marke" viewBox="0 0 24 24" aria-hidden="true">' +
@@ -2712,6 +2796,86 @@
         $("trauungText").innerHTML = absaetze.map((a) => "<p>" + a + "</p>").join("");
       }
 
+      // ------------------------------------------------------ Neuigkeiten
+      // Wann zuletzt jemand etwas eingetragen hat – ueber alle Gaeste.
+      function letzteAenderung() {
+        const zeiten = [
+          ...[...profile.values()].map((p) => p.geaendert),
+          ...speisen.map((s) => s.geaendert || s.angelegt),
+          ...musik.map((m) => m.angelegt),
+        ]
+          .map((z) => Date.parse(z))
+          .filter(Boolean);
+        return zeiten.length ? Math.max(...zeiten) : null;
+      }
+
+      // "vor 2 Stunden", "gestern", "hace 3 días" – in der Sprache der Seite.
+      function vorWann(zeit) {
+        const sek = Math.min(-60, (zeit - Date.now()) / 1000);
+        const rtf = new Intl.RelativeTimeFormat(L("_locale"), { numeric: "auto" });
+        if (sek > -3600) return rtf.format(Math.round(sek / 60), "minute");
+        if (sek > -86400) return rtf.format(Math.round(sek / 3600), "hour");
+        return rtf.format(Math.round(sek / 86400), "day");
+      }
+
+      // Hoechstens drei Namen, der Rest als "und 2 weitere".
+      function kurzListe(liste, hoechstens = 3) {
+        const eins = [...new Set(liste)];
+        return namenListe(
+          eins.length > hoechstens
+            ? [...eins.slice(0, hoechstens), t("neu.weitere", { n: eins.length - hoechstens })]
+            : eins,
+        );
+      }
+
+      function neuigkeiten() {
+        const z = letzteAenderung();
+        const zeile =
+          '<span class="puls" aria-hidden="true"></span><span>' +
+          esc(t("lebendig.zeile") + (z ? " · " + t("lebendig.zuletzt", { wann: vorWann(z) }) : "")) +
+          "</span>";
+        $("lebendigHero").innerHTML = zeile;
+
+        const ich = gaeste.find((g) => g.name === ichName);
+        let html = "";
+        if (ich) {
+          // Was der eigene Haushalt eingetragen hat, weiss er schon.
+          const haus = new Set(haushaltVon(ich).map((g) => g.name));
+          const neu = (zeit) => Date.parse(zeit) > stichtag;
+          const leute = [...profile.values()]
+            .filter((p) => !haus.has(p.name) && neu(p.geaendert))
+            .map((p) => p.name);
+          const gerichte = speisen
+            .filter((s) => !haus.has(s.name) && neu(s.angelegt))
+            .map((s) => s.titel);
+          const lieder = musik.filter((m) => !haus.has(m.name) && neu(m.angelegt));
+
+          const punkte = [];
+          if (leute.length)
+            punkte.push(["plaetze", t("neu.gaeste", { namen: esc(kurzListe(leute)) }), 'data-ziel="Board"']);
+          if (gerichte.length)
+            punkte.push(["schale", t("neu.buffet", { was: esc(kurzListe(gerichte)) }), 'data-sprung="buffet"']);
+          if (lieder.length)
+            punkte.push(["note", t("neu.musik", { n: lieder.length }), "data-zu-musik"]);
+
+          html = punkte.length
+            ? '<div class="karte auftritt neuigkeiten"><p class="versalien">' +
+              esc(t("neu.titel")) +
+              "</p><ul>" +
+              punkte
+                .map(
+                  ([s, text, ziel]) =>
+                    "<li><button " + ziel + ">" + symbol(s) + "<span>" + text +
+                    '</span><span class="pfeil" aria-hidden="true">&#8594;</span></button></li>',
+                )
+                .join("") +
+              '</ul><p class="lebendig">' + zeile + "</p></div>"
+            : '<p class="lebendig">' + zeile + "</p>";
+        }
+        $("neuEinladung").innerHTML = html;
+        $("neuProfil").innerHTML = html;
+      }
+
       // -------------------------------------------------------- Einladung
       function zeigeEinladung() {
         $("schlafenText").textContent = t("schlafen");
@@ -2785,6 +2949,7 @@
           (mitTrauung ? ortkarte("trauung") : "") + ortkarte("fest");
 
         countdown();
+        neuigkeiten();
         zeige("Einladung");
       }
 
@@ -2940,6 +3105,7 @@
           });
 
         trauungKarte();
+        neuigkeiten();
         fotoFeld();
         meineBeitraege();
         rendereMusik();
@@ -3885,6 +4051,15 @@
         const sp = e.target.closest("[data-sprung]");
         if (sp) return springe(sp.dataset.sprung);
 
+        // Aus "Neu seit deinem letzten Besuch" zu den Musikwuenschen.
+        if (e.target.closest("[data-zu-musik]")) {
+          zeigeProfil();
+          return setTimeout(
+            () => $("karteMusik").scrollIntoView({ behavior: "smooth", block: "start" }),
+            350,
+          );
+        }
+
         const gs = e.target.closest("[data-gast]");
         if (gs) return zeigeGast(gs.dataset.gast);
 
@@ -4058,6 +4233,7 @@
       zeigeEinladung();
       try {
         await laden();
+        neuigkeiten(); // "zuletzt etwas Neues" auch fuer neue Besucher
 
         // Persoenlicher Link (?h=CODE aus erweiterung.sql): direkt in den
         // eigenen Haushalt, in der Sprache, die ihr fuer ihn gewaehlt habt.

@@ -188,6 +188,15 @@ export const TEXTE = {
     },
     "board.fertig": "Alle haben geantwortet.",
     "board.alle": "Alle",
+
+    // Zeigt, dass sich hier etwas tut.
+    "lebendig.zeile": "Diese Seite wächst bis zur Feier mit",
+    "lebendig.zuletzt": "zuletzt etwas Neues {wann}",
+    "neu.titel": "Neu seit deinem letzten Besuch",
+    "neu.gaeste": "Neues von {namen}",
+    "neu.buffet": "Neu am Buffet: {was}",
+    "neu.musik": { one: "1 neuer Musikwunsch", other: "{n} neue Musikwünsche" },
+    "neu.weitere": "{n} weitere",
     // Filter im Reiter Gaeste. Links der Wert aus der Gaesteliste.
     gruppe: {
       Bedienste: "Servicekraft",
@@ -513,6 +522,15 @@ export const TEXTE = {
     },
     "board.fertig": "Everyone has replied.",
     "board.alle": "All",
+
+    // Zeigt, dass sich hier etwas tut.
+    "lebendig.zeile": "This page keeps growing until the big day",
+    "lebendig.zuletzt": "last update {wann}",
+    "neu.titel": "New since your last visit",
+    "neu.gaeste": "News from {namen}",
+    "neu.buffet": "New at the buffet: {was}",
+    "neu.musik": { one: "1 new song request", other: "{n} new song requests" },
+    "neu.weitere": "{n} more",
     gruppe: {
       Bedienste: "Service staff",
     },
@@ -845,6 +863,15 @@ export const TEXTE = {
     },
     "board.fertig": "Todos han respondido.",
     "board.alle": "Todos",
+
+    // Zeigt, dass sich hier etwas tut.
+    "lebendig.zeile": "Esta página va creciendo hasta la fiesta",
+    "lebendig.zuletzt": "última novedad {wann}",
+    "neu.titel": "Novedades desde tu última visita",
+    "neu.gaeste": "Novedades de {namen}",
+    "neu.buffet": "Nuevo en el bufé: {was}",
+    "neu.musik": { one: "1 canción nueva pedida", other: "{n} canciones nuevas pedidas" },
+    "neu.weitere": "{n} más",
     gruppe: {
       Bedienste: "Personal de servicio",
     },
@@ -1176,6 +1203,15 @@ export const TEXTE = {
     },
     "board.fertig": "Mọi người đều đã trả lời.",
     "board.alle": "Tất cả",
+
+    // Zeigt, dass sich hier etwas tut.
+    "lebendig.zeile": "Trang này sẽ còn được cập nhật đến ngày vui",
+    "lebendig.zuletzt": "cập nhật gần nhất {wann}",
+    "neu.titel": "Mới kể từ lần ghé trước",
+    "neu.gaeste": "Tin mới từ {namen}",
+    "neu.buffet": "Món mới ở tiệc buffet: {was}",
+    "neu.musik": { one: "1 yêu cầu bài hát mới", other: "{n} yêu cầu bài hát mới" },
+    "neu.weitere": "{n} khác",
     gruppe: {
       Bedienste: "Nhân viên phục vụ",
     },
