@@ -1192,6 +1192,42 @@
           transition-duration: 0.01ms !important;
         }
       }
+      /* ------------------------------------------------------ Musikwuensche */
+      ul.wuensche {
+        list-style: none;
+        margin: 6px 0 0;
+        padding: 0;
+      }
+      ul.wuensche li {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 2px 12px;
+        padding: 10px 0;
+        border-top: 1px solid var(--linie);
+        font-size: 14px;
+      }
+      ul.wuensche li:first-child {
+        border-top: 0;
+      }
+      ul.wuensche .lied {
+        font-family: var(--display);
+        font-size: 1.15rem;
+      }
+      ul.wuensche .von {
+        color: var(--leise);
+        font-size: 13px;
+      }
+      ul.wuensche button {
+        margin-left: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gold);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
       /* ------------------------------------------------------------ Frist */
       .frist {
         font-size: 14px;
@@ -1427,6 +1463,7 @@
 
         <div class="karte auftritt" id="karteWeiter" hidden>
           <h2 data-t="weiter.titel">Schön, dass du da bist</h2>
+          <p class="leiser" id="weiterFuer"></p>
           <p class="leiser" id="weiterText"></p>
           <button class="knopf" data-ziel="Profil" data-t="weiter.platz">
             Zu meinem Platz
@@ -1525,6 +1562,37 @@
           <button class="knopf leise" data-beitrag-neu data-t="mitbringen.neu">
             Etwas hinzufügen
           </button>
+        </div>
+
+        <!-- Bleibt verborgen, bis die Tabelle 'musik' existiert
+             (erweiterung.sql). -->
+        <div class="karte auftritt" id="karteMusik" hidden>
+          <h2 data-t="musik.titel">Welches Lied muss laufen?</h2>
+          <p class="leiser" data-t="musik.text">
+            Wir sind Tänzer – die Musik ist uns wichtig. Wünsch dir, was dich
+            auf die Tanzfläche holt.
+          </p>
+          <label for="mTitel" data-t="musik.lied">Lied</label>
+          <input
+            type="text"
+            id="mTitel"
+            maxlength="80"
+            placeholder="z. B. Propuesta Indecente"
+            data-t-ph="musik.liedPh"
+          />
+          <label for="mInterpret" data-t="musik.interpret">Von wem?</label>
+          <input
+            type="text"
+            id="mInterpret"
+            maxlength="80"
+            placeholder="z. B. Romeo Santos"
+            data-t-ph="musik.interpretPh"
+          />
+          <button class="knopf leise" id="musikButton" data-t="musik.knopf">
+            Wünschen
+          </button>
+          <p class="leiser" id="musikZahl" style="margin: 22px 0 0"></p>
+          <ul class="wuensche" id="musikListe"></ul>
         </div>
 
         <div class="karte auftritt">
@@ -1756,29 +1824,20 @@
     <script type="module">
       import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
       import { TEXTE } from "./sprachen.js";
+      import {
+        FEIER,
+        ORTE,
+        ABLAUF,
+        KATEGORIEN,
+        ALLERGENE,
+        KENNZEICHEN,
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        BUCKET,
+      } from "./feier.js";
 
-      // =====================================================================
-      //  EURE ANGABEN – hier und nur hier pflegen.
-      //
-      //  Hier steht nur, was in jeder Sprache gleich ist: Datum, Zeiten,
-      //  Adressen, Koordinaten. Alle Texte stehen in sprachen.js.
-      // =====================================================================
-      const FEIER = {
-        // Maschinenlesbar. Treibt das Datum im Kopf (in jeder Sprache
-        // richtig formatiert), den Countdown und den Kalendereintrag.
-        tag: "2026-12-12",
-
-        trauung: { von: "10:45", bis: "11:30" },
-        fest: { von: "12:30", bis: "22:00" },
-
-        // Bis wann die Gaeste antworten sollen. Danach bittet die Seite
-        // nur noch darum, Aenderungen trotzdem zu melden.
-        antwortBis: "2026-11-15",
-
-        // Link zur Galerie eurer Fotografin. Steht er drin, zeigt die
-        // Seite nach der Feier einen Knopf dorthin.
-        fotos: null,
-      };
+      // Eure Angaben (Datum, Zeiten, Orte, Kategorien) stehen in feier.js,
+      // alle Texte in sprachen.js. Diese Datei ist nur die Seite.
 
       // Zum Ausprobieren: ?jetzt=2026-12-12T14:10 laesst die Seite so tun,
       // als waere es gerade dann – fuer "Heute"-Ansicht und Danke-Seite.
@@ -1788,101 +1847,14 @@
           ? new Date(JETZT_TEST)
           : new Date();
 
-      // Die beiden Orte. Koordinaten gegen OpenStreetMap geprueft.
-      // 'marken' sind die Symbole vor den Hinweisen; die Texte dazu stehen
-      // in sprachen.js unter orteHinweise, in derselben Reihenfolge.
-      const ORTE = {
-        trauung: {
-          kurz: "Trauzimmer Dülken",
-          strasse: "Theodor-Frings-Allee 22",
-          plz: "41751 Viersen-Dülken",
-          lat: 51.2489191,
-          lon: 6.3312341,
-          marken: ["&#9200;", "&#128663;", "&#9855;", "&#128101;", "&#9742;"],
-        },
-        fest: {
-          kurz: "Tanzschule Bachata Viersen",
-          strasse: "Erich-Sanders-Weg 1",
-          plz: "41749 Viersen-Süchteln",
-          lat: 51.2942011,
-          lon: 6.3657625,
-          web: "https://www.bachata-viersen.de",
-          telefon: "+49 178 868 3013",
-          instagram: "https://www.instagram.com/bachata.viersen/",
-          marken: ["&#9888;", "&#128663;", "&#128652;", "&#127925;"],
-        },
-      };
-
-      // Die Zeiten des Tages. Titel und Text je Punkt stehen in
-      // sprachen.js unter 'ablauf', in derselben Reihenfolge.
-      // nebensache: true stellt einen Punkt gedaempft dar,
-      // ort: verweist auf einen Schluessel aus ORTE und erzeugt den Link.
-      const ABLAUF = [
-        { zeit: "10:45", ort: "trauung", nebensache: true },
-        { zeit: "12:30", ort: "fest" },
-        { zeit: "13:30" },
-        { zeit: "16:00" },
-        { zeit: "18:30" },
-        { zeit: "20:00" },
-        { zeit: "22:00" },
-      ];
-
-      // Kategorien des Mitbring-Buffets. Die Werte sind das, was in der
-      // Datenbank steht – sie bleiben deutsch, egal in welcher Sprache
-      // jemand einträgt. Angezeigt wird die Übersetzung aus sprachen.js.
-      // art: null bedeutet "Gast schreibt selbst hin, was es ist".
-      const KATEGORIEN = [
-        { bereich: "Mittagsbuffet", art: "herzhaft" },
-        { bereich: "Mittagsbuffet", art: "Salat oder Beilage" },
-        { bereich: "Mittagsbuffet", art: "Brot, Dip, Kleinigkeiten" },
-        { bereich: "Mittagsbuffet", art: "süß oder Nachtisch" },
-        { bereich: "Anderes", art: null },
-      ];
-
-      // Ankreuzbar statt Freitext: so laesst sich die Liste filtern.
-      // Das Zutatenfeld bleibt trotzdem – kein Haken deckt "Koriander" ab.
-      const ALLERGENE = [
-        "Gluten",
-        "Milch",
-        "Ei",
-        "Nüsse",
-        "Erdnüsse",
-        "Soja",
-        "Fisch",
-        "Sellerie",
-        "Senf",
-      ];
-      // "Passend fuer" – wird beim Eintragen unten angehakt und oben
-      // im Reiter zum Filter. Allergene stehen davor, die sind eine
-      // andere Frage: was drin ist, nicht fuer wen es passt.
-      const KENNZEICHEN = [
-        "vegetarisch",
-        "vegan",
-        "halal",
-        "glutenfrei",
-        "laktosefrei",
-      ];
-
-      // =====================================================================
-      //  Schluessel: Supabase -> Settings -> API Keys
-      //  Nimm den PUBLISHABLE key (beginnt mit 'sb_publishable_'), nicht den
-      //  alten anon-Key aus dem Legacy-Tab – der wird Ende 2026 abgeschaltet.
-      //
-      //  Dieser Schluessel darf oeffentlich im Quelltext stehen, dafuer ist er
-      //  gemacht. Was er darf, regeln die Policies aus schema.sql.
-      //  Der SECRET key (sb_secret_...) gehoert hier NIEMALS hinein.
-      // =====================================================================
-      const SUPABASE_URL = "https://jlwpzsdpezjxsgefbiws.supabase.co";
-      const SUPABASE_KEY = "sb_publishable_HBsRUKuS-hKMz1X2rNYzQw_eD2Q1eBv";
-      const BUCKET = "gaeste-fotos";
-      // =====================================================================
-
       const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
       const $ = (id) => document.getElementById(id);
       let gaeste = [],
         profile = new Map(),
         speisen = [],
+        musik = [],
+        musikDa = false, // gibt es die Tabelle schon? (erweiterung.sql)
         filterAuf = "alle",
         speisenFilterAuf = "alle",
         beitragOffen = null, // null = neuer Eintrag, sonst die id
@@ -1958,8 +1930,7 @@
           b.setAttribute("aria-pressed", String(b.dataset.sprache === lang));
         for (const s of [$("wahl"), $("wahl2")])
           if (s.options[0]) s.options[0].textContent = t("auswahl.bitte");
-        if (ichName)
-          $("weiterText").textContent = t("weiter.text", { name: ichName });
+        if (ichName) weiterZeilen();
         kopf();
       }
 
@@ -2459,6 +2430,7 @@
           db.from("gaeste").select("*").order("name"),
           db.from("profile").select("*"),
           ladeSpeisen(),
+          ladeMusik(),
         ]);
         if (g.error) throw g.error;
         if (p.error) throw p.error;
@@ -2609,7 +2581,28 @@
           });
 
         meineBeitraege();
+        rendereMusik();
         schritte(p, kStand);
+        weiterZeilen();
+      }
+
+      // "Diese Einladung ist für Christina, Kyan, Thanh und Yuna." –
+      // steht auf der Einladung, sobald klar ist, wer da ist.
+      function weiterZeilen() {
+        const ich = gaeste.find((g) => g.name === ichName);
+        if (!ich) return;
+        const haus = ich.familie
+          ? gaeste.filter((g) => g.familie === ich.familie).map((g) => g.name)
+          : [ich.name];
+        let namen;
+        try {
+          namen = new Intl.ListFormat(L("_locale"), {
+            type: "conjunction",
+          }).format(haus);
+        } catch {
+          namen = haus.join(", ");
+        }
+        $("weiterFuer").textContent = t("weiter.fuer", { namen });
         $("weiterText").textContent = t("weiter.text", { name: ich.name });
       }
 
@@ -3105,6 +3098,94 @@
         }
       }
 
+      // ----------------------------------------------------- Musikwuensche
+      async function ladeMusik() {
+        const { data, error } = await db
+          .from("musik")
+          .select("*")
+          .eq("zurueckgezogen", false)
+          .order("id");
+        // Nachtrag (erweiterung.sql): fehlt die Tabelle, bleibt die Karte
+        // einfach weg.
+        musikDa = !error;
+        if (error) {
+          console.warn("Tabelle musik nicht lesbar:", error.message);
+          return;
+        }
+        musik = data || [];
+      }
+
+      // Alle Wuensche, die neuesten oben. Zuruecknehmen kann man nur die
+      // eigenen – so zeigt es die Seite; eine Sperre ist das nicht.
+      function rendereMusik() {
+        $("karteMusik").hidden = !musikDa;
+        if (!musikDa) return;
+        $("musikZahl").textContent = musik.length
+          ? t("musik.schon", { n: musik.length })
+          : t("musik.leer");
+        $("musikListe").innerHTML = musik
+          .slice()
+          .reverse()
+          .map(
+            (w) =>
+              '<li><span><span class="lied">' +
+              esc(w.titel) +
+              "</span>" +
+              (w.interpret
+                ? ' <span class="von">– ' + esc(w.interpret) + "</span>"
+                : "") +
+              '</span><span class="von">' +
+              esc(w.name) +
+              (w.name === ichName
+                ? '<button data-musik-weg="' +
+                  w.id +
+                  '">' +
+                  esc(t("musik.weg")) +
+                  "</button>"
+                : "") +
+              "</span></li>",
+          )
+          .join("");
+      }
+
+      async function musikWuenschen() {
+        const titel = $("mTitel").value.trim();
+        if (!titel) return melde(t("m.liedFehlt"), true);
+        const knopf = $("musikButton");
+        knopf.disabled = true;
+        try {
+          const { error } = await db.from("musik").insert({
+            name: ichName,
+            titel,
+            interpret: $("mInterpret").value.trim() || null,
+          });
+          if (error) throw error;
+          $("mTitel").value = "";
+          $("mInterpret").value = "";
+          await ladeMusik();
+          rendereMusik();
+          melde(t("m.musik"));
+        } catch (e) {
+          fehler(e);
+        } finally {
+          knopf.disabled = false;
+        }
+      }
+
+      async function musikWeg(id) {
+        try {
+          const { error } = await db
+            .from("musik")
+            .update({ zurueckgezogen: true })
+            .eq("id", id);
+          if (error) throw error;
+          await ladeMusik();
+          rendereMusik();
+        } catch (e) {
+          fehler(e);
+        }
+      }
+
       // ----------------------------------------------------------- Helfer
       // Die Rollen stehen als Freitext in der Gaesteliste. Hier drehen wir
       // sie um: nicht "wer hat welche Rolle", sondern "wer macht das hier".
@@ -3248,6 +3329,9 @@
 
         if (e.target.closest("[data-kalender]")) return kalenderLaden();
 
+        const mw = e.target.closest("[data-musik-weg]");
+        if (mw) return musikWeg(Number(mw.dataset.musikWeg));
+
         if (e.target.closest("[data-beitrag-neu]")) return oeffneBeitrag(null);
 
         const bb = e.target.closest("[data-beitrag-bearbeiten]");
@@ -3335,6 +3419,7 @@
       });
       $("losButton").addEventListener("click", () => wechsleZu($("wahl").value));
       $("speichernButton").addEventListener("click", speichern);
+      $("musikButton").addEventListener("click", musikWuenschen);
       $("kuecheButton").addEventListener("click", anKueche);
 
       // Die Einladung steht auch ohne Datenbank – sie ist der Kern der Seite.
@@ -3342,9 +3427,39 @@
       zeigeEinladung();
       try {
         await laden();
+
+        // Persoenlicher Link (?h=CODE aus erweiterung.sql): direkt in den
+        // eigenen Haushalt, in der Sprache, die ihr fuer ihn gewaehlt habt.
+        // Wer ueber den Link kommt, sieht zuerst die Einladung – dafuer
+        // wurde er ja verschickt.
+        let perLink = false;
+        const code = new URLSearchParams(location.search).get("h");
+        if (code) {
+          const haus = gaeste.filter((g) => g.link && g.link === code);
+          if (haus.length) {
+            const erster =
+              haus.find((g) => g.name === ichName) ||
+              haus.find((g) => g.art === "Erwachsen") ||
+              haus[0];
+            ichName = erster.name;
+            localStorage.setItem("traufeier.gast", ichName);
+            if (!localStorage.getItem("traufeier.sprache") && erster.sprache)
+              setzeSprache(erster.sprache);
+            perLink = true;
+          }
+          // Den Code nicht in der Adresszeile stehen lassen – wer die Seite
+          // weiterschickt, soll niemanden in seinen Haushalt schicken.
+          const u = new URL(location.href);
+          u.searchParams.delete("h");
+          history.replaceState(null, "", u);
+        }
+
         if (ichName && gaeste.some((g) => g.name === ichName)) {
           angemeldet(true);
-          zeigeProfil();
+          if (perLink) {
+            rendereProfil();
+            zeigeEinladung();
+          } else zeigeProfil();
         } else {
           ichName = null;
           localStorage.removeItem("traufeier.gast");

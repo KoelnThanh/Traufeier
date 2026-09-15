@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Planung · Christina &amp; Thanh</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+
+    <style>
+      /* Euer Werkzeug, nicht die Einladung: gleiche Farben, aber auf
+         Ueberblick gebaut – Zahlen, Tabellen, Knoepfe. */
+      :root {
+        --papier: #faf7f2;
+        --tinte: #2a2521;
+        --leise: #837a6f;
+        --linie: #e7ded1;
+        --karte: #fffdfa;
+        --gold: #a8874a;
+        --gold-weich: #f5edde;
+        --salbei: #5c7d62;
+        --salbei-weich: #e8f0e8;
+        --warn: #9a3412;
+        --warn-weich: #fdeae4;
+        --display: "Cormorant Garamond", Georgia, serif;
+        --text: system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --papier: #15120f;
+          --tinte: #efe8df;
+          --leise: #a09588;
+          --linie: #302823;
+          --karte: #1d1815;
+          --gold: #d5b276;
+          --gold-weich: #2a2016;
+          --salbei: #8fb094;
+          --salbei-weich: #1d2620;
+          --warn: #f3a98c;
+          --warn-weich: #2f1b14;
+        }
+      }
+      * { box-sizing: border-box; }
+      [hidden] { display: none !important; }
+      body {
+        margin: 0;
+        background: var(--papier);
+        color: var(--tinte);
+        font: 15px/1.55 var(--text);
+      }
+      main {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 28px 16px 80px;
+      }
+      h1 {
+        font-family: var(--display);
+        font-weight: 400;
+        font-size: 2.4rem;
+        margin: 0;
+      }
+      h2 {
+        font-family: var(--display);
+        font-weight: 500;
+        font-size: 1.6rem;
+        margin: 0 0 12px;
+      }
+      h3 { font-size: 1rem; margin: 18px 0 6px; }
+      a { color: var(--gold); }
+      .leiser { color: var(--leise); font-size: 14px; }
+      .karte {
+        background: var(--karte);
+        border: 1px solid var(--linie);
+        border-radius: 3px;
+        padding: 22px;
+        margin-top: 18px;
+      }
+      .kopf {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      input, select, textarea, button { font: inherit; color: inherit; }
+      input[type="email"], input[type="password"], select, textarea {
+        padding: 9px 11px;
+        background: var(--papier);
+        border: 1px solid var(--linie);
+        border-radius: 3px;
+      }
+      textarea { width: 100%; min-height: 150px; resize: vertical; font-size: 14px; }
+      .knopf {
+        display: inline-block;
+        padding: 8px 14px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        color: #fff;
+        background: var(--gold);
+        border: 1px solid var(--gold);
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      .knopf.leise { color: var(--tinte); background: transparent; border-color: var(--linie); }
+      .knopf:disabled { opacity: 0.45; cursor: default; }
+      @media (prefers-color-scheme: dark) { .knopf { color: #17130f; } }
+      :is(input, select, textarea, .knopf):focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+      .reihe { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+      .zahlen {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+      .zahl {
+        padding: 12px 14px;
+        border: 1px solid var(--linie);
+        border-radius: 3px;
+      }
+      .zahl b {
+        display: block;
+        font-family: var(--display);
+        font-size: 2.1rem;
+        font-weight: 500;
+        line-height: 1.1;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      .zahl span { font-size: 13px; color: var(--leise); }
+      .zahl.gut b { color: var(--salbei); }
+      .zahl.warn b { color: var(--warn); }
+
+      .tabelle { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td {
+        text-align: left;
+        padding: 7px 8px;
+        border-top: 1px solid var(--linie);
+        vertical-align: top;
+      }
+      th { font-weight: 600; color: var(--leise); font-size: 13px; }
+      td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+
+      .hinweis {
+        padding: 11px 14px;
+        margin-top: 12px;
+        font-size: 14px;
+        border: 1px dashed var(--linie);
+        border-radius: 3px;
+        color: var(--leise);
+      }
+      .hinweis.warn {
+        border-style: solid;
+        border-color: var(--warn);
+        background: var(--warn-weich);
+        color: var(--warn);
+      }
+      .chip {
+        display: inline-block;
+        margin: 2px 4px 2px 0;
+        padding: 1px 9px;
+        font-size: 12px;
+        border-radius: 999px;
+        border: 1px solid var(--linie);
+        color: var(--leise);
+      }
+      .chip.ja { border-color: var(--salbei); color: var(--salbei); background: var(--salbei-weich); }
+      .chip.nein { border-color: var(--warn); color: var(--warn); }
+      .chip.achtung { border-color: var(--warn); color: var(--warn); background: var(--warn-weich); }
+
+      .haushalt {
+        padding: 16px 0;
+        border-top: 1px solid var(--linie);
+      }
+      .haushalt:first-of-type { border-top: 0; }
+      .haushalt .titel {
+        font-family: var(--display);
+        font-size: 1.3rem;
+        font-weight: 500;
+      }
+      .haushalt textarea { margin: 10px 0 8px; }
+
+      .abgleich { padding: 12px 0; border-top: 1px solid var(--linie); }
+      .abgleich:first-of-type { border-top: 0; }
+      .abgleich ul { margin: 6px 0 0; padding-left: 18px; }
+
+      #meldung {
+        position: fixed;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        padding: 10px 16px;
+        border-radius: 3px;
+        background: var(--tinte);
+        color: var(--papier);
+        font-size: 14px;
+        z-index: 5;
+      }
+
+      /* ------------------------------------------------ Druckkarte (A6) */
+      #druck { display: none; }
+      @media print {
+        @page { size: A6 landscape; margin: 0; }
+        body { background: #fff; }
+        body > *:not(#druck) { display: none !important; }
+        #druck { display: block; }
+      }
+      .druckkarte {
+        width: 148mm;
+        height: 105mm;
+        padding: 9mm 10mm;
+        display: grid;
+        grid-template-columns: 1fr 38mm;
+        gap: 8mm;
+        align-items: center;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        color: #2a2521;
+        background: #fffdfa;
+        border: 0.3mm solid #e7ded1;
+        outline: 0.3mm solid rgba(168, 135, 74, 0.45);
+        outline-offset: -3mm;
+      }
+      .druckkarte .fuer {
+        font-family: system-ui, sans-serif;
+        font-size: 8.5pt;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #a8874a;
+        margin: 0 0 3mm;
+      }
+      .druckkarte .namen { font-size: 30pt; font-weight: 300; line-height: 1; margin: 0; }
+      .druckkarte .namen i { color: #a8874a; font-weight: 400; }
+      .druckkarte .datum { font-size: 14pt; margin: 4mm 0 0; }
+      .druckkarte .ort { font-size: 12pt; margin: 1mm 0 0; color: #837a6f; }
+      .druckkarte .qr svg { width: 38mm; height: 38mm; display: block; }
+      .druckkarte .scannen {
+        font-family: system-ui, sans-serif;
+        font-size: 7pt;
+        text-align: center;
+        margin: 2mm 0 0;
+        color: #837a6f;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div class="kopf">
+        <div>
+          <p class="leiser" style="margin: 0">Christina &amp; Thanh</p>
+          <h1>Planung</h1>
+        </div>
+        <div id="anmeldung">
+          <form id="anmeldeForm" class="reihe">
+            <input type="email" id="email" placeholder="E-Mail" autocomplete="username" required />
+            <input type="password" id="passwort" placeholder="Passwort" autocomplete="current-password" required />
+            <button class="knopf">Anmelden</button>
+          </form>
+          <div id="angemeldetAls" class="reihe" hidden>
+            <span class="leiser" id="werAngemeldet"></span>
+            <button class="knopf leise" id="abmelden">Abmelden</button>
+          </div>
+        </div>
+      </div>
+      <p class="leiser" style="margin: 8px 0 0">
+        Ohne Anmeldung seht ihr alles außer den Küchenangaben – die gibt die
+        Datenbank nur an euch zwei heraus.
+      </p>
+      <div id="warnungen"></div>
+
+      <!-- ================================================ Antworten ===== -->
+      <section class="karte">
+        <h2>Antworten</h2>
+        <div class="zahlen" id="zahlen"></div>
+        <p class="leiser" id="fristText" style="margin: 12px 0 0"></p>
+        <h3>Nach Gruppe</h3>
+        <div class="tabelle"><table id="gruppen"></table></div>
+        <h3>Noch keine Antwort</h3>
+        <div id="offen"></div>
+      </section>
+
+      <!-- ============================================== Allergien ===== -->
+      <section class="karte">
+        <h2>Allergien und Buffet</h2>
+        <div id="abgleich"></div>
+      </section>
+
+      <!-- ================================================= Buffet ===== -->
+      <section class="karte">
+        <h2>Buffet</h2>
+        <div class="tabelle"><table id="buffet"></table></div>
+        <p class="leiser" id="buffetHinweis" style="margin: 10px 0 0"></p>
+      </section>
+
+      <!-- ================================================== Musik ===== -->
+      <section class="karte">
+        <div class="kopf">
+          <h2 style="margin: 0">Musikwünsche</h2>
+          <button class="knopf leise" id="playlistKopieren">Liste kopieren</button>
+        </div>
+        <div class="tabelle" style="margin-top: 10px"><table id="musik"></table></div>
+      </section>
+
+      <!-- ================================================ Versand ===== -->
+      <section class="karte">
+        <h2>Einladungen verschicken</h2>
+        <p class="leiser" style="margin: 0">
+          Pro Haushalt: Sprache wählen, Text prüfen, dann kopieren oder direkt
+          in WhatsApp öffnen. Der Link führt jeden direkt zu sich. Für alle
+          ohne Smartphone gibt es eine Karte zum Ausdrucken mit QR-Code.
+        </p>
+        <div class="reihe" style="margin-top: 12px">
+          <label class="leiser" for="versandFilter">Zeigen:</label>
+          <select id="versandFilter">
+            <option value="alle">alle Haushalte</option>
+            <option value="offen">nur ohne Antwort</option>
+          </select>
+        </div>
+        <div id="versand"></div>
+      </section>
+
+      <!-- ================================================= Export ===== -->
+      <section class="karte">
+        <h2>Sichern</h2>
+        <p class="leiser" style="margin: 0 0 12px">
+          Vor dem Aufräumen nach der Feier: alles als Tabelle für Excel oder
+          Numbers.
+        </p>
+        <div class="reihe">
+          <button class="knopf leise" data-export="gaeste">Gäste und Antworten</button>
+          <button class="knopf leise" data-export="speisen">Buffet</button>
+          <button class="knopf leise" data-export="musik">Musikwünsche</button>
+          <button class="knopf leise" data-export="kueche" id="exportKueche" disabled>Küche (nur angemeldet)</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="meldung" hidden></div>
+    <div id="druck"></div>
+
+    <script type="module">
+      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+      import { TEXTE } from "./sprachen.js";
+      import {
+        FEIER,
+        KATEGORIEN,
+        KENNZEICHEN,
+        SUPABASE_URL,
+        SUPABASE_KEY,
+      } from "./feier.js";
+
+      // Eigener Speicherplatz fuer die Anmeldung. Sonst saehe die Einladung
+      // im selben Browser eure Sitzung und schickte ihre Anfragen als
+      // "angemeldet" – dafuer hat sie keine Rechte, Zusagen wuerden scheitern.
+      const db = createClient(SUPABASE_URL, SUPABASE_KEY, {
+        auth: { storageKey: "traufeier-planung", persistSession: true },
+      });
+
+      // ------------------------------------------------------------------
+      //  Einladungstext je Sprache. Hier anpassen, wenn er anders klingen
+      //  soll. {namen}, {datum}, {frist} und {link} werden ersetzt.
+      // ------------------------------------------------------------------
+      const VORLAGEN = {
+        de:
+          "Hallo {namen}!\n\n" +
+          "Wir heiraten – und feiern das am {datum}, in unserer Tanzschule in Viersen. " +
+          "Wir würden uns riesig freuen, wenn ihr dabei seid.\n\n" +
+          "Alles Weitere steht hier, und bitte sagt uns bis {frist}, ob ihr kommt:\n" +
+          "{link}\n\n" +
+          "Christina & Thanh",
+        en:
+          "Hi {namen}!\n\n" +
+          "We're getting married – and celebrating on {datum} at our dance school in Viersen. " +
+          "We'd love for you to be there.\n\n" +
+          "All the details are here – please let us know by {frist} whether you can come:\n" +
+          "{link}\n\n" +
+          "Christina & Thanh",
+        es:
+          "¡Hola, {namen}!\n\n" +
+          "Nos casamos y lo celebramos el {datum}, en nuestra escuela de baile en Viersen. " +
+          "Nos haría muchísima ilusión que vinieran.\n\n" +
+          "Aquí está toda la información. Por favor, dígannos antes del {frist} si vienen:\n" +
+          "{link}\n\n" +
+          "Christina & Thanh",
+        vi:
+          "Chào {namen}!\n\n" +
+          "Chúng mình kết hôn – và sẽ tổ chức tiệc mừng vào {datum} tại trường dạy nhảy của chúng mình ở Viersen. " +
+          "Chúng mình rất mong mọi người đến chung vui.\n\n" +
+          "Mọi thông tin ở đây, và vui lòng cho chúng mình biết trước {frist} là có đến được không:\n" +
+          "{link}\n\n" +
+          "Christina & Thanh",
+      };
+
+      // Beschriftung der Druckkarte je Sprache.
+      const KARTE = {
+        de: { fuer: "Für {namen}", scannen: "Scannen für Einladung und Zusage" },
+        en: { fuer: "For {namen}", scannen: "Scan for the invitation and to reply" },
+        es: { fuer: "Para {namen}", scannen: "Escanea para ver la invitación y responder" },
+        vi: { fuer: "Gửi {namen}", scannen: "Quét mã để xem thiệp mời và trả lời" },
+      };
+
+      // ------------------------------------------------------------------
+      //  Stichwoerter fuer den Allergie-Abgleich, in allen vier Sprachen –
+      //  Gaeste schreiben ihre Kuechenangaben so, wie sie sprechen.
+      //  Kurze Woerter (bis 3 Buchstaben) muessen allein stehen ("ei",
+      //  "cá"), laengere duerfen ein Wort beginnen – so trifft "nuss" auch
+      //  "Nussallergie", aber "Erdnussallergie" nur bei den Erdnuessen.
+      // ------------------------------------------------------------------
+      const STICHWORTE = {
+        Gluten: ["gluten", "weizen", "dinkel", "roggen", "gerste", "zöliakie", "zoeliakie", "wheat", "celiac", "coeliac", "trigo", "celíac", "lúa mì"],
+        Milch: ["milch", "laktose", "lactose", "milk", "dairy", "leche", "lactosa", "sữa"],
+        Ei: ["ei", "eier", "egg", "eggs", "huevo", "huevos", "trứng"],
+        Nüsse: ["nuss", "nüsse", "nuesse", "haselnuss", "walnuss", "mandel", "cashew", "pistazie", "nut", "nuts", "almond", "frutos secos", "nuez", "nueces", "almendra", "hạt"],
+        Erdnüsse: ["erdnuss", "erdnüsse", "peanut", "maní", "cacahuete", "cacahuate", "đậu phộng", "lạc"],
+        Soja: ["soja", "soy", "soya", "đậu nành"],
+        Fisch: ["fisch", "fish", "pescado", "cá"],
+        Sellerie: ["sellerie", "celery", "apio", "cần tây"],
+        Senf: ["senf", "mustard", "mostaza", "mù tạt"],
+      };
+      const WUENSCHE = {
+        vegetarisch: ["vegetar", "vegetarian", "vegetariano", "ăn chay", "chay"],
+        vegan: ["vegan", "vegano", "thuần chay"],
+        halal: ["halal", "kein schwein", "no pork", "sin cerdo", "không ăn thịt heo", "không ăn thịt lợn"],
+        glutenfrei: ["glutenfrei", "gluten-free", "gluten free", "sin gluten", "không gluten"],
+        laktosefrei: ["laktosefrei", "lactose-free", "lactose free", "sin lactosa", "không lactose"],
+      };
+
+      const muster = (w) =>
+        new RegExp(
+          "(^|[^\\p{L}])" +
+            w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") +
+            (w.length <= 3 ? "([^\\p{L}]|$)" : ""),
+          "iu",
+        );
+      const findet = (text, woerter) => woerter.some((w) => muster(w).test(text));
+
+      // ================================================================ Zustand
+      const $ = (id) => document.getElementById(id);
+      let gaeste = [],
+        profile = new Map(),
+        speisen = [],
+        musik = null, // null = Tabelle fehlt noch
+        kueche = null, // null = nicht angemeldet
+        planer = false,
+        sprachen = new Map(); // Haushalt -> Sprache, solange nicht gespeichert
+
+      const esc = (s) =>
+        String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+      function melde(text) {
+        const m = $("meldung");
+        m.textContent = text;
+        m.hidden = false;
+        clearTimeout(melde.uhr);
+        melde.uhr = setTimeout(() => (m.hidden = true), 3500);
+      }
+
+      const zusage = (name) => (profile.get(name) || {}).zusage;
+      const status = (name) => (zusage(name) === true ? "ja" : zusage(name) === false ? "nein" : "offen");
+      const artLabel = (art) => (TEXTE.de.art || {})[art] || art;
+      const datumDe = (iso) => new Date(iso).toLocaleDateString("de-DE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+
+      // Haushalte: wie in der Gaesteliste, sonst jeder fuer sich.
+      function haushalte() {
+        const karte = new Map();
+        for (const g of gaeste) {
+          const k = g.familie || g.name;
+          if (!karte.has(k)) karte.set(k, []);
+          karte.get(k).push(g);
+        }
+        return [...karte.entries()]
+          .map(([name, leute]) => ({
+            name,
+            leute,
+            link: leute.map((g) => g.link).find(Boolean) || null,
+            sprache: sprachen.get(name) || leute.map((g) => g.sprache).find(Boolean) || "de",
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name, "de"));
+      }
+
+      const liste = (namen, lang) => {
+        try {
+          return new Intl.ListFormat(TEXTE[lang]._locale, { type: "conjunction" }).format(namen);
+        } catch {
+          return namen.join(", ");
+        }
+      };
+
+      // ================================================================ Laden
+      async function laden() {
+        const [g, p, s, m] = await Promise.all([
+          db.from("gaeste").select("*").order("name"),
+          db.from("profile").select("*"),
+          db.from("speisen").select("*").eq("zurueckgezogen", false).order("id"),
+          db.from("musik").select("*").eq("zurueckgezogen", false).order("id"),
+        ]);
+        if (g.error) throw g.error;
+        if (p.error) throw p.error;
+        gaeste = g.data || [];
+        profile = new Map((p.data || []).map((r) => [r.name, r]));
+        speisen = s.error ? [] : s.data || [];
+        musik = m.error ? null : m.data || [];
+
+        kueche = null;
+        if (planer) {
+          const k = await db.from("kueche").select("*").order("erfasst", { ascending: false });
+          kueche = k.error ? null : k.data || [];
+        }
+      }
+
+      function alles() {
+        warnungen();
+        antworten();
+        abgleich();
+        buffet();
+        rendereMusik();
+        versand();
+        $("exportKueche").disabled = !kueche;
+      }
+
+      function warnungen() {
+        const w = [];
+        if (gaeste.length && !("link" in gaeste[0]))
+          w.push("Persönliche Links und Musikwünsche fehlen noch: <b>erweiterung.sql</b> im Supabase SQL-Editor ausführen.");
+        else if (musik === null)
+          w.push("Die Tabelle für Musikwünsche fehlt: <b>erweiterung.sql</b> ausführen.");
+        $("warnungen").innerHTML = w.map((t) => '<p class="hinweis warn">' + t + "</p>").join("");
+      }
+
+      // ============================================================ Antworten
+      function antworten() {
+        const n = (f) => gaeste.filter(f).length;
+        const ja = n((g) => zusage(g.name) === true);
+        const nein = n((g) => zusage(g.name) === false);
+        const offen = gaeste.length - ja - nein;
+
+        const kinder = gaeste.filter((g) => g.art === "Kind");
+        const amt = gaeste.filter((g) => g.standesamt === "Ja" || g.standesamt === "(Ja)");
+        const amtBelegt = amt.filter((g) => zusage(g.name) !== false).length;
+        const schlafen = n((g) => g.schlafplatz && zusage(g.name) !== false);
+
+        const kachel = (zahl, text, klasse = "") => '<div class="zahl ' + klasse + '"><b>' + zahl + "</b><span>" + text + "</span></div>";
+        $("zahlen").innerHTML =
+          kachel(ja, "kommen", "gut") +
+          kachel(nein, "kommen nicht") +
+          kachel(offen, "noch keine Antwort", offen ? "warn" : "") +
+          kachel(kinder.filter((g) => zusage(g.name) === true).length + " / " + kinder.length, "Kinder kommen") +
+          kachel(amtBelegt + " / " + FEIER.plaetzeStandesamt, "Plätze Standesamt", amtBelegt > FEIER.plaetzeStandesamt ? "warn" : "") +
+          kachel(schlafen, "brauchen Schlafplatz");
+
+        const tage = Math.round((new Date(FEIER.antwortBis + "T23:59") - new Date()) / 86400000);
+        $("fristText").textContent =
+          tage >= 0
+            ? "Antwortfrist " + new Date(FEIER.antwortBis + "T12:00").toLocaleDateString("de-DE", { day: "numeric", month: "long" }) + " – noch " + tage + (tage === 1 ? " Tag." : " Tage.")
+            : "Die Antwortfrist ist abgelaufen.";
+
+        const gruppen = [...new Set(gaeste.map((g) => g.zugehoerigkeit || "–"))].sort();
+        $("gruppen").innerHTML =
+          '<tr><th>Gruppe</th><th class="n">kommen</th><th class="n">nicht</th><th class="n">offen</th><th class="n">gesamt</th></tr>' +
+          gruppen
+            .map((gr) => {
+              const d = gaeste.filter((g) => (g.zugehoerigkeit || "–") === gr);
+              const c = (s) => d.filter((g) => status(g.name) === s).length;
+              return "<tr><td>" + esc(gr) + '</td><td class="n">' + c("ja") + '</td><td class="n">' + c("nein") + '</td><td class="n">' + c("offen") + '</td><td class="n">' + d.length + "</td></tr>";
+            })
+            .join("");
+
+        const offeneHaushalte = haushalte().filter((h) => h.leute.some((g) => status(g.name) === "offen"));
+        $("offen").innerHTML = offeneHaushalte.length
+          ? '<div class="tabelle"><table>' +
+            offeneHaushalte
+              .map(
+                (h) =>
+                  "<tr><td>" +
+                  esc(h.name) +
+                  "</td><td>" +
+                  h.leute
+                    .filter((g) => status(g.name) === "offen")
+                    .map((g) => '<span class="chip">' + esc(g.name) + "</span>")
+                    .join("") +
+                  '</td><td class="n"><a href="#haus-' + encodeURIComponent(h.name) + '">zum Versand</a></td></tr>',
+              )
+              .join("") +
+            "</table></div>"
+          : '<p class="leiser">Alle haben geantwortet.</p>';
+      }
+
+      // ======================================================= Allergie-Abgleich
+      function abgleich() {
+        if (!planer) {
+          $("abgleich").innerHTML = '<p class="leiser">Anmelden, um die Küchenangaben zu sehen. Die Datenbank gibt sie nur an euch zwei heraus.</p>';
+          return;
+        }
+        if (kueche === null) {
+          $("abgleich").innerHTML = '<p class="hinweis warn">Die Küchenangaben ließen sich nicht laden. Ist erweiterung.sql ausgeführt?</p>';
+          return;
+        }
+        if (!kueche.length) {
+          $("abgleich").innerHTML = '<p class="leiser">Noch hat niemand der Küche etwas geschickt.</p>';
+          return;
+        }
+
+        const ohneZutaten = speisen.filter((b) => !b.zutaten && !(b.allergene || []).length);
+        const kopf =
+          '<p class="leiser" style="margin:0 0 6px">Automatischer Abgleich über Stichwörter in allen vier Sprachen – er findet viel, aber nicht alles. Die Angaben selbst stehen immer darunter; bitte lesen.</p>' +
+          (ohneZutaten.length
+            ? '<p class="hinweis warn">' + ohneZutaten.length + (ohneZutaten.length === 1 ? " Gericht hat" : " Gerichte haben") + " weder Zutaten noch Allergene: " + ohneZutaten.map((b) => esc(b.titel) + " (" + esc(b.name) + ")").join(", ") + ". Dort hilft kein Abgleich – nachfragen.</p>"
+            : "");
+
+        $("abgleich").innerHTML =
+          kopf +
+          kueche
+            .map((k) => {
+              const text = [k.allergien, k.hinweise].filter(Boolean).join(" · ");
+              const gefunden = Object.keys(STICHWORTE).filter((a) => findet(text, STICHWORTE[a]));
+              const wuensche = Object.keys(WUENSCHE).filter((w) => findet(text, WUENSCHE[w]));
+
+              const zeilen = [];
+              for (const a of gefunden) {
+                const drin = speisen.filter((b) => (b.allergene || []).includes(a));
+                zeilen.push(
+                  drin.length
+                    ? '<li><span class="chip achtung">' + esc(a) + "</span> steckt laut Angabe in: " + drin.map((b) => "<b>" + esc(b.titel) + "</b> (" + esc(b.name) + ")").join(", ") + "</li>"
+                    : '<li><span class="chip">' + esc(a) + "</span> kein Gericht am Buffet ist damit markiert</li>",
+                );
+              }
+              for (const w of wuensche) {
+                const passt = speisen.filter((b) => (b.kennzeichen || []).includes(w));
+                zeilen.push('<li><span class="chip ja">' + esc(w) + "</span> " + passt.length + (passt.length === 1 ? " passendes Gericht" : " passende Gerichte") + (passt.length ? ": " + passt.map((b) => esc(b.titel)).join(", ") : "") + "</li>");
+              }
+              if (!zeilen.length) zeilen.push('<li class="leiser">Keine bekannten Stichwörter erkannt – bitte selbst lesen.</li>');
+
+              return (
+                '<div class="abgleich"><b>' + esc(k.name) + '</b> <span class="leiser">· ' + datumDe(k.erfasst) + "</span>" +
+                (k.allergien ? '<div>Allergien: ' + esc(k.allergien) + "</div>" : "") +
+                (k.hinweise ? '<div class="leiser">Hinweis: ' + esc(k.hinweise) + "</div>" : "") +
+                "<ul>" + zeilen.join("") + "</ul></div>"
+              );
+            })
+            .join("");
+      }
+
+      // ================================================================ Buffet
+      function buffet() {
+        const mittag = KATEGORIEN.filter((k) => k.bereich === "Mittagsbuffet");
+        const zeile = (titel, drin) =>
+          "<tr><td>" + esc(titel) + '</td><td class="n">' + drin.length + "</td><td>" +
+          (drin.length ? drin.map((b) => esc(b.titel) + ' <span class="leiser">(' + esc(b.name) + (b.menge ? ", " + esc(b.menge) : "") + ")</span>").join("<br>") : '<span class="chip achtung">fehlt noch</span>') +
+          "</td></tr>";
+        const anderes = speisen.filter((b) => b.bereich !== "Mittagsbuffet");
+        $("buffet").innerHTML =
+          '<tr><th>Kategorie</th><th class="n">Anzahl</th><th>Was</th></tr>' +
+          mittag.map((k) => zeile("Mittag – " + artLabel(k.art), speisen.filter((b) => b.bereich === k.bereich && b.art === k.art))).join("") +
+          zeile("Anderes", anderes);
+
+        const personen = new Set(speisen.map((b) => b.name)).size;
+        const kommen = gaeste.filter((g) => zusage(g.name) === true && g.art !== "Kind").length;
+        $("buffetHinweis").textContent = speisen.length
+          ? speisen.length + " Beiträge von " + personen + " Personen. " + kommen + " Erwachsene haben zugesagt."
+          : "Noch hat niemand etwas eingetragen.";
+      }
+
+      // ================================================================ Musik
+      function rendereMusik() {
+        $("playlistKopieren").disabled = !musik || !musik.length;
+        if (musik === null) {
+          $("musik").innerHTML = '<tr><td class="leiser">Tabelle fehlt noch (erweiterung.sql).</td></tr>';
+          return;
+        }
+        $("musik").innerHTML = musik.length
+          ? "<tr><th>Lied</th><th>Von</th><th>Gewünscht von</th></tr>" +
+            musik.map((w) => "<tr><td>" + esc(w.titel) + "</td><td>" + esc(w.interpret || "–") + "</td><td>" + esc(w.name) + "</td></tr>").join("")
+          : '<tr><td class="leiser">Noch keine Wünsche.</td></tr>';
+      }
+
+      // ================================================================ Versand
+      function nachricht(h) {
+        const lang = TEXTE[h.sprache] ? h.sprache : "de";
+        const loc = TEXTE[lang]._locale;
+        return VORLAGEN[lang]
+          .replace("{namen}", liste(h.leute.map((g) => g.name), lang))
+          .replace("{datum}", new Intl.DateTimeFormat(loc, { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(FEIER.tag + "T12:00")))
+          .replace("{frist}", new Intl.DateTimeFormat(loc, { weekday: "long", day: "numeric", month: "long" }).format(new Date(FEIER.antwortBis + "T12:00")))
+          .replace("{link}", linkVon(h));
+      }
+      const linkVon = (h) => (h.link ? FEIER.adresse + "?h=" + h.link : FEIER.adresse);
+
+      function versand() {
+        const nurOffen = $("versandFilter").value === "offen";
+        const liste_ = haushalte().filter((h) => !nurOffen || h.leute.some((g) => status(g.name) === "offen"));
+        $("versand").innerHTML = liste_
+          .map((h, i) => {
+            const chips = h.leute.map((g) => '<span class="chip ' + status(g.name) + '">' + esc(g.name) + "</span>").join("");
+            return (
+              '<div class="haushalt" id="haus-' + esc(encodeURIComponent(h.name)) + '" data-haus="' + esc(h.name) + '">' +
+              '<div class="kopf"><span class="titel">' + esc(h.name) + "</span>" +
+              '<select data-sprache aria-label="Sprache für ' + esc(h.name) + '">' +
+              ["de", "en", "es", "vi"].map((l) => '<option value="' + l + '"' + (l === h.sprache ? " selected" : "") + ">" + TEXTE[l]._name + "</option>").join("") +
+              "</select></div>" +
+              "<div>" + chips + "</div>" +
+              (h.link ? "" : '<p class="leiser" style="margin:6px 0 0">Noch ohne persönlichen Link – der Text verweist auf die allgemeine Seite.</p>') +
+              '<textarea data-text aria-label="Nachricht an ' + esc(h.name) + '">' + esc(nachricht(h)) + "</textarea>" +
+              '<div class="reihe">' +
+              '<button class="knopf" data-kopieren>Text kopieren</button>' +
+              '<a class="knopf leise" data-whatsapp target="_blank" rel="noopener">In WhatsApp öffnen</a>' +
+              '<button class="knopf leise" data-drucken' + (h.link ? "" : " disabled") + ">Karte drucken</button>" +
+              "</div></div>"
+            );
+          })
+          .join("");
+        for (const el of $("versand").querySelectorAll(".haushalt")) whatsapp(el);
+      }
+
+      // Der WhatsApp-Link nimmt immer den aktuellen Text – auch wenn ihr ihn
+      // im Feld noch angepasst habt.
+      function whatsapp(el) {
+        el.querySelector("[data-whatsapp]").href = "https://wa.me/?text=" + encodeURIComponent(el.querySelector("[data-text]").value);
+      }
+
+      async function spracheSetzen(el, lang) {
+        const h = haushalte().find((x) => x.name === el.dataset.haus);
+        if (!h) return;
+        sprachen.set(h.name, lang);
+        h.sprache = lang;
+        el.querySelector("[data-text]").value = nachricht(h);
+        whatsapp(el);
+        if (!planer) return melde("Sprache nur für diesen Browser gemerkt – angemeldet wird sie gespeichert.");
+        const { error } = await db.from("gaeste").update({ sprache: lang }).in("name", h.leute.map((g) => g.name));
+        if (error) return melde("Nicht gespeichert: " + error.message);
+        for (const g of h.leute) g.sprache = lang;
+        melde("Gespeichert – der Link öffnet für " + h.name + " jetzt auf " + TEXTE[lang]._name + ".");
+      }
+
+      function drucken(el) {
+        const h = haushalte().find((x) => x.name === el.dataset.haus);
+        if (!h || !h.link || typeof qrcode !== "function") return melde("Karte geht nur mit persönlichem Link.");
+        const lang = TEXTE[h.sprache] ? h.sprache : "de";
+        const qr = qrcode(0, "M");
+        qr.addData(linkVon(h));
+        qr.make();
+        const datum = new Intl.DateTimeFormat(TEXTE[lang]._locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(FEIER.tag + "T12:00"));
+        $("druck").innerHTML =
+          '<div class="druckkarte"><div>' +
+          '<p class="fuer">' + esc(KARTE[lang].fuer.replace("{namen}", liste(h.leute.map((g) => g.name), lang))) + "</p>" +
+          '<p class="namen">Christina <i>&amp;</i> Thanh</p>' +
+          '<p class="datum">' + esc(datum) + "</p>" +
+          '<p class="ort">Tanzschule Bachata Viersen</p>' +
+          '</div><div class="qr">' + qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true }) +
+          '<p class="scannen">' + esc(KARTE[lang].scannen) + "</p></div></div>";
+        window.print();
+      }
+
+      // ================================================================ Export
+      function csv(dateiname, zeilen, spalten) {
+        const zelle = (v) => '"' + String(Array.isArray(v) ? v.join(", ") : v ?? "").replace(/"/g, '""') + '"';
+        // BOM + Semikolon: so oeffnet ein deutsches Excel die Umlaute richtig.
+        const text = "﻿" + [spalten.join(";"), ...zeilen.map((z) => spalten.map((s) => zelle(z[s])).join(";"))].join("\r\n");
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([text], { type: "text/csv;charset=utf-8" }));
+        a.download = dateiname;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+      }
+
+      function exportieren(was) {
+        const tag = new Date().toISOString().slice(0, 10);
+        if (was === "gaeste")
+          csv("traufeier-gaeste-" + tag + ".csv",
+            gaeste.map((g) => ({ ...g, zusage: status(g.name), steckbrief: (profile.get(g.name) || {}).steckbrief || "" })),
+            ["name", "familie", "art", "zugehoerigkeit", "standesamt", "schlafplatz", "schlafort", "rollen", "zusage", "steckbrief", "sprache", "link"]);
+        if (was === "speisen")
+          csv("traufeier-buffet-" + tag + ".csv", speisen, ["name", "bereich", "art", "titel", "menge", "zutaten", "allergene", "kennzeichen", "geaendert"]);
+        if (was === "musik" && musik)
+          csv("traufeier-musik-" + tag + ".csv", musik, ["titel", "interpret", "name", "angelegt"]);
+        if (was === "kueche" && kueche)
+          csv("traufeier-kueche-" + tag + ".csv", kueche, ["name", "allergien", "hinweise", "erfasst"]);
+      }
+
+      // ================================================================ Anmeldung
+      // Angemeldet heisst noch nicht berechtigt: erst ist_planer() fragen.
+      async function pruefeSitzung() {
+        const { data } = await db.auth.getSession();
+        const sitzung = data && data.session;
+        planer = false;
+        if (sitzung) {
+          const r = await db.rpc("ist_planer");
+          if (r.error) {
+            await db.auth.signOut();
+            melde("Anmeldung geht erst nach erweiterung.sql.");
+          } else if (r.data !== true) {
+            await db.auth.signOut();
+            melde("Diese Adresse steht nicht in der Tabelle 'planer'.");
+          } else planer = true;
+        }
+        const { data: d2 } = await db.auth.getSession();
+        $("anmeldeForm").hidden = planer;
+        $("angemeldetAls").hidden = !planer;
+        $("werAngemeldet").textContent = planer && d2.session ? "Angemeldet: " + d2.session.user.email : "";
+      }
+
+      async function neuLaden() {
+        try {
+          await laden();
+          alles();
+        } catch (e) {
+          $("warnungen").innerHTML = '<p class="hinweis warn">Laden fehlgeschlagen: ' + esc(e.message || e) + "</p>";
+        }
+      }
+
+      $("anmeldeForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const { error } = await db.auth.signInWithPassword({ email: $("email").value.trim(), password: $("passwort").value });
+        if (error) return melde("Anmeldung fehlgeschlagen: " + error.message);
+        $("passwort").value = "";
+        await pruefeSitzung();
+        await neuLaden();
+      });
+      $("abmelden").addEventListener("click", async () => {
+        await db.auth.signOut();
+        await pruefeSitzung();
+        await neuLaden();
+      });
+
+      // ================================================================ Klicks
+      $("versandFilter").addEventListener("change", versand);
+      $("versand").addEventListener("input", (e) => {
+        const el = e.target.closest(".haushalt");
+        if (el && e.target.matches("[data-text]")) whatsapp(el);
+      });
+      $("versand").addEventListener("change", (e) => {
+        const el = e.target.closest(".haushalt");
+        if (el && e.target.matches("[data-sprache]")) spracheSetzen(el, e.target.value);
+      });
+      $("versand").addEventListener("click", async (e) => {
+        const el = e.target.closest(".haushalt");
+        if (!el) return;
+        if (e.target.closest("[data-kopieren]")) {
+          try {
+            await navigator.clipboard.writeText(el.querySelector("[data-text]").value);
+            melde("Kopiert – jetzt in den Chat einfügen.");
+          } catch {
+            melde("Kopieren ging nicht – bitte markieren und kopieren.");
+          }
+        }
+        if (e.target.closest("[data-drucken]")) drucken(el);
+      });
+      document.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-export]");
+        if (b) exportieren(b.dataset.export);
+      });
+      $("playlistKopieren").addEventListener("click", async () => {
+        const text = (musik || []).map((w) => w.titel + (w.interpret ? " – " + w.interpret : "")).join("\n");
+        try {
+          await navigator.clipboard.writeText(text);
+          melde("Playlist kopiert.");
+        } catch {
+          melde("Kopieren ging nicht.");
+        }
+      });
+
+      await pruefeSitzung();
+      await neuLaden();
+    </script>
+  </body>
+</html>

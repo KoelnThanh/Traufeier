@@ -85,6 +85,7 @@ export const TEXTE = {
     "weiter.text": "Du antwortest gerade als {name}.",
     "weiter.platz": "Zu meinem Platz",
     "weiter.board": "Alle Gäste ansehen",
+    "weiter.fuer": "Diese Einladung ist für {namen}.",
 
     "haushalt.titel": "Dein Haushalt",
     "haushalt.text":
@@ -129,6 +130,16 @@ export const TEXTE = {
     "mitbringen.text":
       "Mittags gibt es ein Buffet aus dem, was alle mitbringen. Am Abend wird für euch gekocht – da braucht ihr nichts.",
     "mitbringen.neu": "Etwas hinzufügen",
+    "musik.titel": "Welches Lied muss laufen?",
+    "musik.text": "Wir sind Tänzer – die Musik ist uns wichtig. Wünsch dir, was dich auf die Tanzfläche holt.",
+    "musik.lied": "Lied",
+    "musik.liedPh": "z. B. Propuesta Indecente",
+    "musik.interpret": "Von wem?",
+    "musik.interpretPh": "z. B. Romeo Santos",
+    "musik.knopf": "Wünschen",
+    "musik.schon": { one: "1 Wunsch bisher", other: "{n} Wünsche bisher" },
+    "musik.leer": "Noch hat sich niemand etwas gewünscht.",
+    "musik.weg": "zurücknehmen",
 
     "kueche.titel": "Für die Küche",
     "kueche.hinweis":
@@ -251,6 +262,8 @@ export const TEXTE = {
     "m.geaendert": "Geändert.",
     "m.raus": "Ist aus der Liste raus.",
     "m.titelFehlt": "Schreib bitte dazu, was du mitbringst.",
+    "m.musik": "Steht auf der Liste.",
+    "m.liedFehlt": "Schreib bitte dazu, welches Lied.",
 
     // Leer = Karte "Übernachten" bleibt ausgeblendet.
     schlafen: "",
@@ -394,6 +407,7 @@ export const TEXTE = {
     "weiter.text": "You're answering as {name}.",
     "weiter.platz": "Go to my spot",
     "weiter.board": "See all guests",
+    "weiter.fuer": "This invitation is for {namen}.",
 
     "haushalt.titel": "Your household",
     "haushalt.text": "Answer for the others too – one tap switches over.",
@@ -437,6 +451,16 @@ export const TEXTE = {
     "mitbringen.text":
       "Lunch is a buffet made of whatever everyone brings. Dinner is cooked for you – nothing needed there.",
     "mitbringen.neu": "Add something",
+    "musik.titel": "Which song has to be played?",
+    "musik.text": "We're dancers – music matters to us. Request whatever gets you on the dance floor.",
+    "musik.lied": "Song",
+    "musik.liedPh": "e.g. Propuesta Indecente",
+    "musik.interpret": "By whom?",
+    "musik.interpretPh": "e.g. Romeo Santos",
+    "musik.knopf": "Request",
+    "musik.schon": { one: "1 request so far", other: "{n} requests so far" },
+    "musik.leer": "No requests yet.",
+    "musik.weg": "remove",
 
     "kueche.titel": "For the kitchen",
     "kueche.hinweis":
@@ -558,6 +582,8 @@ export const TEXTE = {
     "m.geaendert": "Changed.",
     "m.raus": "Removed from the list.",
     "m.titelFehlt": "Please say what you're bringing.",
+    "m.musik": "It's on the list.",
+    "m.liedFehlt": "Please enter a song.",
 
     // Leer = Karte "Übernachten" bleibt ausgeblendet.
     schlafen: "",
@@ -700,6 +726,7 @@ export const TEXTE = {
     "weiter.text": "Estás respondiendo como {name}.",
     "weiter.platz": "Ir a mi lugar",
     "weiter.board": "Ver a todos los invitados",
+    "weiter.fuer": "Esta invitación es para {namen}.",
 
     "haushalt.titel": "Tu hogar",
     "haushalt.text": "Responde también por los demás: un clic y cambias.",
@@ -743,6 +770,16 @@ export const TEXTE = {
     "mitbringen.text":
       "Al mediodía hay un bufé con lo que trae cada uno. La cena se cocina para ustedes: ahí no hace falta nada.",
     "mitbringen.neu": "Añadir algo",
+    "musik.titel": "¿Qué canción no puede faltar?",
+    "musik.text": "Somos bailarines: la música nos importa mucho. Pide lo que te haga salir a la pista.",
+    "musik.lied": "Canción",
+    "musik.liedPh": "p. ej. Propuesta Indecente",
+    "musik.interpret": "¿De quién?",
+    "musik.interpretPh": "p. ej. Romeo Santos",
+    "musik.knopf": "Pedir",
+    "musik.schon": { one: "1 petición hasta ahora", other: "{n} peticiones hasta ahora" },
+    "musik.leer": "Todavía nadie ha pedido nada.",
+    "musik.weg": "quitar",
 
     "kueche.titel": "Para la cocina",
     "kueche.hinweis":
@@ -866,6 +903,8 @@ export const TEXTE = {
     "m.geaendert": "Cambiado.",
     "m.raus": "Quitado de la lista.",
     "m.titelFehlt": "Escribe, por favor, qué vas a traer.",
+    "m.musik": "Ya está en la lista.",
+    "m.liedFehlt": "Escribe qué canción, por favor.",
 
     // Leer = Karte "Übernachten" bleibt ausgeblendet.
     schlafen: "",
@@ -1012,6 +1051,7 @@ export const TEXTE = {
     "weiter.text": "Bạn đang trả lời với tên {name}.",
     "weiter.platz": "Đến chỗ của tôi",
     "weiter.board": "Xem tất cả khách mời",
+    "weiter.fuer": "Thiệp mời này dành cho {namen}.",
 
     "haushalt.titel": "Gia đình bạn",
     "haushalt.text":
@@ -1056,6 +1096,16 @@ export const TEXTE = {
     "mitbringen.text":
       "Buổi trưa có tiệc buffet từ những món mọi người mang đến. Buổi tối đã có người nấu – không cần mang gì.",
     "mitbringen.neu": "Thêm món",
+    "musik.titel": "Bài hát nào nhất định phải có?",
+    "musik.text": "Chúng mình là dân nhảy – âm nhạc rất quan trọng. Hãy chọn bài khiến bạn muốn ra sàn nhảy.",
+    "musik.lied": "Bài hát",
+    "musik.liedPh": "ví dụ: Propuesta Indecente",
+    "musik.interpret": "Của ai?",
+    "musik.interpretPh": "ví dụ: Romeo Santos",
+    "musik.knopf": "Gửi yêu cầu",
+    "musik.schon": { one: "{n} yêu cầu", other: "{n} yêu cầu" },
+    "musik.leer": "Chưa có ai yêu cầu bài nào.",
+    "musik.weg": "bỏ",
 
     "kueche.titel": "Cho nhà bếp",
     "kueche.hinweis":
@@ -1179,6 +1229,8 @@ export const TEXTE = {
     "m.geaendert": "Đã thay đổi.",
     "m.raus": "Đã bỏ khỏi danh sách.",
     "m.titelFehlt": "Vui lòng ghi bạn sẽ mang món gì.",
+    "m.musik": "Đã có trong danh sách.",
+    "m.liedFehlt": "Vui lòng ghi tên bài hát.",
 
     // Leer = Karte "Übernachten" bleibt ausgeblendet.
     schlafen: "",
