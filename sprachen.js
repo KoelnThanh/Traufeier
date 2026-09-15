@@ -105,7 +105,7 @@ export const TEXTE = {
     },
     "trauung.wann": "{von} Uhr im {ort}, bis etwa {bis} Uhr.",
     "trauung.grund":
-      "Im Trauzimmer gibt es nur {n} Plätze. Deshalb laden wir einzelne Menschen ein und nicht ganze Haushalte: Die meisten von euch haben Kinder, und so kann jeweils einer bei ihnen bleiben. Wir wünschen uns, dass genau diese {n} dabei sind.",
+      "Im Trauzimmer gibt es nur {n} Plätze. Deshalb können wir nur einzelne Personen und nicht ganze Haushalte einladen.",
     // Leer = kein Treffpunkt-Absatz. Sonst ein ganzer Satz, <strong> erlaubt.
     "trauung.treffpunkt": "",
 
@@ -433,7 +433,7 @@ export const TEXTE = {
     "trauung.haushalt": "Coming to the ceremony from your household: <strong>{namen}</strong>",
     "trauung.wann": "{von} at {ort}, until about {bis}.",
     "trauung.grund":
-      "There are only {n} seats in the ceremony room, so we're inviting individuals rather than whole households: most of you have children, and this way one of you can stay with them. We'd love for exactly these {n} people to be there.",
+      "There are only {n} seats in the ceremony room, so we can only invite individuals rather than whole households.",
     "trauung.treffpunkt": "",
 
     "schritte.titel": "Still to do",
@@ -763,7 +763,7 @@ export const TEXTE = {
     },
     "trauung.wann": "A las {von} en {ort}, hasta las {bis} aproximadamente.",
     "trauung.grund":
-      "En la sala solo hay {n} lugares, por eso invitamos a personas y no a hogares completos: la mayoría tiene hijos, y así uno de ustedes puede quedarse con ellos. Nos gustaría que estén exactamente estas {n} personas.",
+      "En la sala solo hay {n} lugares, por eso solo podemos invitar a personas y no a hogares completos.",
     "trauung.treffpunkt": "",
 
     "schritte.titel": "Pendiente",
@@ -1094,7 +1094,7 @@ export const TEXTE = {
     "trauung.haushalt": "Trong gia đình bạn, người được mời dự lễ đăng ký: <strong>{namen}</strong>",
     "trauung.wann": "{von} tại {ort}, đến khoảng {bis}.",
     "trauung.grund":
-      "Phòng làm lễ chỉ có {n} chỗ ngồi, vì vậy chúng mình mời từng người chứ không mời cả gia đình: phần lớn mọi người đều có con nhỏ, như vậy sẽ có một người ở lại trông các bé. Chúng mình mong đúng {n} người này sẽ có mặt.",
+      "Phòng làm lễ chỉ có {n} chỗ ngồi, vì vậy chúng mình chỉ có thể mời từng người chứ không mời cả gia đình.",
     "trauung.treffpunkt": "",
 
     "schritte.titel": "Việc cần làm",

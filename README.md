@@ -254,8 +254,7 @@ bewusst ein kleiner, vertraulicher Rahmen:
   und wer noch keinen Namen gewählt hat, sieht weder den Ablauf-Punkt
   noch das Trauzimmer.
 - **Karte „Die Trauung“ in Mein Platz**: persönlich eingeladen oder wer
-  aus dem Haushalt dabei ist, Uhrzeit und der Grund (Kinder, einer
-  bleibt bei ihnen).
+  aus dem Haushalt dabei ist, Uhrzeit und der Grund (nur 25 Plätze).
 - **Treffpunkt für alle anderen**: steht in `sprachen.js` unter
   `trauung.treffpunkt`. Leer = kein Absatz. Ein ganzer Satz, in allen
   vier Sprachen.
