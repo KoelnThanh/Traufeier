@@ -326,6 +326,29 @@
         text-align: left;
       }
 
+      /* Das Titelbild: wie ein eingelegtes Foto in der Karte, mit
+         derselben feinen Goldlinie wie der Kartenrand. */
+      .titelbild {
+        position: relative;
+        max-width: 420px;
+        margin: 4px auto 22px;
+      }
+      .titelbild img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 2px;
+        background: var(--gold-weich);
+      }
+      .titelbild::after {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border: 1px solid #fff;
+        opacity: 0.55;
+        pointer-events: none;
+      }
+
       /* Traufeier, nicht Hochzeit – das gehoert auf die erste Seite. */
       .einordnung {
         max-width: 36ch;
@@ -349,6 +372,7 @@
         padding: 0;
       }
       body.kompakt .hero-blatt::after,
+      body.kompakt .titelbild,
       body.kompakt .hero .ornament,
       body.kompakt .countdown,
       body.kompakt .hero .lebendig,
@@ -590,14 +614,6 @@
         margin-top: 7px;
       }
 
-      .trauungtext p {
-        margin: 0 0 12px;
-        line-height: 1.55;
-      }
-      .trauungtext p:last-child {
-        margin-bottom: 0;
-      }
-
       /* Foto: zwei Knoepfe statt eines Dateifelds. Das unsichtbare Feld
          liegt ueber dem ganzen Knopf – so trifft jeder Tipp, auch in
          Browsern, die Klicks auf ein Label nicht weiterreichen. */
@@ -784,6 +800,19 @@
         border: 1px solid var(--linie);
         border-radius: 3px;
         background: var(--gold-weich);
+      }
+      .ortfoto {
+        margin: 0 0 18px;
+      }
+      .ortfoto .ortbild {
+        margin: 0;
+      }
+      .ortfoto figcaption {
+        margin-top: 6px;
+        font-size: 12px;
+        font-style: italic;
+        color: var(--leise);
+        text-align: right;
       }
       .ortkarte .adresse {
         font-family: var(--display);
@@ -1177,6 +1206,25 @@
       .luecke strong {
         color: var(--tinte);
         font-weight: 600;
+      }
+
+      .getraenkgruppe + .getraenkgruppe {
+        margin-top: 14px;
+      }
+      .getraenkgruppe .versalien {
+        color: var(--leise);
+      }
+      .trauzeugen {
+        list-style: none;
+        margin: 14px 0 0;
+        padding: 0;
+      }
+      .trauzeugen li {
+        padding: 10px 0;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      .trauzeugen li + li {
+        border-top: 1px solid var(--linie);
       }
 
       .abendblock {
@@ -1614,6 +1662,17 @@
           <circle cx="98" cy="10" r="1.7" fill="currentColor" stroke="none" />
         </svg>
 
+        <figure class="titelbild">
+          <img
+            src="titelbild.jpg"
+            width="1000"
+            height="800"
+            alt="Christina und Thanh"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </figure>
+
         <p class="eckdaten">
           <span id="heroDatum"></span>
           <span class="trenn" aria-hidden="true">&#183;</span>
@@ -1631,12 +1690,12 @@
           >Zu den Fotos</a
         >
         <p class="einordnung" data-t-html="hero.einordnung">
-          Es ist unsere <strong>Traufeier</strong> – standesamtlich, im kleinen
-          Kreis, mit einem langen Tag danach. Die große Hochzeit feiern wir
-          später.
+          Wir feiern unsere <strong>standesamtliche Trauung</strong>, im
+          kleinen Kreis – romantisch, festlich und voller Eleganz.
         </p>
         <p class="zweisaetze" data-t-html="hero.zweisaetze">
-          Schenkt uns nichts, kommt einfach.<br />Und zieht euch schick an.
+          Euer Dabeisein ist uns Geschenk genug.<br />Macht euch gern richtig
+          schick – wir tun es auch :)
         </p>
       </div>
     </header>
@@ -1691,6 +1750,14 @@
           <div id="orte"></div>
         </div>
 
+        <div class="karte auftritt" id="karteFragen">
+          <h2 data-t="fragen.titel">Fragen?</h2>
+          <p class="leiser" data-t="fragen.text">
+            Meldet euch gern bei unseren Trauzeugen.
+          </p>
+          <ul class="trauzeugen" id="trauzeugen"></ul>
+        </div>
+
         <div class="karte auftritt" id="karteSchlafen" hidden>
           <h2 data-t="schlafen.titel">Übernachten</h2>
           <p id="schlafenText"></p>
@@ -1701,7 +1768,7 @@
           <h2 data-t="auswahl.titel">Und wer bist du?</h2>
           <p class="leiser" data-t="auswahl.text">
             Such dich in der Liste – danach siehst du deinen Platz und die
-            anderen Gäste. Für Kinder und Mitbewohner kannst du danach in einem
+            anderen Gäste. Für Kinder und Partner kannst du danach in einem
             Klick mitantworten.
           </p>
           <p class="frist" id="fristAuswahl"></p>
@@ -1749,12 +1816,6 @@
           <h2 id="meinName" style="margin: 6px 0 16px">–</h2>
           <dl class="fakten" id="meineFakten"></dl>
           <div class="chips" id="meineRollen"></div>
-        </div>
-
-        <!-- Nur fuer Haushalte, in denen jemand zur Trauung eingeladen ist. -->
-        <div class="karte auftritt" id="karteTrauung" hidden>
-          <h2 data-t="trauung.titel">Die Trauung</h2>
-          <div class="trauungtext" id="trauungText"></div>
         </div>
 
         <div class="karte auftritt">
@@ -1839,8 +1900,9 @@
             style="margin-bottom: 16px"
             data-t="mitbringen.text"
           >
-            Mittags gibt es ein Buffet aus dem, was alle mitbringen. Am Abend
-            wird für euch gekocht – da braucht ihr nichts.
+            Mittags gibt es ein Buffet aus dem, was alle mitbringen. Abends
+            gibt es Chili con Carne (auch vegan) und Baguette – da braucht ihr
+            nichts.
           </p>
           <p style="margin: -6px 0 16px">
             <button class="ortlink" data-sprung="buffet" style="padding: 0">
@@ -1849,8 +1911,26 @@
             </button>
           </p>
           <div id="meineBeitraege"></div>
+          <p class="hinweis" data-t-html="karte.hinweis">
+            <strong>Bitte druck zu deinem Beitrag die Zutatenliste aus</strong>
+            und stell sie mit ans Buffet.
+          </p>
           <button class="knopf leise" data-beitrag-neu data-t="mitbringen.neu">
             Etwas hinzufügen
+          </button>
+        </div>
+
+        <!-- Bleibt verborgen, bis es die Spalte profile.getraenke gibt
+             (getraenke.sql). -->
+        <div class="karte auftritt" id="karteGetraenke" hidden>
+          <h2 data-t="getraenke.titel">Was trinkst du?</h2>
+          <p class="leiser" data-t="getraenke.text">
+            Damit wir richtig einkaufen: Kreuz an, was du gern trinkst.
+          </p>
+          <div id="getraenke" style="margin-top: 16px"></div>
+          <p class="hinweis" id="getraenkeStand" hidden></p>
+          <button class="knopf leise" id="getraenkeButton" data-t="speichern">
+            Speichern
           </button>
         </div>
 
@@ -1957,6 +2037,10 @@
         <div class="karte auftritt" id="speisenKopf">
           <h2 data-t="speisen.titel">Das Mittagsbuffet</h2>
           <p class="leiser" id="buffetStand"></p>
+          <p class="hinweis" data-t-html="karte.hinweis">
+            <strong>Bitte druck zu deinem Beitrag die Zutatenliste aus</strong>
+            und stell sie mit ans Buffet.
+          </p>
           <div id="luecken"></div>
           <div class="filter" id="speisenFilter"></div>
           <button class="knopf" data-beitrag-neu data-t="speisen.neu">
@@ -1991,12 +2075,6 @@
             zugesagt.
           </p>
           <div id="aufgaben"></div>
-        </div>
-
-        <div class="karte auftritt" id="karteBedienste" hidden>
-          <h2 data-t="helfer.geister">Gute Geister</h2>
-          <p class="leiser" style="margin-bottom: 16px" id="bediensteText"></p>
-          <div class="helferliste" id="bedienste"></div>
         </div>
 
         <button class="knopf leise" data-ziel="Profil" data-t="zurueck">
@@ -2161,6 +2239,8 @@
         KATEGORIEN,
         ALLERGENE,
         KENNZEICHEN,
+        TRAUZEUGEN,
+        GETRAENKE,
         SUPABASE_URL,
         SUPABASE_KEY,
         BUCKET,
@@ -2185,6 +2265,7 @@
         speisen = [],
         musik = [],
         musikDa = false, // gibt es die Tabelle schon? (erweiterung.sql)
+        getraenkeDa = false, // gibt es die Spalte schon? (getraenke.sql)
         filterAuf = "alle",
         speisenFilterAuf = "alle",
         beitragOffen = null, // null = neuer Eintrag, sonst die id
@@ -2474,7 +2555,7 @@
           esc(schluessel) +
           '">' +
           (o.bild
-            ? '<img class="ortbild" src="' +
+            ? '<figure class="ortfoto"><img class="ortbild" src="' +
               esc(o.bild.datei) +
               '" width="' +
               o.bild.breite +
@@ -2482,7 +2563,11 @@
               o.bild.hoehe +
               '" loading="lazy" decoding="async" alt="' +
               esc(t("ort.bild." + schluessel)) +
-              '">'
+              '">' +
+              (o.bild.beispiel
+                ? "<figcaption>" + esc(t("ort.beispiel")) + "</figcaption>"
+                : "") +
+              "</figure>"
             : "") +
           '<p class="versalien">' +
           esc(t("ort." + schluessel)) +
@@ -2773,35 +2858,6 @@
         return !!ich && haushaltVon(ich).some(zurTrauung);
       }
 
-      function trauungKarte() {
-        const ich = gaeste.find((g) => g.name === ichName);
-        $("karteTrauung").hidden = !trauungSichtbar();
-        if ($("karteTrauung").hidden) return;
-
-        // Erwachsene zuerst: "Lea und Lasse", nicht "Lasse und Lea".
-        const andere = haushaltVon(ich)
-          .filter((g) => zurTrauung(g) && g.name !== ich.name)
-          .sort((a, b) => (a.art === "Kind") - (b.art === "Kind"))
-          .map((g) => g.name);
-        const absaetze = [];
-        if (zurTrauung(ich)) {
-          absaetze.push(t("trauung.du"));
-          if (andere.length)
-            absaetze.push(t("trauung.auch", { n: andere.length, namen: esc(namenListe(andere)) }));
-        } else {
-          absaetze.push(t("trauung.haushalt", { n: andere.length, namen: esc(namenListe(andere)) }));
-        }
-        absaetze.push(
-          esc(t("trauung.wann", { von: FEIER.trauung.von, bis: FEIER.trauung.bis, ort: ORTE.trauung.kurz })),
-          t("trauung.grund", { n: FEIER.plaetzeStandesamt }),
-        );
-        // Leer in sprachen.js = noch kein Treffpunkt, dann kein Absatz.
-        if (t("trauung.treffpunkt")) absaetze.push(t("trauung.treffpunkt"));
-
-        // Eigene Texte aus sprachen.js – duerfen <strong> enthalten.
-        $("trauungText").innerHTML = absaetze.map((a) => "<p>" + a + "</p>").join("");
-      }
-
       // ------------------------------------------------------ Neuigkeiten
       // Wann zuletzt jemand etwas eingetragen hat – ueber alle Gaeste.
       function letzteAenderung() {
@@ -2959,6 +3015,29 @@
         $("orte").innerHTML =
           (mitTrauung ? ortkarte("trauung") : "") + ortkarte("fest");
 
+        $("karteFragen").hidden = !TRAUZEUGEN.length;
+        $("trauzeugen").innerHTML = TRAUZEUGEN.map((z) => {
+          const nummer = z.telefon.replace(/[^\d+]/g, "");
+          const href = z.whatsapp
+            ? "https://wa.me/" + nummer.replace("+", "")
+            : "tel:" + nummer;
+          return (
+            "<li><strong>" +
+            esc(z.name) +
+            "</strong>" +
+            (z.rolle ? " &middot; " + esc(t("fragen." + z.rolle)) : "") +
+            '<br><a href="' +
+            esc(href) +
+            '"' +
+            (z.whatsapp ? ' target="_blank" rel="noopener"' : "") +
+            ">" +
+            esc(z.telefon) +
+            "</a>" +
+            (z.whatsapp ? ' <span class="leiser">' + esc(t("fragen.whatsapp")) + "</span>" : "") +
+            "</li>"
+          );
+        }).join("");
+
         countdown();
         neuigkeiten();
         zeige("Einladung");
@@ -2977,6 +3056,10 @@
 
         gaeste = g.data;
         profile = new Map((p.data || []).map((r) => [r.name, r]));
+
+        // Nachtrag (getraenke.sql): fehlt die Spalte, bleibt die Karte weg.
+        const probe = await db.from("profile").select("getraenke").limit(1);
+        getraenkeDa = !probe.error;
 
         const liste =
           '<option value="">' +
@@ -3064,6 +3147,7 @@
         // Beim Wechsel leeren, sonst landen Annas Allergien bei Bruno.
         $("allergien").value = "";
         $("hinweise").value = "";
+        getraenkeFeld(p.getraenke || []);
 
         rendereProfil();
         zeige("Profil");
@@ -3115,9 +3199,9 @@
             datum: new Date(kStand).toLocaleDateString(L("_locale")),
           });
 
-        trauungKarte();
         neuigkeiten();
         fotoFeld();
+        getraenkeFeld(gehakt("getraenke"));
         meineBeitraege();
         rendereMusik();
         schritte(p, kStand);
@@ -3144,6 +3228,8 @@
           [!!kStand, "schritte.kueche"],
           [meine().length > 0, "schritte.buffet"],
         ];
+        if (getraenkeDa)
+          liste.push([(p.getraenke || []).length > 0, "schritte.getraenke"]);
         $("schritte").innerHTML = liste
           .map(
             ([fertig, key]) =>
@@ -3413,6 +3499,66 @@
         }
       }
 
+      // ------------------------------------------------------- Getraenke
+      // Wie die Haken beim Buffet: Wert deutsch, Beschriftung uebersetzt.
+      // 'gesetzt' kommt beim Wechsel aus dem Profil, beim Sprachwechsel
+      // aus dem Formular – halb Angekreuztes bleibt so stehen.
+      function getraenkeFeld(gesetzt) {
+        $("karteGetraenke").hidden = !getraenkeDa;
+        if (!getraenkeDa) return;
+        $("getraenke").innerHTML = GETRAENKE.map(
+          (gr, i) =>
+            '<div class="getraenkgruppe"><p class="versalien">' +
+            esc(wort("getraenkGruppe", gr.gruppe)) +
+            '</p><div class="hakenreihe" id="getraenkeGruppe' +
+            i +
+            '">' +
+            gr.werte
+              .map(
+                (w) =>
+                  '<label><input type="checkbox" value="' +
+                  esc(w) +
+                  '"' +
+                  (gesetzt.includes(w) ? " checked" : "") +
+                  ">" +
+                  esc(wort("getraenk", w)) +
+                  "</label>",
+              )
+              .join("") +
+            "</div></div>",
+        ).join("");
+        const p = profile.get(ichName) || {};
+        const stand = (p.getraenke || []).map((w) => wort("getraenk", w));
+        $("getraenkeStand").hidden = !stand.length;
+        $("getraenkeStand").textContent = t("getraenke.stand", {
+          liste: namenListe(stand),
+        });
+      }
+
+      async function getraenkeSpeichern() {
+        const knopf = $("getraenkeButton");
+        const fuer = ichName;
+        knopf.disabled = true;
+        knopf.textContent = t("speichern.laeuft");
+        try {
+          const datensatz = {
+            name: fuer,
+            getraenke: gehakt("getraenke"),
+            geaendert: new Date().toISOString(),
+          };
+          const { error } = await db.from("profile").upsert(datensatz);
+          if (error) throw error;
+          profile.set(fuer, { ...(profile.get(fuer) || {}), ...datensatz });
+          if (ichName === fuer) rendereProfil();
+          melde(t("m.getraenke"));
+        } catch (e) {
+          fehler(e);
+        } finally {
+          knopf.disabled = false;
+          knopf.textContent = t("speichern");
+        }
+      }
+
       async function anKueche() {
         const knopf = $("kuecheButton");
         const fuer = ichName;
@@ -3578,6 +3724,10 @@
               b.id +
               '">' +
               esc(t("speisen.aendern")) +
+              '</button><button data-beitrag-karte="' +
+              b.id +
+              '">' +
+              esc(t("karte.knopf")) +
               "</button></div>"
             : "") +
           "</div></div>"
@@ -3696,6 +3846,63 @@
         $("meineBeitraege").innerHTML = eigene.length
           ? eigene.map((b) => beitragKarte(b, true)).join("")
           : '<p class="leiser">' + esc(t("speisen.meineLeer")) + "</p>";
+      }
+
+      // Ein Tischkaertchen fuers Buffet: A4 quer in der Mitte knicken und
+      // aufstellen. Die obere Haelfte steht auf dem Kopf, damit man es
+      // von beiden Seiten lesen kann. Kennzeichen gross in Versalien –
+      // wer "vegan" sucht, soll es vom Nachbartisch aus sehen.
+      function druckeKarte(id) {
+        const b = speisen.find((x) => String(x.id) === String(id));
+        if (!b) return;
+        const marken = (b.kennzeichen || [])
+          .map((k) => "<span>" + esc(wort("kennzeichen", k)) + "</span>")
+          .join("");
+        const enthaelt = (b.allergene || []).map((a) => wort("allergen", a));
+        const seite =
+          '<div class="seite">' +
+          '<div class="titel">' + esc(b.titel) + "</div>" +
+          '<div class="von">' + esc(t("karte.von", { name: b.name })) + "</div>" +
+          '<div class="linie"></div>' +
+          (marken ? '<div class="marken">' + marken + "</div>" : "") +
+          (enthaelt.length
+            ? '<div class="enthaelt"><b>' + esc(t("beitrag.enthaelt")) + ":</b> " + esc(namenListe(enthaelt)) + "</div>"
+            : "") +
+          (b.zutaten ? '<div class="zutaten">' + esc(b.zutaten) + "</div>" : "") +
+          "</div>";
+        const html =
+          '<!doctype html><html lang="' + esc(lang) + '"><head><meta charset="utf-8">' +
+          "<title>" + esc(b.titel) + "</title>" +
+          '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">' +
+          "<style>" +
+          "@page{size:A4 landscape;margin:0}" +
+          "*{box-sizing:border-box}" +
+          "html,body{margin:0;background:#fff;color:#2a2521;-webkit-print-color-adjust:exact;print-color-adjust:exact}" +
+          "body{font-family:'Cormorant Garamond',Georgia,serif;width:297mm;height:210mm}" +
+          ".haelfte{height:105mm;display:flex;align-items:center;justify-content:center;padding:8mm 16mm}" +
+          ".oben{transform:rotate(180deg)}" +
+          ".knick{position:relative;border-top:1px dashed #c9bda9}" +
+          ".knick span{position:absolute;right:8mm;top:-2.2mm;padding:0 2mm;background:#fff;font:9px sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#b3a790}" +
+          ".seite{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px solid #e7ded1;outline:1px solid #a8874a;outline-offset:-3mm}" +
+          ".titel{font-size:34pt;line-height:1.05;font-weight:500;padding:0 12mm}" +
+          ".von{margin-top:2mm;font-size:13pt;font-style:italic;color:#837a6f}" +
+          ".linie{width:36mm;height:1px;background:#a8874a;margin:4mm 0}" +
+          ".marken{display:flex;flex-wrap:wrap;justify-content:center;gap:3mm;margin-bottom:3mm}" +
+          ".marken span{font:600 10pt/1 sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#a8874a;border:1px solid #a8874a;border-radius:99px;padding:1.6mm 4mm}" +
+          ".enthaelt{font-size:13pt;margin-bottom:1.5mm}" +
+          ".zutaten{font-size:12pt;color:#5c544b;max-width:220mm;line-height:1.35}" +
+          "@media screen{body{margin:10px auto;box-shadow:0 2px 12px rgba(0,0,0,.15)}}" +
+          "</style></head><body>" +
+          '<div class="haelfte oben">' + seite + "</div>" +
+          '<div class="knick"><span>' + esc(t("karte.knicken")) + "</span></div>" +
+          '<div class="haelfte">' + seite + "</div>" +
+          "<script>document.fonts.ready.then(function(){setTimeout(function(){print()},150)})<\/script>" +
+          "</body></html>";
+        const w = window.open("", "_blank");
+        if (!w) return melde(t("karte.blockiert"), true);
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
       }
 
       // ------------------------------------------------- Beitrag erfassen
@@ -3959,24 +4166,6 @@
               .join("")
           : '<p class="leiser">' + esc(t("helfer.keine")) + "</p>";
 
-        // Servicekraefte stehen in der Gaesteliste als eigene Art ("Bedienste").
-        const bed = gaeste.filter(
-          (g) => g.art === "Bedienste" || g.zugehoerigkeit === "Bedienste",
-        );
-        $("karteBedienste").hidden = bed.length === 0;
-        $("bediensteText").textContent = t("helfer.geisterText", {
-          n: bed.length,
-        });
-        $("bedienste").innerHTML = bed
-          .map(
-            (g) =>
-              '<span class="helfer">' +
-              portrait(g, profile.get(g.name)) +
-              esc(g.name) +
-              "</span>",
-          )
-          .join("");
-
         zeige("Helfer");
       }
 
@@ -4091,6 +4280,9 @@
         const bb = e.target.closest("[data-beitrag-bearbeiten]");
         if (bb) return oeffneBeitrag(bb.dataset.beitragBearbeiten);
 
+        const bk = e.target.closest("[data-beitrag-karte]");
+        if (bk) return druckeKarte(bk.dataset.beitragKarte);
+
         const sf = e.target.closest("[data-speisen-filter]");
         if (sf) {
           speisenFilterAuf = sf.dataset.speisenFilter;
@@ -4173,6 +4365,7 @@
       });
       $("losButton").addEventListener("click", () => wechsleZu($("wahl").value));
       $("speichernButton").addEventListener("click", speichern);
+      $("getraenkeButton").addEventListener("click", getraenkeSpeichern);
       for (const i of document.querySelectorAll(".fotoknopf input"))
         i.addEventListener("change", fotoGewaehlt);
 

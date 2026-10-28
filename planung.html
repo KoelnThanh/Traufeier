@@ -303,6 +303,13 @@
         <p class="leiser" id="buffetHinweis" style="margin: 10px 0 0"></p>
       </section>
 
+      <!-- ============================================== Getraenke ===== -->
+      <section class="karte">
+        <h2>Getränke</h2>
+        <p class="leiser" id="getraenkeHinweis" style="margin: 0 0 10px"></p>
+        <div class="tabelle"><table id="getraenke"></table></div>
+      </section>
+
       <!-- ================================================== Musik ===== -->
       <section class="karte">
         <div class="kopf">
@@ -356,6 +363,7 @@
         FEIER,
         KATEGORIEN,
         KENNZEICHEN,
+        GETRAENKE,
         SUPABASE_URL,
         SUPABASE_KEY,
       } from "./feier.js";
@@ -533,6 +541,7 @@
         abgleich();
         buffet();
         rendereMusik();
+        getraenke();
         versand();
         $("exportKueche").disabled = !kueche;
       }
@@ -690,6 +699,32 @@
           ? "<tr><th>Lied</th><th>Von</th><th>Gewünscht von</th></tr>" +
             musik.map((w) => "<tr><td>" + esc(w.titel) + "</td><td>" + esc(w.interpret || "–") + "</td><td>" + esc(w.name) + "</td></tr>").join("")
           : '<tr><td class="leiser">Noch keine Wünsche.</td></tr>';
+      }
+
+      // ============================================================== Getraenke
+      // Fuer den Einkauf: wer was angekreuzt hat. Absagen zaehlen nicht.
+      function getraenke() {
+        const da = [...profile.values()].some((p) => "getraenke" in p);
+        if (!da) {
+          $("getraenkeHinweis").textContent = "";
+          $("getraenke").innerHTML = '<tr><td class="leiser">Spalte fehlt noch (getraenke.sql).</td></tr>';
+          return;
+        }
+        const mit = [...profile.values()].filter((p) => p.zusage !== false && (p.getraenke || []).length);
+        $("getraenkeHinweis").textContent =
+          mit.length + " von " + gaeste.length + " haben angekreuzt. Absagen sind nicht mitgezählt.";
+        $("getraenke").innerHTML =
+          "<tr><th></th><th>Personen</th><th>Wer</th></tr>" +
+          GETRAENKE.map(
+            (gr) =>
+              '<tr><td colspan="3"><b>' + esc(gr.gruppe) + "</b></td></tr>" +
+              gr.werte
+                .map((w) => {
+                  const wer = mit.filter((p) => p.getraenke.includes(w)).map((p) => p.name);
+                  return "<tr><td>" + esc(w) + "</td><td>" + wer.length + '</td><td class="leiser">' + esc(wer.join(", ") || "–") + "</td></tr>";
+                })
+                .join(""),
+          ).join("");
       }
 
       // ================================================================ Versand

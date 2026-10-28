@@ -30,9 +30,9 @@ export const TEXTE = {
 
     "hero.ueberzeile": "Wir heiraten",
     "hero.einordnung":
-      "Es ist unsere <strong>Traufeier</strong> – standesamtlich, im kleinen Kreis, mit einem langen Tag danach. Die große Hochzeit feiern wir später.",
+      "Wir feiern unsere <strong>standesamtliche Trauung</strong>, im kleinen Kreis – romantisch, festlich und voller Eleganz. ❤️<br>Ein ganz besonderer Tag für uns, bevor wir in ein paar Jahren die große Hochzeitsparty nachholen und es ordentlich krachen lassen. 🤩",
     "hero.zweisaetze":
-      "Euer Dabeisein ist uns Geschenk genug.<br>Und gern schick – es wird getanzt.",
+      "Euer Dabeisein ist uns Geschenk genug.<br>Macht euch gern richtig schick – wir tun es auch :)",
     "countdown.tage": "Noch {n} Tage",
     "countdown.morgen": "Morgen ist es so weit",
     "countdown.heute": "Heute ist der Tag",
@@ -74,7 +74,7 @@ export const TEXTE = {
 
     "auswahl.titel": "Und wer bist du?",
     "auswahl.text":
-      "Such dich in der Liste – danach siehst du deinen Platz und die anderen Gäste. Für Kinder und Mitbewohner kannst du danach in einem Klick mitantworten.",
+      "Such dich in der Liste – danach siehst du deinen Platz und die anderen Gäste. Für Kinder und Partner kannst du danach in einem Klick mitantworten.",
     "auswahl.label": "Dein Name",
     "auswahl.bitte": "Bitte auswählen …",
     "auswahl.weiter": "Weiter",
@@ -95,19 +95,6 @@ export const TEXTE = {
     "fakten.dabei": "Du bist dabei",
     "fakten.vorgemerkt": "Vorgemerkt",
 
-    // Karte "Die Trauung" – nur fuer Haushalte, in denen jemand dabei ist.
-    "trauung.titel": "Die Trauung",
-    "trauung.du": "<strong>Du bist bei unserer Trauung dabei</strong> – persönlich eingeladen.",
-    "trauung.auch": "Aus eurem Haushalt außerdem dabei: {namen}",
-    "trauung.haushalt": {
-      one: "Aus eurem Haushalt ist bei der Trauung dabei: <strong>{namen}</strong>",
-      other: "Aus eurem Haushalt sind bei der Trauung dabei: <strong>{namen}</strong>",
-    },
-    "trauung.wann": "{von} Uhr im {ort}, bis etwa {bis} Uhr.",
-    "trauung.grund":
-      "Im Trauzimmer gibt es nur {n} Plätze. Deshalb können wir nur einzelne Personen und nicht ganze Haushalte einladen.",
-    // Leer = kein Treffpunkt-Absatz. Sonst ein ganzer Satz, <strong> erlaubt.
-    "trauung.treffpunkt": "",
 
     "schritte.titel": "Noch zu tun",
     "schritte.zusage": "Zu- oder Absage gegeben",
@@ -156,7 +143,7 @@ export const TEXTE = {
 
     "mitbringen.titel": "Was bringst du mit?",
     "mitbringen.text":
-      "Mittags gibt es ein Buffet aus dem, was alle mitbringen. Am Abend wird für euch gekocht – da braucht ihr nichts.",
+      "Mittags gibt es ein Buffet aus dem, was alle mitbringen. Abends gibt es Chili con Carne (auch vegan) und Baguette – da braucht ihr nichts.",
     "mitbringen.neu": "Etwas hinzufügen",
     "musik.titel": "Welches Lied muss laufen?",
     "musik.text": "Wir sind Tänzer – die Musik ist uns wichtig. Wünsch dir, was dich auf die Tanzfläche holt.",
@@ -279,11 +266,6 @@ export const TEXTE = {
       "Aus unserer Gästeliste. Gestrichelt heißt: noch nicht endgültig zugesagt.",
     "helfer.offen": "noch offen",
     "helfer.keine": "Noch sind keine Aufgaben verteilt.",
-    "helfer.geister": "Gute Geister",
-    "helfer.geisterText": {
-      one: "Eine Person hilft uns an dem Tag im Hintergrund.",
-      other: "{n} Menschen helfen uns an dem Tag im Hintergrund.",
-    },
 
     schliessen: "Schließen",
     abbrechen: "Abbrechen",
@@ -306,50 +288,98 @@ export const TEXTE = {
     "m.musik": "Steht auf der Liste.",
     "m.liedFehlt": "Schreib bitte dazu, welches Lied.",
 
+    "ort.beispiel": "Beispielbild",
+    "fragen.titel": "Fragen?",
+    "fragen.text": "Meldet euch gern bei unseren Trauzeugen.",
+    "fragen.Trauzeugin": "Trauzeugin",
+    "fragen.Trauzeuge": "Trauzeuge",
+    "fragen.whatsapp": "per WhatsApp",
+    "getraenke.titel": "Was trinkst du?",
+    "getraenke.text": "Damit wir richtig einkaufen: Kreuz an, was du gern trinkst – gern auch mehreres.",
+    "getraenke.stand": "Gespeichert: {liste}",
+    "schritte.getraenke": "Gesagt, was du trinkst",
+    "m.getraenke": "Notiert. Prost!",
+    "karte.knopf": "Kärtchen drucken",
+    "karte.hinweis": "<strong>Bitte druck zu deinem Beitrag die Zutatenliste aus</strong> und stell sie mit ans Buffet – so sieht jeder, was drin ist. Mit „Kärtchen drucken“ geht das in einem Schritt: einmal knicken, aufstellen, fertig.",
+    "karte.von": "von {name}",
+    "karte.knicken": "hier knicken",
+    "karte.blockiert": "Das Druckfenster wurde blockiert – bitte Pop-ups für diese Seite erlauben.",
+    // Links der Wert aus feier.js (GETRAENKE) – bleibt deutsch.
+    getraenkGruppe: {
+      "Wasser": "Wasser",
+      "Wein": "Wein",
+      "Saft & Limo": "Saft & Limo",
+      "Bier": "Bier",
+    },
+    getraenk: {
+      "Sprudelwasser": "Sprudelwasser",
+      "stilles Wasser": "stilles Wasser",
+      "alkoholfreier Wein": "alkoholfreier Wein",
+      "Rotwein trocken": "Rotwein, trocken",
+      "Rotwein lieblich": "Rotwein, lieblich",
+      "Weißwein trocken": "Weißwein, trocken",
+      "Weißwein lieblich": "Weißwein, lieblich",
+      "Apfelsaft": "Apfelsaft",
+      "Sprite": "Sprite",
+      "Cola": "Cola",
+      "Fassbrause": "Fassbrause",
+      "Kölsch": "Kölsch",
+    },
+
     // Leer = Karte "Übernachten" bleibt ausgeblendet.
     schlafen: "",
     abendessen:
-      "Um 18:30 Uhr gibt es Abendessen – Suppe und ein paar warme Sachen. Dafür ist gesorgt, ihr müsst nichts mitbringen. Wer kocht, steht unter „Helfer“.",
+      "Um 18 Uhr gibt es Abendessen – Chili con Carne, auch in einer veganen Variante, dazu Baguette. Dafür ist gesorgt, ihr müsst nichts mitbringen.",
 
     ablauf: [
       [
         "Trauung",
-        "Im kleinen Kreis, bis etwa 11:30 Uhr. Wer dabei ist, findet es in seinem Platz.",
+        "Standesamt, Trauzimmer im 1. OG – im kleinen Kreis, bis etwa 11:30 Uhr. Wer dabei ist, findet es in seinem Platz.",
       ],
-      ["Einlass", "Ankommen, anstoßen, Zeit zum Reden."],
+      [
+        "Einlass",
+        "Ankommen, anstoßen, Zeit zum Reden.",
+      ],
       [
         "Mittagsbuffet",
         "Alles, was ihr mitbringt.",
       ],
       [
         "Tanzworkshop für alle",
-        "Grundschritt in einer halben Stunde, ohne Vorkenntnisse – danach kann jeder mittanzen.",
-      ],
-      [
-        "Abendessen",
-        "Suppe und ein paar warme Sachen. Hier braucht ihr nichts mitzubringen.",
+        "Grundschritt in 20 Minuten, ohne Vorkenntnisse – danach kann jeder mittanzen.",
       ],
       [
         "Unser Tanz, dann eurer",
         "Einmal dürfen wir doch in die Mitte. Danach gehört die Fläche euch.",
       ],
-      ["Ende", "Dann machen wir das Licht aus."],
+      [
+        "Abendessen",
+        "Chili con Carne, auch vegan, dazu Baguette. Hier braucht ihr nichts mitzubringen.",
+      ],
+      [
+        "Noch einmal tanzen",
+        "Die Fläche gehört euch – bis zum Schluss.",
+      ],
+      [
+        "Ende",
+        "Dann machen wir das Licht aus.",
+      ],
     ],
 
     // Als Brief gesetzt, nicht als Liste. HTML erlaubt (<strong>).
     haltung: [
-      "Wir heiraten standesamtlich und feiern das mit euch – bewusst nicht als große Hochzeit, sondern als Traufeier. Geschenke brauchen wir keine: <strong>Dass ihr dabei seid, ist uns Geschenk genug.</strong>",
-      "Weil getanzt wird, darf es gern <strong>schick</strong> sein – das macht ihr ja ohnehin gern. Packt am besten Schuhe ein, in denen ihr euch wohlfühlt: Um 16 Uhr gibt es einen kleinen Tanzworkshop für alle.",
-      "Ein Rundum-Catering gibt es nicht, dafür machen wir vieles <strong>gemeinsam</strong>. Mittags bringt jeder etwas fürs Buffet mit, und wer mag, übernimmt eine kleine Aufgabe – so bleibt mehr Zeit, zusammen zu essen, zu trinken und zu reden. Den eigenen Teller bringt jeder selbst zurück.",
-      "Für die Kinder ist eine <strong>Erzieherin</strong> da, damit auch die Eltern in Ruhe feiern können. Und statt eines Programms rund um uns steht der gemeinsame Tag im Mittelpunkt: <strong>kein Fotoshooting, keine gestellten Bilder</strong> – unsere Fotografin hält einfach fest, was passiert.",
-      "Das große Fest holen wir in ein paar Jahren nach, wenn die Kinder größer sind. Deshalb ist um <strong>22 Uhr</strong> Schluss.",
+      "Wir heiraten standesamtlich und feiern das mit euch – nicht als große Hochzeitsparty, sondern als kleine Traufeier, aber nicht weniger <strong>stilvoll und elegant</strong>. Geschenke brauchen wir keine: <strong>Dass ihr dabei seid, ist uns Geschenk genug.</strong> Wer uns dennoch etwas schenken möchte, darf gern ein paar Goldstücke in unsere Wunschkasse werfen.",
+      "Macht euch gern <strong>richtig schick</strong> – wir tun es auch. Packt am besten Schuhe ein, in denen ihr euch wohlfühlt: Um 15:30 Uhr gibt es einen kleinen Tanzworkshop für alle.",
+      "Ein Rundum-Catering gibt es nicht, dafür machen wir vieles <strong>gemeinsam</strong>. Mittags bringt jeder etwas fürs Buffet mit, und wer mag, übernimmt eine kleine Aufgabe – so bleibt mehr Zeit, zusammen zu essen, zu trinken, zu tanzen und zu reden. Kellner haben wir keine, dafür euch: Den leeren Teller bringt bitte jeder selbst zurück – zählt als Aufwärmübung für die Tanzfläche. 😉",
+      "Für die Kinder ist <strong>ein Babysitter</strong> da, damit auch die Eltern in Ruhe feiern können. Und statt eines Programms rund um uns steht der gemeinsame Tag im Mittelpunkt: <strong>kein Fotoshooting, keine gestellten Bilder</strong> – unser Fotograf hält einfach fest, was passiert.",
+      "Die große Party holen wir in ein paar Jahren nach, wenn die Kinder größer sind. Deshalb ist um <strong>22 Uhr</strong> Schluss.",
     ],
 
     orteHinweise: {
       trauung: [
         "<strong>Bitte zehn Minuten früher da sein.</strong> Um 11:30 Uhr wird der Raum wieder gebraucht.",
         "Parken: direkt am Verwaltungsgebäude, weitere Plätze am Eligiusplatz (rund 100 m) und am Peterboroughplatz.",
-        "Verwaltungsgebäude II der Stadt Viersen. Ein Aufzug führt hinauf – auch mit Rollstuhl oder Kinderwagen kein Problem.",
+        "Verwaltungsgebäude II der Stadt Viersen, das Trauzimmer liegt im <strong>1. OG</strong>. Ein Aufzug führt hinauf – auch mit Rollstuhl oder Kinderwagen kein Problem.",
         "25 Sitzplätze. Deshalb ist die Trauung der kleine Teil des Tages.",
         "Standesamt Viersen: <a href='tel:+492162101253'>02162 101-253</a>",
       ],
@@ -357,7 +387,6 @@ export const TEXTE = {
         "<strong>Süchteln, nicht Dülken.</strong> Von der Trauung sind es gut 5 km – mit dem Auto etwa 15 Minuten.",
         "Parkplätze sind direkt an der Tanzschule – ihr müsst nichts suchen.",
         "Es gibt eine Garderobe – Mäntel und Wechselschuhe könnt ihr dort lassen.",
-        "Mit dem Bus bis Süchteln Busbahnhof. Die Linien 067, 074 und 083 verbinden Dülken und Süchteln.",
         "Wir feiern bis 22:00 Uhr. Wer ein Taxi braucht, bestellt es besser vorher.",
       ],
     },
@@ -372,9 +401,9 @@ export const TEXTE = {
 
     "hero.ueberzeile": "We're getting married",
     "hero.einordnung":
-      "It's our <strong>civil wedding celebration</strong> – a small ceremony at the registry office, followed by a long day together. The big wedding comes later.",
+      "We're celebrating our <strong>civil wedding</strong> in a small circle – romantic, festive and full of elegance. ❤️<br>A very special day for us, before we throw the big wedding party in a few years and really let our hair down. 🤩",
     "hero.zweisaetze":
-      "Having you there is gift enough.<br>And do dress up – there'll be dancing.",
+      "Having you there is gift enough.<br>Feel free to dress up properly – we will too :)",
     "countdown.tage": "{n} days to go",
     "countdown.morgen": "It's tomorrow",
     "countdown.heute": "Today's the day",
@@ -416,7 +445,7 @@ export const TEXTE = {
 
     "auswahl.titel": "And who are you?",
     "auswahl.text":
-      "Find yourself in the list – then you'll see your spot and the other guests. You can answer for your kids and your household with a single tap.",
+      "Find yourself in the list – then you'll see your spot and the other guests. You can answer for your kids and your partner with a single tap.",
     "auswahl.label": "Your name",
     "auswahl.bitte": "Please choose …",
     "auswahl.weiter": "Continue",
@@ -436,14 +465,6 @@ export const TEXTE = {
     "fakten.dabei": "You're on the list",
     "fakten.vorgemerkt": "Pencilled in",
 
-    "trauung.titel": "The ceremony",
-    "trauung.du": "<strong>You're invited to our wedding ceremony</strong> – personally.",
-    "trauung.auch": "Also coming from your household: {namen}",
-    "trauung.haushalt": "Coming to the ceremony from your household: <strong>{namen}</strong>",
-    "trauung.wann": "{von} at {ort}, until about {bis}.",
-    "trauung.grund":
-      "There are only {n} seats in the ceremony room, so we can only invite individuals rather than whole households.",
-    "trauung.treffpunkt": "",
 
     "schritte.titel": "Still to do",
     "schritte.zusage": "Said yes or no",
@@ -491,7 +512,7 @@ export const TEXTE = {
 
     "mitbringen.titel": "What are you bringing?",
     "mitbringen.text":
-      "Lunch is a buffet made of whatever everyone brings. Dinner is cooked for you – nothing needed there.",
+      "Lunch is a buffet made of whatever everyone brings. Dinner is chili con carne (also vegan) with baguette – nothing needed there.",
     "mitbringen.neu": "Add something",
     "musik.titel": "Which song has to be played?",
     "musik.text": "We're dancers – music matters to us. Request whatever gets you on the dance floor.",
@@ -612,11 +633,6 @@ export const TEXTE = {
       "From our guest list. Dashed means: not fully confirmed yet.",
     "helfer.offen": "not confirmed",
     "helfer.keine": "No tasks assigned yet.",
-    "helfer.geister": "Behind the scenes",
-    "helfer.geisterText": {
-      one: "One person is helping us behind the scenes on the day.",
-      other: "{n} people are helping us behind the scenes on the day.",
-    },
 
     schliessen: "Close",
     abbrechen: "Cancel",
@@ -639,39 +655,90 @@ export const TEXTE = {
     "m.musik": "It's on the list.",
     "m.liedFehlt": "Please enter a song.",
 
+    "ort.beispiel": "Example photo",
+    "fragen.titel": "Questions?",
+    "fragen.text": "Just get in touch with our witnesses.",
+    "fragen.Trauzeugin": "Witness",
+    "fragen.Trauzeuge": "Witness",
+    "fragen.whatsapp": "via WhatsApp",
+    "getraenke.titel": "What do you drink?",
+    "getraenke.text": "So we buy the right things: tick what you like to drink – several is fine.",
+    "getraenke.stand": "Saved: {liste}",
+    "schritte.getraenke": "Told us what you drink",
+    "m.getraenke": "Noted. Cheers!",
+    "karte.knopf": "Print a card",
+    "karte.hinweis": "<strong>Please print the ingredient list for your dish</strong> and put it next to it on the buffet – so everyone can see what's in it. “Print a card” does it in one step: fold once, stand it up, done.",
+    "karte.von": "by {name}",
+    "karte.knicken": "fold here",
+    "karte.blockiert": "The print window was blocked – please allow pop-ups for this page.",
+    // Links der Wert aus feier.js (GETRAENKE) – bleibt deutsch.
+    getraenkGruppe: {
+      "Wasser": "Water",
+      "Wein": "Wine",
+      "Saft & Limo": "Juice & soft drinks",
+      "Bier": "Beer",
+    },
+    getraenk: {
+      "Sprudelwasser": "Sparkling water",
+      "stilles Wasser": "Still water",
+      "alkoholfreier Wein": "Alcohol-free wine",
+      "Rotwein trocken": "Red wine, dry",
+      "Rotwein lieblich": "Red wine, sweet",
+      "Weißwein trocken": "White wine, dry",
+      "Weißwein lieblich": "White wine, sweet",
+      "Apfelsaft": "Apple juice",
+      "Sprite": "Sprite",
+      "Cola": "Cola",
+      "Fassbrause": "Fassbrause (alcohol-free malt soda)",
+      "Kölsch": "Kölsch",
+    },
+
     // Leer = Karte "Übernachten" bleibt ausgeblendet.
     schlafen: "",
     abendessen:
-      "Dinner is at 18:30 – soup and a few warm dishes. It's all taken care of, you don't need to bring anything. Who's cooking is listed under “Helpers”.",
+      "Dinner is at 18:00 – chili con carne, also as a vegan version, with baguette. It's all taken care of, you don't need to bring anything.",
 
     ablauf: [
       [
         "Ceremony",
-        "In a small circle, until about 11:30. If you're part of it, you'll see it on your spot.",
+        "Registry office, ceremony room on the 1st floor – in a small circle, until about 11:30. If you're part of it, you'll see it on your spot.",
       ],
-      ["Doors open", "Arrive, raise a glass, time to talk."],
+      [
+        "Doors open",
+        "Arrive, raise a glass, time to talk.",
+      ],
       [
         "Lunch buffet",
         "Everything you bring.",
       ],
       [
         "Dance workshop for everyone",
-        "Basic steps in half an hour, no experience needed – after that, everyone can join in.",
+        "Basic steps in 20 minutes, no experience needed – after that, everyone can join in.",
       ],
-      ["Dinner", "Soup and a few warm dishes. Nothing to bring here."],
       [
         "Our dance, then yours",
         "Just this once we'll take centre stage. After that, the floor is yours.",
       ],
-      ["The end", "Then we turn out the lights."],
+      [
+        "Dinner",
+        "Chili con carne, also vegan, with baguette. Nothing to bring here.",
+      ],
+      [
+        "Dancing again",
+        "The floor is yours – right until the end.",
+      ],
+      [
+        "The end",
+        "Then we turn out the lights.",
+      ],
     ],
 
     // Als Brief gesetzt, nicht als Liste. HTML erlaubt (<strong>).
     haltung: [
-      "We're getting married at the registry office and celebrating with you – not as a big wedding, but as a small civil wedding celebration. We don't need any gifts: <strong>having you there is gift enough.</strong>",
-      "Since there will be dancing, feel free to dress <strong>smartly</strong> – you like to anyway. Bring shoes you feel comfortable in: at 16:00 there's a short dance workshop for everyone.",
-      "There's no all-inclusive catering – instead, we'll do a lot of it <strong>together</strong>. Everyone brings something for the lunch buffet, and anyone who likes can take on a small task – that leaves more time to eat, drink and talk together. Everyone takes their own plate back afterwards.",
-      "A <strong>childcare worker</strong> will look after the kids, so parents can relax and celebrate too. And rather than a programme centred on us, the focus is on the day together: <strong>no photo shoot, no posed pictures</strong> – our photographer simply captures what happens.",
+      "We're getting married at the registry office and celebrating with you – not as a big wedding party, but as a small civil wedding celebration, though no less <strong>stylish and elegant</strong>. We don't need any gifts: <strong>having you there is gift enough.</strong> If you'd still like to give us something, feel free to drop a few gold coins into our wish box.",
+      "Feel free to dress up <strong>properly</strong> – we will too. Bring shoes you feel comfortable in: at 15:30 there's a short dance workshop for everyone.",
+      "There's no all-inclusive catering – instead, we'll do a lot of it <strong>together</strong>. Everyone brings something for the lunch buffet, and anyone who likes can take on a small task – that leaves more time to eat, drink, dance and talk together. We have no waiters, but we have you: please bring your empty plate back yourself – it counts as a warm-up for the dance floor. 😉",
+      "<strong>A babysitter</strong> will look after the kids, so parents can relax and celebrate too. And rather than a programme centred on us, the focus is on the day together: <strong>no photo shoot, no posed pictures</strong> – our photographer simply captures what happens.",
       "We'll have the big party in a few years, when the kids are older. That's why we finish at <strong>22:00</strong>.",
     ],
 
@@ -679,7 +746,7 @@ export const TEXTE = {
       trauung: [
         "<strong>Please arrive ten minutes early.</strong> The room is needed again at 11:30.",
         "Parking: right by the building, with more spaces at Eligiusplatz (about 100 m) and Peterboroughplatz.",
-        "Administrative Building II of the City of Viersen. A lift takes you up – no problem with a wheelchair or pram.",
+        "Administrative Building II of the City of Viersen; the ceremony room is on the <strong>1st floor</strong>. A lift takes you up – no problem with a wheelchair or pram.",
         "25 seats. That's why the ceremony is the small part of the day.",
         "Viersen registry office: <a href='tel:+492162101253'>+49 2162 101-253</a>",
       ],
@@ -687,7 +754,6 @@ export const TEXTE = {
         "<strong>Süchteln, not Dülken.</strong> It's a good 5 km from the ceremony – about 15 minutes by car.",
         "Parking is right at the dance school – no need to search.",
         "There's a cloakroom – you can leave coats and spare shoes there.",
-        "By bus to Süchteln Busbahnhof. Lines 067, 074 and 083 connect Dülken and Süchteln.",
         "We celebrate until 22:00. If you need a taxi, best to book it in advance.",
       ],
     },
@@ -705,9 +771,9 @@ export const TEXTE = {
 
     "hero.ueberzeile": "Nos casamos",
     "hero.einordnung":
-      "Es nuestra <strong>celebración de boda civil</strong>: una ceremonia pequeña en el registro civil y después un largo día juntos. La gran boda la celebraremos más adelante.",
+      "Celebramos nuestra <strong>boda civil</strong> en un círculo pequeño: romántica, festiva y llena de elegancia. ❤️<br>Un día muy especial para nosotros, antes de que en unos años hagamos la gran fiesta de boda y lo celebremos por todo lo alto. 🤩",
     "hero.zweisaetze":
-      "Su presencia es nuestro mejor regalo.<br>Y vengan elegantes: habrá baile.",
+      "Su presencia es nuestro mejor regalo.<br>Vístanse bien elegantes: nosotros también lo haremos :)",
     "countdown.tage": "Faltan {n} días",
     "countdown.morgen": "Es mañana",
     "countdown.heute": "Hoy es el día",
@@ -749,7 +815,7 @@ export const TEXTE = {
 
     "auswahl.titel": "¿Y tú quién eres?",
     "auswahl.text":
-      "Búscate en la lista: después verás tu lugar y a los demás invitados. Por tus hijos y las personas de tu hogar puedes responder con un solo clic.",
+      "Búscate en la lista: después verás tu lugar y a los demás invitados. Por tus hijos y tu pareja puedes responder con un solo clic.",
     "auswahl.label": "Tu nombre",
     "auswahl.bitte": "Elige, por favor …",
     "auswahl.weiter": "Continuar",
@@ -769,20 +835,6 @@ export const TEXTE = {
     "fakten.dabei": "Estás en la lista",
     "fakten.vorgemerkt": "Apuntado provisionalmente",
 
-    "trauung.titel": "La ceremonia",
-    "trauung.du": "<strong>Te invitamos personalmente a nuestra ceremonia civil.</strong>",
-    "trauung.auch": {
-      one: "De tu hogar también asiste: {namen}",
-      other: "De tu hogar también asisten: {namen}",
-    },
-    "trauung.haushalt": {
-      one: "De tu hogar asiste a la ceremonia: <strong>{namen}</strong>",
-      other: "De tu hogar asisten a la ceremonia: <strong>{namen}</strong>",
-    },
-    "trauung.wann": "A las {von} en {ort}, hasta las {bis} aproximadamente.",
-    "trauung.grund":
-      "En la sala solo hay {n} lugares, por eso solo podemos invitar a personas y no a hogares completos.",
-    "trauung.treffpunkt": "",
 
     "schritte.titel": "Pendiente",
     "schritte.zusage": "Confirmar si vienes",
@@ -831,7 +883,7 @@ export const TEXTE = {
 
     "mitbringen.titel": "¿Qué traes?",
     "mitbringen.text":
-      "Al mediodía hay un bufé con lo que trae cada uno. La cena se cocina para ustedes: ahí no hace falta nada.",
+      "Al mediodía hay un bufé con lo que trae cada uno. Por la noche hay chili con carne (también vegano) y baguette: ahí no hace falta nada.",
     "mitbringen.neu": "Añadir algo",
     "musik.titel": "¿Qué canción no puede faltar?",
     "musik.text": "Somos bailarines: la música nos importa mucho. Pide lo que te haga salir a la pista.",
@@ -954,11 +1006,6 @@ export const TEXTE = {
       "De nuestra lista de invitados. Con línea discontinua: todavía no está confirmado del todo.",
     "helfer.offen": "sin confirmar",
     "helfer.keine": "Todavía no hay tareas repartidas.",
-    "helfer.geister": "Ángeles de la guarda",
-    "helfer.geisterText": {
-      one: "Una persona nos ayuda ese día entre bastidores.",
-      other: "{n} personas nos ayudan ese día entre bastidores.",
-    },
 
     schliessen: "Cerrar",
     abbrechen: "Cancelar",
@@ -981,42 +1028,90 @@ export const TEXTE = {
     "m.musik": "Ya está en la lista.",
     "m.liedFehlt": "Escribe qué canción, por favor.",
 
+    "ort.beispiel": "Foto de ejemplo",
+    "fragen.titel": "¿Preguntas?",
+    "fragen.text": "Escríbanles a nuestros testigos.",
+    "fragen.Trauzeugin": "Testigo",
+    "fragen.Trauzeuge": "Testigo",
+    "fragen.whatsapp": "por WhatsApp",
+    "getraenke.titel": "¿Qué te gusta beber?",
+    "getraenke.text": "Para comprar lo correcto: marca lo que te gusta beber, puedes elegir varias cosas.",
+    "getraenke.stand": "Guardado: {liste}",
+    "schritte.getraenke": "Nos dijiste qué bebes",
+    "m.getraenke": "Anotado. ¡Salud!",
+    "karte.knopf": "Imprimir tarjeta",
+    "karte.hinweis": "<strong>Por favor, imprime la lista de ingredientes de tu plato</strong> y ponla junto a él en el bufé, así todos saben qué lleva. Con «Imprimir tarjeta» se hace en un paso: se dobla una vez, se pone de pie y listo.",
+    "karte.von": "de {name}",
+    "karte.knicken": "doblar aquí",
+    "karte.blockiert": "Se bloqueó la ventana de impresión. Permite las ventanas emergentes para esta página.",
+    // Links der Wert aus feier.js (GETRAENKE) – bleibt deutsch.
+    getraenkGruppe: {
+      "Wasser": "Agua",
+      "Wein": "Vino",
+      "Saft & Limo": "Jugos y refrescos",
+      "Bier": "Cerveza",
+    },
+    getraenk: {
+      "Sprudelwasser": "Agua con gas",
+      "stilles Wasser": "Agua sin gas",
+      "alkoholfreier Wein": "Vino sin alcohol",
+      "Rotwein trocken": "Vino tinto seco",
+      "Rotwein lieblich": "Vino tinto dulce",
+      "Weißwein trocken": "Vino blanco seco",
+      "Weißwein lieblich": "Vino blanco dulce",
+      "Apfelsaft": "Jugo de manzana",
+      "Sprite": "Sprite",
+      "Cola": "Cola",
+      "Fassbrause": "Fassbrause (refresco de malta sin alcohol)",
+      "Kölsch": "Kölsch",
+    },
+
     // Leer = Karte "Übernachten" bleibt ausgeblendet.
     schlafen: "",
     abendessen:
-      "A las 18:30 hay cena: sopa y algunos platos calientes. Todo está organizado, no hace falta que traigan nada. Quién cocina aparece en «Ayudantes».",
+      "A las 18:00 hay cena: chili con carne, también en versión vegana, con baguette. Todo está organizado, no hace falta que traigan nada.",
 
     ablauf: [
       [
         "Ceremonia",
-        "En un círculo pequeño, hasta las 11:30 más o menos. Si formas parte, lo verás en tu lugar.",
+        "Registro civil, sala de bodas en el primer piso. En un círculo pequeño, hasta las 11:30 más o menos. Si formas parte, lo verás en tu lugar.",
       ],
-      ["Llegada", "Llegar, brindar, tiempo para charlar."],
+      [
+        "Llegada",
+        "Llegar, brindar, tiempo para charlar.",
+      ],
       [
         "Bufé del mediodía",
         "Todo lo que traigan.",
       ],
       [
         "Taller de baile para todos",
-        "Pasos básicos en media hora, sin experiencia previa; después, todo el mundo puede unirse.",
-      ],
-      [
-        "Cena",
-        "Sopa y algunos platos calientes. Aquí no hace falta traer nada.",
+        "Pasos básicos en 20 minutos, sin experiencia previa; después, todo el mundo puede unirse.",
       ],
       [
         "Nuestro baile, después el suyo",
         "Por una vez sí nos ponemos en el centro. Después, la pista es de ustedes.",
       ],
-      ["Fin", "Luego apagamos las luces."],
+      [
+        "Cena",
+        "Chili con carne, también vegano, con baguette. Aquí no hace falta traer nada.",
+      ],
+      [
+        "A bailar otra vez",
+        "La pista es de ustedes, hasta el final.",
+      ],
+      [
+        "Fin",
+        "Luego apagamos las luces.",
+      ],
     ],
 
     // Als Brief gesetzt, nicht als Liste. HTML erlaubt (<strong>).
     haltung: [
-      "Nos casamos por lo civil y lo celebramos con ustedes, no como una gran boda, sino como una celebración íntima. No necesitamos regalos: <strong>que estén con nosotros es el mejor regalo.</strong>",
-      "Como habrá baile, vístanse <strong>elegantes</strong>, algo que de todos modos les encanta. Traigan zapatos con los que se sientan cómodos: a las 16:00 hay un pequeño taller de baile para todos.",
-      "No habrá un catering completo; en cambio, haremos muchas cosas <strong>juntos</strong>. Al mediodía cada uno trae algo para el bufé, y quien quiera puede encargarse de una pequeña tarea: así queda más tiempo para comer, beber y charlar juntos. Cada uno lleva su propio plato de vuelta.",
-      "Una <strong>educadora infantil</strong> cuidará de los niños para que también los padres puedan celebrar tranquilos. Y en lugar de un programa centrado en nosotros, lo importante es el día compartido: <strong>sin sesión de fotos ni fotos posadas</strong>; nuestra fotógrafa simplemente captura lo que pase.",
+      "Nos casamos por lo civil y lo celebramos con ustedes: no como una gran fiesta de boda, sino como una celebración pequeña, pero no por eso menos <strong>elegante y con estilo</strong>. No necesitamos regalos: <strong>que estén con nosotros es el mejor regalo.</strong> Quien aun así quiera regalarnos algo, puede echar unas monedas de oro en nuestra caja de deseos.",
+      "Vístanse <strong>bien elegantes</strong>: nosotros también lo haremos. Traigan zapatos con los que se sientan cómodos: a las 15:30 hay un pequeño taller de baile para todos.",
+      "No habrá un catering completo; en cambio, haremos muchas cosas <strong>juntos</strong>. Al mediodía cada uno trae algo para el bufé, y quien quiera puede encargarse de una pequeña tarea: así queda más tiempo para comer, beber, bailar y charlar juntos. No tenemos meseros, pero los tenemos a ustedes: cada uno lleva su plato vacío de vuelta; cuenta como calentamiento para la pista. 😉",
+      "<strong>Una niñera</strong> cuidará de los niños para que también los padres puedan celebrar tranquilos. Y en lugar de un programa centrado en nosotros, lo importante es el día compartido: <strong>sin sesión de fotos ni fotos posadas</strong>; nuestro fotógrafo simplemente captura lo que pase.",
       "La gran fiesta la haremos dentro de unos años, cuando los niños sean mayores. Por eso terminamos a las <strong>22:00</strong>.",
     ],
 
@@ -1024,7 +1119,7 @@ export const TEXTE = {
       trauung: [
         "<strong>Lleguen diez minutos antes, por favor.</strong> A las 11:30 se vuelve a necesitar la sala.",
         "Estacionamiento: justo al lado del edificio, y más plazas en Eligiusplatz (a unos 100 m) y en Peterboroughplatz.",
-        "Edificio administrativo II de la ciudad de Viersen. Hay ascensor: sin problema con silla de ruedas o cochecito.",
+        "Edificio administrativo II de la ciudad de Viersen; la sala de bodas está en el <strong>primer piso</strong>. Hay ascensor: sin problema con silla de ruedas o cochecito.",
         "25 asientos. Por eso la ceremonia es la parte pequeña del día.",
         "Registro civil de Viersen: <a href='tel:+492162101253'>+49 2162 101-253</a>",
       ],
@@ -1032,7 +1127,6 @@ export const TEXTE = {
         "<strong>Süchteln, no Dülken.</strong> Desde la ceremonia hay unos 5 km, unos 15 minutos en auto.",
         "Hay estacionamiento justo en la escuela de baile, no hace falta buscar.",
         "Hay guardarropa: ahí pueden dejar abrigos y zapatos para cambiarse.",
-        "En autobús hasta Süchteln Busbahnhof. Las líneas 067, 074 y 083 conectan Dülken y Süchteln.",
         "Celebramos hasta las 22:00. Si necesitas un taxi, mejor pídelo con antelación.",
       ],
     },
@@ -1050,9 +1144,9 @@ export const TEXTE = {
 
     "hero.ueberzeile": "Chúng mình kết hôn",
     "hero.einordnung":
-      "Đây là <strong>buổi lễ đăng ký kết hôn</strong> của chúng mình – một nghi thức nhỏ tại phòng hộ tịch, sau đó là một ngày dài bên nhau. Đám cưới lớn sẽ tổ chức sau.",
+      "Chúng mình tổ chức <strong>lễ đăng ký kết hôn</strong> trong phạm vi nhỏ – lãng mạn, trang trọng và thanh lịch. ❤️<br>Một ngày thật đặc biệt với chúng mình, trước khi vài năm nữa tổ chức tiệc cưới lớn và quẩy thật tưng bừng. 🤩",
     "hero.zweisaetze":
-      "Có mọi người đến đã là món quà quý nhất.<br>Và nhớ ăn mặc đẹp – sẽ có khiêu vũ.",
+      "Có mọi người đến đã là món quà quý nhất.<br>Mọi người cứ diện thật đẹp nhé – chúng mình cũng vậy :)",
     "countdown.tage": "Còn {n} ngày",
     "countdown.morgen": "Ngày mai là ngày vui",
     "countdown.heute": "Hôm nay là ngày vui",
@@ -1094,7 +1188,7 @@ export const TEXTE = {
 
     "auswahl.titel": "Còn bạn là ai?",
     "auswahl.text":
-      "Hãy tìm tên mình trong danh sách – sau đó bạn sẽ thấy chỗ của mình và các khách mời khác. Bạn có thể trả lời cho con cái và người trong nhà chỉ với một lần bấm.",
+      "Hãy tìm tên mình trong danh sách – sau đó bạn sẽ thấy chỗ của mình và các khách mời khác. Bạn có thể trả lời cho con cái và người bạn đời chỉ với một lần bấm.",
     "auswahl.label": "Tên của bạn",
     "auswahl.bitte": "Vui lòng chọn …",
     "auswahl.weiter": "Tiếp tục",
@@ -1115,14 +1209,6 @@ export const TEXTE = {
     "fakten.dabei": "Bạn có tên trong danh sách",
     "fakten.vorgemerkt": "Đã ghi tên tạm",
 
-    "trauung.titel": "Lễ đăng ký kết hôn",
-    "trauung.du": "<strong>Bạn được mời riêng đến lễ đăng ký kết hôn của chúng mình.</strong>",
-    "trauung.auch": "Trong gia đình bạn còn có: {namen}",
-    "trauung.haushalt": "Trong gia đình bạn, người được mời dự lễ đăng ký: <strong>{namen}</strong>",
-    "trauung.wann": "{von} tại {ort}, đến khoảng {bis}.",
-    "trauung.grund":
-      "Phòng làm lễ chỉ có {n} chỗ ngồi, vì vậy chúng mình chỉ có thể mời từng người chứ không mời cả gia đình.",
-    "trauung.treffpunkt": "",
 
     "schritte.titel": "Việc cần làm",
     "schritte.zusage": "Đã trả lời có đến hay không",
@@ -1171,7 +1257,7 @@ export const TEXTE = {
 
     "mitbringen.titel": "Bạn mang gì đến?",
     "mitbringen.text":
-      "Buổi trưa có tiệc buffet từ những món mọi người mang đến. Buổi tối đã có người nấu – không cần mang gì.",
+      "Buổi trưa có tiệc buffet từ những món mọi người mang đến. Buổi tối có chili con carne (có cả món chay) và bánh mì baguette – không cần mang gì.",
     "mitbringen.neu": "Thêm món",
     "musik.titel": "Bài hát nào nhất định phải có?",
     "musik.text": "Chúng mình là dân nhảy – âm nhạc rất quan trọng. Hãy chọn bài khiến bạn muốn ra sàn nhảy.",
@@ -1294,11 +1380,6 @@ export const TEXTE = {
       "Từ danh sách khách mời của chúng mình. Viền nét đứt nghĩa là chưa xác nhận hẳn.",
     "helfer.offen": "chưa chắc",
     "helfer.keine": "Chưa phân công việc nào.",
-    "helfer.geister": "Những người giúp thầm lặng",
-    "helfer.geisterText": {
-      one: "{n} người giúp chúng mình ở hậu trường trong ngày hôm đó.",
-      other: "{n} người giúp chúng mình ở hậu trường trong ngày hôm đó.",
-    },
 
     schliessen: "Đóng",
     abbrechen: "Hủy",
@@ -1321,47 +1402,98 @@ export const TEXTE = {
     "m.musik": "Đã có trong danh sách.",
     "m.liedFehlt": "Vui lòng ghi tên bài hát.",
 
+    "ort.beispiel": "Ảnh minh họa",
+    "fragen.titel": "Có câu hỏi?",
+    "fragen.text": "Cứ liên hệ với người làm chứng của chúng mình nhé.",
+    "fragen.Trauzeugin": "Người làm chứng",
+    "fragen.Trauzeuge": "Người làm chứng",
+    "fragen.whatsapp": "qua WhatsApp",
+    "getraenke.titel": "Bạn uống gì?",
+    "getraenke.text": "Để chúng mình mua cho đúng: đánh dấu những gì bạn thích uống – chọn nhiều cũng được.",
+    "getraenke.stand": "Đã lưu: {liste}",
+    "schritte.getraenke": "Đã cho biết bạn uống gì",
+    "m.getraenke": "Đã ghi lại. Dô!",
+    "karte.knopf": "In thẻ món ăn",
+    "karte.hinweis": "<strong>Vui lòng in danh sách nguyên liệu cho món bạn mang</strong> và đặt cạnh món ăn trên bàn buffet – để ai cũng biết trong đó có gì. Bấm „In thẻ món ăn“ là xong: gấp đôi, dựng lên.",
+    "karte.von": "của {name}",
+    "karte.knicken": "gấp ở đây",
+    "karte.blockiert": "Cửa sổ in bị chặn – vui lòng cho phép cửa sổ bật lên trên trang này.",
+    // Links der Wert aus feier.js (GETRAENKE) – bleibt deutsch.
+    getraenkGruppe: {
+      "Wasser": "Nước",
+      "Wein": "Rượu vang",
+      "Saft & Limo": "Nước ép & nước ngọt",
+      "Bier": "Bia",
+    },
+    getraenk: {
+      "Sprudelwasser": "Nước có ga",
+      "stilles Wasser": "Nước lọc",
+      "alkoholfreier Wein": "Vang không cồn",
+      "Rotwein trocken": "Vang đỏ (khô)",
+      "Rotwein lieblich": "Vang đỏ (ngọt)",
+      "Weißwein trocken": "Vang trắng (khô)",
+      "Weißwein lieblich": "Vang trắng (ngọt)",
+      "Apfelsaft": "Nước ép táo",
+      "Sprite": "Sprite",
+      "Cola": "Cola",
+      "Fassbrause": "Fassbrause (nước mạch nha không cồn)",
+      "Kölsch": "Bia Kölsch",
+    },
+
     // Leer = Karte "Übernachten" bleibt ausgeblendet.
     schlafen: "",
     abendessen:
-      "18:30 có bữa tối – súp và vài món nóng. Mọi thứ đã được chuẩn bị, mọi người không cần mang gì. Ai nấu thì xem ở mục “Người giúp”.",
+      "18:00 có bữa tối – chili con carne, có cả phiên bản chay, ăn kèm bánh mì baguette. Mọi thứ đã được chuẩn bị, mọi người không cần mang gì.",
 
     ablauf: [
       [
         "Lễ đăng ký",
-        "Trong phạm vi nhỏ, đến khoảng 11:30. Nếu bạn tham dự, bạn sẽ thấy ở chỗ của mình.",
+        "Phòng hộ tịch, phòng làm lễ ở tầng 1 – trong phạm vi nhỏ, đến khoảng 11:30. Nếu bạn tham dự, bạn sẽ thấy ở chỗ của mình.",
       ],
-      ["Đón khách", "Đến nơi, nâng ly, trò chuyện cùng nhau."],
+      [
+        "Đón khách",
+        "Đến nơi, nâng ly, trò chuyện cùng nhau.",
+      ],
       [
         "Buffet trưa",
         "Tất cả những món mọi người mang đến.",
       ],
       [
         "Lớp nhảy cho mọi người",
-        "Học bước cơ bản trong nửa tiếng, không cần biết nhảy trước – sau đó ai cũng có thể tham gia.",
+        "Học bước cơ bản trong 20 phút, không cần biết nhảy trước – sau đó ai cũng có thể tham gia.",
       ],
-      ["Bữa tối", "Súp và vài món nóng. Phần này không cần mang gì."],
       [
         "Điệu nhảy của chúng mình, rồi đến mọi người",
         "Chỉ lần này thôi chúng mình đứng ở giữa. Sau đó sàn nhảy là của mọi người.",
       ],
-      ["Kết thúc", "Rồi chúng mình tắt đèn."],
+      [
+        "Bữa tối",
+        "Chili con carne, có cả món chay, ăn kèm bánh mì baguette. Phần này không cần mang gì.",
+      ],
+      [
+        "Lại nhảy tiếp",
+        "Sàn nhảy là của mọi người – cho đến phút cuối.",
+      ],
+      [
+        "Kết thúc",
+        "Rồi chúng mình tắt đèn.",
+      ],
     ],
 
     // Als Brief gesetzt, nicht als Liste. HTML erlaubt (<strong>).
     haltung: [
-      "Chúng mình đăng ký kết hôn và muốn cùng mọi người ăn mừng – không phải một đám cưới lớn, mà là một buổi tiệc mừng ấm cúng. Chúng mình không cần quà: <strong>có mọi người ở bên đã là món quà quý nhất.</strong>",
-      "Vì sẽ có khiêu vũ, mọi người cứ <strong>ăn mặc thật đẹp</strong> nhé – dù sao mọi người cũng thích vậy mà. Nhớ mang theo đôi giày thoải mái: 16:00 có một lớp nhảy nhỏ cho tất cả mọi người.",
-      "Sẽ không có dịch vụ tiệc trọn gói – thay vào đó, chúng ta sẽ <strong>cùng nhau</strong> làm nhiều việc. Buổi trưa mỗi người mang một món cho tiệc buffet, ai muốn thì nhận một việc nhỏ – như vậy mọi người có nhiều thời gian hơn để cùng ăn, uống và trò chuyện. Ăn xong, ai cũng tự mang đĩa của mình đi cất.",
-      "Sẽ có <strong>cô giáo mầm non</strong> trông các bé, để bố mẹ cũng được thong thả vui chơi. Thay vì một chương trình xoay quanh chúng mình, điều quan trọng là ngày vui chung: <strong>không chụp ảnh cưới, không tạo dáng</strong> – nhiếp ảnh gia chỉ ghi lại những khoảnh khắc tự nhiên.",
-      "Đám cưới lớn chúng mình sẽ tổ chức sau vài năm nữa, khi các con lớn hơn. Vì vậy buổi tiệc kết thúc lúc <strong>22:00</strong>.",
+      "Chúng mình đăng ký kết hôn và muốn cùng mọi người ăn mừng – không phải một bữa tiệc cưới lớn, mà là một buổi tiệc mừng nhỏ, nhưng vẫn <strong>trang nhã và thanh lịch</strong>. Chúng mình không cần quà: <strong>có mọi người ở bên đã là món quà quý nhất.</strong> Ai vẫn muốn tặng gì thì cứ bỏ vài đồng vàng vào hộp mừng của chúng mình nhé.",
+      "Mọi người cứ <strong>diện thật đẹp</strong> nhé – chúng mình cũng vậy. Nhớ mang theo đôi giày thoải mái: 15:30 có một lớp nhảy nhỏ cho tất cả mọi người.",
+      "Sẽ không có dịch vụ tiệc trọn gói – thay vào đó, chúng ta sẽ <strong>cùng nhau</strong> làm nhiều việc. Buổi trưa mỗi người mang một món cho tiệc buffet, ai muốn thì nhận một việc nhỏ – như vậy mọi người có nhiều thời gian hơn để cùng ăn, uống, nhảy và trò chuyện. Không có người phục vụ, nhưng có mọi người: ăn xong ai cũng tự mang đĩa của mình đi cất – coi như khởi động trước khi ra sàn nhảy. 😉",
+      "Sẽ có <strong>một người trông trẻ</strong> chăm các bé, để bố mẹ cũng được thong thả vui chơi. Thay vì một chương trình xoay quanh chúng mình, điều quan trọng là ngày vui chung: <strong>không chụp ảnh cưới, không tạo dáng</strong> – nhiếp ảnh gia chỉ ghi lại những khoảnh khắc tự nhiên.",
+      "Bữa tiệc lớn chúng mình sẽ tổ chức sau vài năm nữa, khi các con lớn hơn. Vì vậy buổi tiệc kết thúc lúc <strong>22:00</strong>.",
     ],
 
     orteHinweise: {
       trauung: [
         "<strong>Vui lòng đến sớm mười phút.</strong> Đến 11:30 phòng sẽ được dùng tiếp.",
         "Đậu xe: ngay cạnh tòa nhà, ngoài ra còn chỗ ở Eligiusplatz (khoảng 100 m) và Peterboroughplatz.",
-        "Tòa nhà hành chính II của thành phố Viersen. Có thang máy – đi xe lăn hay đẩy xe em bé đều không sao.",
+        "Tòa nhà hành chính II của thành phố Viersen, phòng làm lễ ở <strong>tầng 1</strong>. Có thang máy – đi xe lăn hay đẩy xe em bé đều không sao.",
         "25 chỗ ngồi. Vì vậy lễ đăng ký là phần nhỏ của ngày hôm đó.",
         "Phòng hộ tịch Viersen: <a href='tel:+492162101253'>+49 2162 101-253</a>",
       ],
@@ -1369,7 +1501,6 @@ export const TEXTE = {
         "<strong>Ở Süchteln, không phải Dülken.</strong> Từ nơi làm lễ đi khoảng 5 km – mất chừng 15 phút lái xe.",
         "Có chỗ đậu xe ngay tại trường dạy nhảy – không cần tìm.",
         "Có chỗ gửi đồ – mọi người có thể để áo khoác và giày thay ở đó.",
-        "Đi xe buýt đến trạm Süchteln Busbahnhof. Các tuyến 067, 074 và 083 nối Dülken và Süchteln.",
         "Tiệc kéo dài đến 22:00. Nếu cần taxi, tốt nhất nên đặt trước.",
       ],
     },

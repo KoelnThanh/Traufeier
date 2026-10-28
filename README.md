@@ -31,6 +31,8 @@ Kein Build-Schritt, kein npm. Läuft auf **Netlify** (Hosting) und
 | `benachrichtigung.sql` | Sammelnachricht an eure Telegram-Gruppe bei Änderungen |
 | `vorschau.jpg`, `favicon.*`, `apple-touch-icon.png` | Link-Vorschau und Icons |
 | `saal.jpg` | Der gedeckte Saal – über der Adresse der Feier (`ORTE.fest.bild`) |
+| `titelbild.jpg` | Euer Foto in der Einladungskarte (Ausschnitt, 1000×800) |
+| `getraenke.sql` | Spalte „Was trinkst du?“ und View `getraenke_stand` |
 
 Originalfotos liegen in `02-MVP/bilder/` (nicht auf GitHub). Auf die Seite
 kommt nur, was ihr bewusst ins Hauptverzeichnis legt – es ist öffentlich

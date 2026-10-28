@@ -19,7 +19,7 @@ export const FEIER = {
 
   // Bis wann die Gaeste antworten sollen. Danach bittet die Seite
   // nur noch darum, Aenderungen trotzdem zu melden.
-  antwortBis: "2026-10-15",
+  antwortBis: "2026-11-15",
 
   // Link zur Galerie eurer Fotografin. Steht er drin, zeigt die
   // Seite nach der Feier einen Knopf dorthin.
@@ -62,8 +62,9 @@ export const ORTE = {
     instagram: "https://www.instagram.com/bachata.viersen/",
     // Steht ueber der Adresse. Breite/Hoehe halten den Platz frei, bevor
     // das Bild geladen ist. Bildbeschreibung: sprachen.js, "ort.bild.fest".
-    bild: { datei: "saal.jpg", breite: 1024, hoehe: 765 },
-    marken: ["ort", "auto", "garderobe", "bus", "nacht"],
+    // beispiel: true schreibt "Beispielbild" darunter.
+    bild: { datei: "saal.jpg", breite: 1024, hoehe: 765, beispiel: true },
+    marken: ["ort", "auto", "garderobe", "nacht"],
   },
 };
 
@@ -77,10 +78,38 @@ export const ABLAUF = [
   { zeit: "10:45", ort: "trauung", nebensache: true },
   { zeit: "12:30", ort: "fest" },
   { zeit: "13:30", sprung: "buffet" },
-  { zeit: "16:00", leitung: true },
-  { zeit: "18:30", sprung: "abends" },
-  { zeit: "20:00" },
+  { zeit: "15:30", leitung: true },
+  { zeit: "15:50" },
+  { zeit: "18:00", sprung: "abends" },
+  { zeit: "19:00" },
   { zeit: "22:00" },
+];
+
+// Ansprechpartner fuer Fragen – stehen auf der Einladung.
+// rolle: Schluessel "fragen.<rolle>" in sprachen.js.
+// whatsapp: true macht aus der Nummer einen WhatsApp-Link statt tel:.
+export const TRAUZEUGEN = [
+  { name: "Denise", rolle: "Trauzeugin", telefon: "+34 677 598 183", whatsapp: true },
+  { name: "Kai", rolle: "Trauzeuge", telefon: "+46 72 206 36 73", whatsapp: true },
+];
+
+// "Was trinkst du?" – ankreuzbar, mehrere erlaubt. Wie bei den Speisen
+// steht der Wert deutsch in der Datenbank (profile.getraenke), die
+// Anzeige kommt aus sprachen.js ('getraenk', 'getraenkGruppe').
+export const GETRAENKE = [
+  { gruppe: "Wasser", werte: ["Sprudelwasser", "stilles Wasser"] },
+  {
+    gruppe: "Wein",
+    werte: [
+      "alkoholfreier Wein",
+      "Rotwein trocken",
+      "Rotwein lieblich",
+      "Weißwein trocken",
+      "Weißwein lieblich",
+    ],
+  },
+  { gruppe: "Saft & Limo", werte: ["Apfelsaft", "Sprite", "Cola", "Fassbrause"] },
+  { gruppe: "Bier", werte: ["Kölsch"] },
 ];
 
 // Kategorien des Mitbring-Buffets. Die Werte sind das, was in der
